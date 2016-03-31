@@ -1,0 +1,88 @@
+body {
+  padding: 25px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+#content {
+  padding-bottom: 50px;
+}
+
+.ffitem {
+  margin: 0 0 20px 0;
+}
+
+.ffitem.selected {
+  /*background: black;*/
+}
+
+.ffitem .title {
+  font-size: 1.3em;
+}
+
+.ffitem .author {
+  color: #939393;
+}
+
+.ffitem .summary {
+  padding: 10px 0;
+  /*color: #D3D3D3;*/
+  overflow-wrap: break-word;
+}
+
+.ffitem .details {
+  padding: 10px 0;
+  color: #939393;
+}
+
+.fic_list {
+  width: 250px;
+  float:left;
+}
+
+.fic_reader {
+  overflow: hidden;
+  padding-right: 75px;
+  padding-left: 25px;
+}
+
+.fic_reader .fic_content {
+  /*margin: 0px 10px;*/
+  /*padding: 10px;*/
+  /*border: dashed 1px #D3D3D3;*/
+}
+
+.fic_reader .fic_content div {
+  padding: 10px 0;
+}
+
+.fic_reader .attached.label {
+  position: fixed
+}
+
+.fic_reader .side_options {
+  position: fixed;
+  top: 50%;
+  right: 25px;
+  margin: auto;
+  padding: 10px;
+  transform: translate(0, -50%);
+}
+
+.fic_reader .side_options a {
+  line-height: 30px;
+}
+
+.fic_reader .options {
+  padding: 10px 0;
+  text-align: center;
+  position: relative;
+  height: 20px;
+}
+
+.fic_reader .options a {
+  margin: 0 10px;
+}
