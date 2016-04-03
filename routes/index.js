@@ -24,6 +24,11 @@ var MongoClient = require('mongodb').MongoClient,
 var url = 'mongodb://localhost:27017/fanfic';
 // Use connect method to connect to the Server
 
+var randomColor = function() {
+  colors = ["red", "orange", "yellow", "olive", "green", "teal", "blue", "violet", "purple", "pink", "brown", "grey", "black"];
+  return colors[Math.floor(Math.random() * colors.length)]
+}
+
 var updateFFMeta = function() {
   tempMeta = []
   fs.readdir('/Users/carolyn/Desktop/fanfiction/', (err, files) => {
@@ -37,14 +42,14 @@ var updateFFMeta = function() {
           // TODO: make this intelligent for any de-duping (ao3 vs. ffnet)
           for (var i = 0; i < metadata['chars'].length; i++) {
             var char = metadata['chars'][i];
-            if (CharMeta.indexOf(char) === -1) {
-              CharMeta.push(char);
+            if (CharMeta.map((x) => { return x.name }).indexOf(char) === -1) {
+              CharMeta.push({"name": char, "color": randomColor() });
             }
           }
           for (var j = 0; j < metadata['fandoms'].length; j++) {
             var fandom = metadata['fandoms'][j];
-            if (FandomMeta.indexOf(fandom) === -1) {
-              FandomMeta.push(fandom);
+            if (FandomMeta.map((x) => { return x.name }).indexOf(fandom) === -1) {
+              FandomMeta.push({"name": fandom, "color": randomColor() });
             }
           }
           tempMeta.push(metadata);

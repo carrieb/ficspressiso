@@ -15,9 +15,6 @@ var FFList = React.createClass({
     }
     return (
       <div className="fic_list">
-        <div style={{ textAlign: 'center', paddingBottom: '25px'}}>
-           <FFFilter updateFicMeta={ this.props.updateFicMeta }/>
-        </div>
         { rows }
       </div>
     );

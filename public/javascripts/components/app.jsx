@@ -1,6 +1,7 @@
 var React = require("react"),
     FFList = require("./fflist"),
-    FFReader = require('./ffreader');
+    FFReader = require('./ffreader'),
+    FFFilter = require('./fffilter');
 
 var App = React.createClass({
   getInitialState() {
@@ -74,10 +75,15 @@ var App = React.createClass({
   render() {
     return (
       <div>
-        <FFList meta={ this.state.ff_meta }
-                currentFic={ this.state.fic }
-                loadFicContent={ this.requestFFContent.bind(this, this.onRetrievedFicContent) }
-                updateFicMeta={ this.requestFFMeta }/>
+        <div className="left_bar">
+          <div style={{ textAlign: 'center', paddingBottom: '25px'}}>
+             <FFFilter updateFicMeta={ this.requestFFMeta }/>
+          </div>
+          <FFList meta={ this.state.ff_meta }
+                  currentFic={ this.state.fic }
+                  loadFicContent={ this.requestFFContent.bind(this, this.onRetrievedFicContent) }
+                  updateFicMeta={ this.requestFFMeta }/>
+        </div>
       <FFReader content={ this.state.content }
                 loadFicContent={ this.requestFFContent.bind(this, this.onRetrievedFicContent, this.state.fic ? this.state.fic['title'] : null)}
                 currentChp={ this.state.chp }

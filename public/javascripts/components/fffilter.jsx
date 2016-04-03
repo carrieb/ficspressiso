@@ -6,18 +6,18 @@ var FFFilter = React.createClass({
     var characterOptions = [];
     for (var i = 0; i < this.state.characters.length; i++) {
       characterOptions.push(
-        <div className="item" key={ "char_" + this.state.characters[i] } data-category="character">
-          <div className={"ui " + this.randomColor() + " empty circular label"}/>
-          <span>{ this.state.characters[i] }</span>
+        <div className="item" key={ "char_" + i } data-category="character">
+          <div className={"ui " + this.state.characters[i].color + " empty circular label"}/>
+          <span>{ this.state.characters[i].name }</span>
         </div>
       );
     }
     var fandomOptions = [];
     for (var j = 0; j < this.state.fandoms.length; j++) {
       fandomOptions.push(
-        <div className="item" key={ "fandom_" + this.state.fandoms[j] } data-category="fandom">
-          <div className={"ui " + this.randomColor() + " empty circular label"}/>
-          <span>{ this.state.fandoms[j] }</span>
+        <div className="item" key={ "fandom_" + j } data-category="fandom">
+          <div className={"ui " + this.state.fandoms[j].color + " empty circular label"}/>
+          <span>{ this.state.fandoms[j].name }</span>
         </div>
       );
     }
@@ -29,6 +29,10 @@ var FFFilter = React.createClass({
           <div className="ui search icon input">
             <i className="search icon"></i>
             <input type="text" name="search" placeholder="Search stories..."/>
+          </div>
+          <div className="divider"></div>
+          <div className="item" key="all">
+            <span>All</span>
           </div>
           <div className="divider"></div>
           <div className="header">
@@ -47,10 +51,6 @@ var FFFilter = React.createClass({
     );
     return (filterDropdown);
   },
-  randomColor() {
-    colors = ["red", "orange", "yellow", "olive", "green", "teal", "blue", "violet", "purple", "pink", "brown", "grey", "black"];
-    return colors[Math.floor(Math.random() * colors.length)]
-  },
   getInitialState() {
     return {
       "characters": [],
@@ -61,7 +61,6 @@ var FFFilter = React.createClass({
     $.ajax('/ajax/filter_meta').error((req, status, error) => {
       console.log(error);
     }).done((data) => {
-      console.log(data);
       this.setState(data);
     });
   },
@@ -76,9 +75,12 @@ var FFFilter = React.createClass({
       el.removeAttribute('data-reactid');
     }
     var item = choice[0];
-    var cat = item.getAttribute('data-category');
-    var query = {};
-    query[cat] = item.textContent;
+    var query;
+    if (item && item.textContent !== "All") {
+      var cat = item.getAttribute('data-category');
+      query = {};
+      query[cat] = item.textContent;
+    }
     this.props.updateFicMeta(query);
   },
   componentDidMount() {

@@ -18912,7 +18912,8 @@
 
 	var React = __webpack_require__(1),
 	    FFList = __webpack_require__(149),
-	    FFReader = __webpack_require__(152);
+	    FFReader = __webpack_require__(152),
+	    FFFilter = __webpack_require__(151);
 
 	var App = React.createClass({displayName: "App",
 	  getInitialState:function() {
@@ -18986,10 +18987,15 @@
 	  render:function() {
 	    return (
 	      React.createElement("div", null, 
-	        React.createElement(FFList, {meta:  this.state.ff_meta, 
-	                currentFic:  this.state.fic, 
-	                loadFicContent:  this.requestFFContent.bind(this, this.onRetrievedFicContent), 
-	                updateFicMeta:  this.requestFFMeta}), 
+	        React.createElement("div", {className: "left_bar"}, 
+	          React.createElement("div", {style: { textAlign: 'center', paddingBottom: '25px'}}, 
+	             React.createElement(FFFilter, {updateFicMeta:  this.requestFFMeta})
+	          ), 
+	          React.createElement(FFList, {meta:  this.state.ff_meta, 
+	                  currentFic:  this.state.fic, 
+	                  loadFicContent:  this.requestFFContent.bind(this, this.onRetrievedFicContent), 
+	                  updateFicMeta:  this.requestFFMeta})
+	        ), 
 	      React.createElement(FFReader, {content:  this.state.content, 
 	                loadFicContent:  this.requestFFContent.bind(this, this.onRetrievedFicContent, this.state.fic ? this.state.fic['title'] : null), 
 	                currentChp:  this.state.chp, 
@@ -19027,9 +19033,6 @@
 	    }
 	    return (
 	      React.createElement("div", {className: "fic_list"}, 
-	        React.createElement("div", {style: { textAlign: 'center', paddingBottom: '25px'}}, 
-	           React.createElement(FFFilter, {updateFicMeta:  this.props.updateFicMeta})
-	        ), 
 	         rows 
 	      )
 	    );
@@ -19097,18 +19100,18 @@
 	    var characterOptions = [];
 	    for (var i = 0; i < this.state.characters.length; i++) {
 	      characterOptions.push(
-	        React.createElement("div", {className: "item", key:  "char_" + this.state.characters[i], "data-category": "character"}, 
-	          React.createElement("div", {className: "ui " + this.randomColor() + " empty circular label"}), 
-	          React.createElement("span", null,  this.state.characters[i] )
+	        React.createElement("div", {className: "item", key:  "char_" + i, "data-category": "character"}, 
+	          React.createElement("div", {className: "ui " + this.state.characters[i].color + " empty circular label"}), 
+	          React.createElement("span", null,  this.state.characters[i].name)
 	        )
 	      );
 	    }
 	    var fandomOptions = [];
 	    for (var j = 0; j < this.state.fandoms.length; j++) {
 	      fandomOptions.push(
-	        React.createElement("div", {className: "item", key:  "fandom_" + this.state.fandoms[j], "data-category": "fandom"}, 
-	          React.createElement("div", {className: "ui " + this.randomColor() + " empty circular label"}), 
-	          React.createElement("span", null,  this.state.fandoms[j] )
+	        React.createElement("div", {className: "item", key:  "fandom_" + j, "data-category": "fandom"}, 
+	          React.createElement("div", {className: "ui " + this.state.fandoms[j].color + " empty circular label"}), 
+	          React.createElement("span", null,  this.state.fandoms[j].name)
 	        )
 	      );
 	    }
@@ -19120,6 +19123,10 @@
 	          React.createElement("div", {className: "ui search icon input"}, 
 	            React.createElement("i", {className: "search icon"}), 
 	            React.createElement("input", {type: "text", name: "search", placeholder: "Search stories..."})
+	          ), 
+	          React.createElement("div", {className: "divider"}), 
+	          React.createElement("div", {className: "item", key: "all"}, 
+	            React.createElement("span", null, "All")
 	          ), 
 	          React.createElement("div", {className: "divider"}), 
 	          React.createElement("div", {className: "header"}, 
@@ -19138,10 +19145,6 @@
 	    );
 	    return (filterDropdown);
 	  },
-	  randomColor:function() {
-	    colors = ["red", "orange", "yellow", "olive", "green", "teal", "blue", "violet", "purple", "pink", "brown", "grey", "black"];
-	    return colors[Math.floor(Math.random() * colors.length)]
-	  },
 	  getInitialState:function() {
 	    return {
 	      "characters": [],
@@ -19152,7 +19155,6 @@
 	    $.ajax('/ajax/filter_meta').error(function(req, status, error)  {
 	      console.log(error);
 	    }).done(function(data)  {
-	      console.log(data);
 	      this.setState(data);
 	    }.bind(this));
 	  },
@@ -19167,9 +19169,12 @@
 	      el.removeAttribute('data-reactid');
 	    }
 	    var item = choice[0];
-	    var cat = item.getAttribute('data-category');
-	    var query = {};
-	    query[cat] = item.textContent;
+	    var query;
+	    if (item && item.textContent !== "All") {
+	      var cat = item.getAttribute('data-category');
+	      query = {};
+	      query[cat] = item.textContent;
+	    }
 	    this.props.updateFicMeta(query);
 	  },
 	  componentDidMount:function() {
