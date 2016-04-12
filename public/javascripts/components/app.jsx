@@ -1,99 +1,40 @@
 var React = require("react"),
-    FFList = require("./fflist"),
-    FFReader = require('./ffreader'),
-    FFFilter = require('./fffilter');
+    Library = require("./library"),
+    Browse = require('./browse');
 
 var App = React.createClass({
+  setActive(ev) {
+    this.setState({
+      section: ev.target.textContent
+    });
+  },
   getInitialState() {
     return {
-      "content" : "",
-      "chp" : 0,
-      "ff_meta" : [],
-      "fic" : null
-    };
-  },
-  onRetrievedFicContent(data, title, chp) {
-    console.log("Retrieved content for " + title + ": " + chp, data);
-    var meta = this.getMetaForFic(title);
-    var split = data.split(/\r\n|\r|\n/);
-    var result = split.map((item, index) => {
-      if (item.length > 0) {
-        return (
-          <div key={ index }>{ item }</div>
-        );
-      }
-    });
-    this.setState({
-      "content" : result,
-      "chp" : chp,
-      "fic" : meta
-    })
-    window.scrollTo(0, 0);
-  },
-  getMetaForFic(title) {
-    for (var i = 0; i < this.state.ff_meta.length; i++) {
-      var fic = this.state.ff_meta[i];
-      if (fic['title'] === title) {
-        return fic;
-      }
+      section: this.props.initialSection
     }
-    console.error("No data found for " + title, this.state.ff_meta);
-    return null;
-  },
-  requestFFContent(callback, title, chp) {
-    console.log("Requesting content for " + title + ": " + chp);
-    $.ajax('/ajax/ff_content', {
-      data : {
-        "title" : title,
-        "chp" : chp
-      }
-    }).error((req, status, error) => {
-      console.error(error);
-    }).done((data) => {
-      callback(data, title, chp);
-    });
-  },
-  requestFFMeta(query) {
-    console.log("Getting fics for query:'" + query + "'");
-    $.ajax('/ajax/ff_meta', {
-      data: {
-        "q" : query ? query : undefined
-      }
-    }).error((req, status, error) => {
-      console.log(error);
-    }).done((data) => {
-      console.log("Retrieved " + data.length + " fics.", data);
-      this.setState({
-        "ff_meta" : data
-      });
-    });
-  },
-  componentDidMount() {
-    this.requestFFMeta();
-    setTimeout(this.requestFFMeta, 5000);
   },
   render() {
-    return (
-      <div>
-        <div className="left_bar">
-          <div style={{ textAlign: 'center', paddingBottom: '25px'}}>
-             <FFFilter updateFicMeta={ this.requestFFMeta }/>
-          </div>
-          <FFList meta={ this.state.ff_meta }
-                  currentFic={ this.state.fic }
-                  loadFicContent={ this.requestFFContent.bind(this, this.onRetrievedFicContent) }
-                  updateFicMeta={ this.requestFFMeta }/>
+    sections = ["Library", "Browse"];
+    sectionContent = '';
+    sectionEls = sections.map((section) => {
+      selected = (section === this.state.section ? " active" : "");
+      return (<a className={ "ui item" + selected } onClick={ this.setActive } key={ section }>{ section }</a>);
+    });
+    if (this.state.section === "Library") {
+      sectionContent = (<Library/>);
+    } else if (this.state.section === "Browse") {
+      sectionContent = (<Browse/>);
+    }
+    console.log(this.state.section, sectionContent);
+    return (<div>
+      <div className="ui teal large secondary pointing menu" style={{ marginBottom: '20px' }}>
+        { sectionEls }
+        <div className="right menu">
+          <a className={ "ui item" + (this.state.section === "Settings" ? " active": "") } onClick={ this.setActive } key="Settings">Settings</a>
         </div>
-      <FFReader content={ this.state.content }
-                loadFicContent={ this.requestFFContent.bind(this, this.onRetrievedFicContent, this.state.fic ? this.state.fic['title'] : null)}
-                currentChp={ this.state.chp }
-                lastChp={ this.state.fic ? this.state.fic['chapters'].length - 1 : 0 }
-                chpTitle={this.state.fic ? this.state.fic['chapters'][this.state.chp]['title'] : ""}
-                ficTitle={ this.state.fic ? this.state.fic['title'] : "" }
-                chapters={ this.state.fic ? this.state.fic['chapters'] : [] }/>
-
       </div>
-    );
+      { sectionContent }
+    </div>);
   }
 });
 

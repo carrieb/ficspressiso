@@ -91,3 +91,11 @@ a {
 .fic_reader .options a {
   margin: 0 10px;
 }
+
+#fic_filter {
+  width: 100%
+}
+
+#fic_filter span {
+  text-align: inherit;
+}

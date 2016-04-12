@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 const fs = require('fs');
+const https = require('https');
+const cheerio = require('cheerio');
 
 var database = null;
 
@@ -11,8 +13,12 @@ require("node-jsx").install({
     extension: ".jsx"
 });
 
+var browseUrl = 'https://www.fanfiction.net/book/Harry-Potter/?&srt=1&lan=1&r=10&len=20&c1=3';
+
 var React = require("react"),
+    ReactDOMServer = require('react-dom/server'),
     App = React.createFactory(require("../public/javascripts/components/app")),
+    BrowseItem = React.createFactory(require("../public/javascripts/components/browseitem")),
     FFMeta = [],
     CharMeta = [],
     FandomMeta = [];
@@ -121,13 +127,59 @@ router.get('/ajax/ff_content', function(req, res) {
   }
 });
 
+// Utility function that downloads a URL and invokes
+// callback with the data.
+function download(url, callback) {
+  https.get(url, function(res) {
+    var data = "";
+    res.on('data', function (chunk) {
+      data += chunk;
+    });
+    res.on("end", function() {
+      callback(data);
+    });
+  }).on("error", function() {
+    callback(null);
+  });
+}
+
+router.get('/ajax/browse', function(req, res) {
+  const url = 'https://www.fanfiction.net/book/Harry-Potter/?&srt=1&lan=1&r=10&len=20&c1=3';
+  download(url, (data) => {
+    if (data) {
+      var $ = cheerio.load(data);
+      $('.cimage').remove();
+      var list = '';
+      $("div.z-list").each(function(i, e) {
+        //list = list + $(this).addClass('item').css('width', '100%');
+        var title = $(this).find('.stitle').first().text();
+        var author = $(this).find('a[href^="/u/"]').first().text();
+        var extra = $(this).find('div.z-padtop2').first().text();
+        var summary = $(this).find('div.z-padtop').first().contents().first().text();
+        list = list + ReactDOMServer.renderToString(BrowseItem({
+          title: title,
+          author: author,
+          summary: summary,
+          extra: extra
+        }));
+      });
+      res.send(list);
+    } else {
+      console.error(`Could not retrieve data for url ${url}`);
+    }
+  })
+});
+
 /* GET home page. */
 router.get('/', function(req, res) {
-  var markup = React.renderToString(App());
+  var markup = ReactDOMServer.renderToString(App({
+    initialSection: 'Library'
+  }));
 
   res.render('index', {
     title: 'ficspressiso',
-    markup: markup
+    markup: markup,
+    initialSection: 'Library'
   });
 });
 

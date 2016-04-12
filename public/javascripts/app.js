@@ -1,8 +1,12 @@
 var React = require("react"),
+    ReactDOM = require('react-dom'),
     App = React.createFactory(require("components/app"));
 
 if (typeof window !== "undefined") {
   window.onload = function() {
-    React.render(App(), document.getElementById("content"));
+    console.log(window['initJson']);
+    ReactDOM.render(App({
+      initialSection: window['initJson']['initialSection']
+    }), document.getElementById("content"));
   };
 }

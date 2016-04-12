@@ -24,7 +24,7 @@ var FFFilter = React.createClass({
     var filterDropdown = (
       <div id="fic_filter" className="ui labeled icon top center pointing dropdown button">
         <i className="filter icon"></i>
-        <span className="text" id="selected_filter">Filter Fics</span>
+        <span className="text" id="selected_filter">Filter Stories</span>
         <div className="menu">
           <div className="ui search icon input">
             <i className="search icon"></i>
