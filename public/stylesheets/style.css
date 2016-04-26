@@ -99,3 +99,15 @@ a {
 #fic_filter span {
   text-align: inherit;
 }
+
+.browse_desc:hover {
+  color: #1e70bf;
+}
+
+.browse_item_content {
+  margin-bottom: 25px;
+}
+
+.chart-container {
+  text-align: center;
+}

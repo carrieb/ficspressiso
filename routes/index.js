@@ -18,6 +18,7 @@ var browseUrl = 'https://www.fanfiction.net/book/Harry-Potter/?&srt=1&lan=1&r=10
 var React = require("react"),
     ReactDOMServer = require('react-dom/server'),
     App = React.createFactory(require("../public/javascripts/components/app")),
+    ChartApp = React.createFactory(require("../public/javascripts/components/chartapp")),
     BrowseItem = React.createFactory(require("../public/javascripts/components/browseitem")),
     FFMeta = [],
     CharMeta = [],
@@ -143,8 +144,34 @@ function download(url, callback) {
   });
 }
 
-router.get('/ajax/browse', function(req, res) {
-  const url = 'https://www.fanfiction.net/book/Harry-Potter/?&srt=1&lan=1&r=10&len=20&c1=3';
+var browse_data = [];
+
+var cleanCharName = function(str) {
+  return str.replace('[', '').replace(']', '').trim();
+}
+
+var findChars = function(str) {
+  var items = str.split(' - ');
+  var last = items[items.length -1];
+  console.log(last);
+  var chars = [];
+  if (last === 'Complete') {
+
+  } else {
+    if (!last.startsWith('Published:')) {
+      var raw_chars = last.split(', ');
+      for (var raw_char in raw_chars) {
+        chars.push(cleanCharName(raw_chars[raw_char]));
+      }
+    }
+  }
+  console.log('Found characters:', chars);
+  return chars;
+}
+
+var processLatestFics = function(page, fandom, character, callback, done) {
+  browse_data = []
+  const url = `https://www.fanfiction.net/book/Harry-Potter/?&srt=1&lan=1&r=10&len=20&p=${page}`;
   download(url, (data) => {
     if (data) {
       var $ = cheerio.load(data);
@@ -153,21 +180,75 @@ router.get('/ajax/browse', function(req, res) {
       $("div.z-list").each(function(i, e) {
         //list = list + $(this).addClass('item').css('width', '100%');
         var title = $(this).find('.stitle').first().text();
+        var url = $(this).find('.stitle').first().attr('href');
         var author = $(this).find('a[href^="/u/"]').first().text();
         var extra = $(this).find('div.z-padtop2').first().text();
         var summary = $(this).find('div.z-padtop').first().contents().first().text();
-        list = list + ReactDOMServer.renderToString(BrowseItem({
+        var chars = findChars(extra);
+        var fic = {
           title: title,
+          url: url,
           author: author,
+          extra: extra,
           summary: summary,
-          extra: extra
-        }));
+          chars: chars
+        };
+        browse_data.push(fic);
+        callback(fic);
       });
-      res.send(list);
+      console.log('Retrieved ' + browse_data.length + ' fics from ff.net');
+      done();
     } else {
       console.error(`Could not retrieve data for url ${url}`);
     }
+  });
+}
+
+var chart_data = null;
+
+// TODO: do this while we are getting the fics? (for each char);
+var fillChartData = function() {
+  chart_data = {
+    labels: [],
+    data: [],
+  }
+
+  for (var i in browse_data) {
+    console.log(browse_data[i].chars);
+    for (var j in browse_data[i].chars) {
+      var idx = chart_data.labels.indexOf(browse_data[i].chars[j]);
+      if (idx > -1) {
+        chart_data.data[idx] = chart_data.data[idx] + 1;
+      } else {
+        chart_data.labels.push(browse_data[i].chars[j]);
+        chart_data.data.push(1);
+      }
+    }
+  }
+  console.log(chart_data);
+}
+
+processLatestFics(1, null, null, function(item) {}, function() { });
+
+router.get('/ajax/chart_data', function(req, res) {
+  processLatestFics(req.query.page, null, null, function(item) {}, function() {
+    fillChartData();
+    console.log(chart_data);
+    res.json(chart_data);
   })
+});
+
+router.get('/ajax/browse', function(req, res) {
+  const page = req.query.page;
+  const fandom = req.query.fandom;
+  const character = req.query.character; // TODO: convert to value for ffnet..? (using page??);
+  var list = '';
+  processLatestFics(page, fandom, character, function(fic) {
+    // TOOD: move this to the client
+    list = list + ReactDOMServer.renderToString(BrowseItem(fic));
+  }, function() {
+    res.send(list);
+  });
 });
 
 /* GET home page. */
@@ -180,6 +261,32 @@ router.get('/', function(req, res) {
     title: 'ficspressiso',
     markup: markup,
     initialSection: 'Library'
+  });
+});
+
+router.get('/browse', function(req, res) {
+  var markup = ReactDOMServer.renderToString(App({
+    initialSection: 'Browse',
+    renderChart: false
+  }));
+
+  res.render('index', {
+    title: 'ficspressiso',
+    markup: markup,
+    initialSection: 'Browse'
+  });
+});
+
+router.get('/chart', function(req, res) {
+  var markup = ReactDOMServer.renderToString(App({
+    initialSection: 'Chart',
+    renderChart: false
+  }));
+
+  res.render('index', {
+    title: 'ficspressiso',
+    markup: markup,
+    initialSection: 'Chart'
   });
 });
 

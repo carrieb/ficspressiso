@@ -6,7 +6,8 @@ if (typeof window !== "undefined") {
   window.onload = function() {
     console.log(window['initJson']);
     ReactDOM.render(App({
-      initialSection: window['initJson']['initialSection']
+      initialSection: window['initJson']['initialSection'],
+      renderChart: true
     }), document.getElementById("content"));
   };
 }

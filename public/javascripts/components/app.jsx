@@ -1,6 +1,7 @@
 var React = require("react"),
     Library = require("./library"),
-    Browse = require('./browse');
+    Browse = require('./browse'),
+    ChartApp = require('./chartapp');
 
 var App = React.createClass({
   setActive(ev) {
@@ -14,7 +15,7 @@ var App = React.createClass({
     }
   },
   render() {
-    sections = ["Library", "Browse"];
+    sections = ["Library", "Browse", "Chart"];
     sectionContent = '';
     sectionEls = sections.map((section) => {
       selected = (section === this.state.section ? " active" : "");
@@ -24,6 +25,8 @@ var App = React.createClass({
       sectionContent = (<Library/>);
     } else if (this.state.section === "Browse") {
       sectionContent = (<Browse/>);
+    } else if (this.state.section === "Chart") {
+      sectionContent = (<ChartApp renderChart={this.props.renderChart}/>);
     }
     console.log(this.state.section, sectionContent);
     return (<div>
