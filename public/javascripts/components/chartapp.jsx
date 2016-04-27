@@ -3,6 +3,30 @@ var Chart;
 var randomColor = require('randomcolor');
 
 var ChartApp = React.createClass({
+  getInitialState() {
+    return ({
+      data: null,
+      chart: null,
+      loaded: false,
+      options: {
+        responsive: false,
+        legend: {
+          display: false
+        },
+        tooltips: {
+          bodyFontSize: 18
+        }
+      }
+    });
+  },
+  initializeChart(ctx, data) {
+    console.log(ctx, data, this.state.options);
+    var myDoughnutChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: data,
+      options: this.state.options
+    });
+  },
   componentDidMount() {
     //var myChart = new Chart({});
     var renderChart = this.props.renderChart;
@@ -14,15 +38,7 @@ var ChartApp = React.createClass({
       if (renderChart) {
         Chart = require('chart.js');
         var ctx = document.getElementById("myChart");
-        var options = {
-          responsive: false,
-          legend: {
-            display: false
-          },
-          tooltips: {
-            bodyFontSize: 18
-          }
-        };
+        console.log(result.data.length)
         var data = {
           labels: result.labels,
           datasets: [
@@ -31,31 +47,36 @@ var ChartApp = React.createClass({
               backgroundColor: randomColor({
                 count: result.data.length
               })
-              // backgroundColor: [
-              //   "#FF6384",
-              //   "#36A2EB",
-              //   "#FFCE56"
-              // ],
-              // hoverBackgroundColor: [
-              //   "#FF6384",
-              //   "#36A2EB",
-              //   "#FFCE56"
-              // ]
             }]
         };
-        var myDoughnutChart = new Chart(ctx, {
-          type: 'doughnut',
+        this.initializeChart(ctx, data);
+        this.setState({
           data: data,
-          options: options
-        });
+          loaded: true
+        })
       }
-    });
+    }.bind(this));
   },
   render() {
+    var loadingBar = null;
+    var chartCanvas =  (<canvas id="myChart" width="500" height="500" style={{width: '500px', height: '500px'}}></canvas>);;
+    if (!this.state.loaded) {
+      loadingBar = (
+        <div className="ui segment" style={{ border: 'none', boxShadow: 'none'}}>
+          <div className="ui active inverted dimmer">
+            <div className="ui medium text loader">Loading</div>
+          </div>
+          <p>hihihihi</p>
+          <p>hihihihi</p>
+          <p>hihihihi</p>
+        </div>
+      );
+    }
     return (<div className="container chart-container">
-    <canvas id="myChart" width="500" height="500" style={{width: '500px', height: '500px'}}></canvas>
-  </div>);
-}
+      { loadingBar }
+      { chartCanvas }
+    </div>);
+  }
 });
 
 module.exports = ChartApp;
