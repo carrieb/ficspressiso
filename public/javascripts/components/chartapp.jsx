@@ -15,7 +15,13 @@ var ChartApp = React.createClass({
         Chart = require('chart.js');
         var ctx = document.getElementById("myChart");
         var options = {
-          responsive: false
+          responsive: false,
+          legend: {
+            display: false
+          },
+          tooltips: {
+            bodyFontSize: 18
+          }
         };
         var data = {
           labels: result.labels,

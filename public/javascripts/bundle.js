@@ -20611,7 +20611,13 @@
 	        Chart = __webpack_require__(177);
 	        var ctx = document.getElementById("myChart");
 	        var options = {
-	          responsive: false
+	          responsive: false,
+	          legend: {
+	            display: false
+	          },
+	          tooltips: {
+	            bodyFontSize: 18
+	          }
 	        };
 	        var data = {
 	          labels: result.labels,
