@@ -15,47 +15,72 @@ var ChartApp = React.createClass({
         },
         tooltips: {
           bodyFontSize: 18
-        }
+        },
+        onClick: this.onChartClick
       }
     });
   },
+  initializeData(result) {
+    return {
+      labels: result.labels,
+      datasets: [
+        {
+          data: result.data,
+          backgroundColor: randomColor({
+            count: result.data.length,
+            hue: 'blue'
+          })
+        }
+      ]
+    };
+  },
   initializeChart(ctx, data) {
-    console.log(ctx, data, this.state.options);
-    var myDoughnutChart = new Chart(ctx, {
+    console.log(ctx, data, this.state.options, this.onChartClick);
+    return new Chart(ctx, {
       type: 'doughnut',
       data: data,
       options: this.state.options
     });
   },
+  onChartClick(ev, chart) {
+    console.log(ev, chart);
+    var activePoints = this.state.chart.getElementsAtEvent(ev);
+    console.log('active', activePoints);
+    for (var i = 0; i < activePoints.length; i++) {
+      var point = activePoints[i];
+      console.log(point);
+      console.log(point["_model"]["label"]);
+      // TODO: we don't want to update the chart data - we want to show a list of those Stories
+      // somewhere?
+    }
+  },
+  updateChartData(char) {
+    return $.ajax('/ajax/chart_data', {
+      data: {
+        page: 1,
+        character: char
+      }
+    })
+  },
   componentDidMount() {
     //var myChart = new Chart({});
     var renderChart = this.props.renderChart;
-    $.ajax('/ajax/chart_data', {
-      data: {
-          page: 1
-      }
-    }).done(function(result) {
-      if (renderChart) {
-        Chart = require('chart.js');
+    if (renderChart) {
+      this.updateChartData('').done((result) => {
+        if (!this.state.loaded) {
+          Chart = require('chart.js');
+        }
         var ctx = document.getElementById("myChart");
-        console.log(result.data.length)
-        var data = {
-          labels: result.labels,
-          datasets: [
-            {
-              data: result.data,
-              backgroundColor: randomColor({
-                count: result.data.length
-              })
-            }]
-        };
-        this.initializeChart(ctx, data);
+        console.log(result.data.length);
+        var data = this.initializeData(result);
+        var chart = this.initializeChart(ctx, data);
         this.setState({
           data: data,
-          loaded: true
-        })
-      }
-    }.bind(this));
+          loaded: true,
+          chart: chart
+        });
+      });
+    }
   },
   render() {
     var loadingBar = null;

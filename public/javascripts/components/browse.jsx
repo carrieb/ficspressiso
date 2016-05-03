@@ -1,4 +1,5 @@
 const React = require('react');
+const BrowseSearch = require('./browsesearch');
 
 const Browse = React.createClass({
   getInitialState() {
@@ -17,7 +18,8 @@ const Browse = React.createClass({
     if (this.state.loaded) {
       browseContent = (
         <div>
-          <div style={{ textAlign: "right" }}><button onClick={ this.next }className="ui blue button">Next</button></div>
+          <div style={{ float: "right", paddingLeft: '25px' }}><button onClick={ this.next } className="ui blue button">Next</button></div>
+          <BrowseSearch requestContent={ this.requestContent }/>
           <div className="ui relaxed items" dangerouslySetInnerHTML={this.createMarkup()}/>
         </div>
       );
@@ -39,33 +41,37 @@ const Browse = React.createClass({
     </div>);
   },
   next() {
+    console.log('what');
     this.setState({
       page: this.state.page + 1,
       loaded: false
     });
-    this.requestContent(this.state.page + 1);
+    this.requestContent(this.state.page + 1, this.state.character);
   },
-  requestContent(page) {
+  requestContent(page, character) {
+    console.log("requesting", page, character);
     $.ajax('/ajax/browse', {
       type: 'GET',
       data: {
         page: page,
         fandom: null,
-        character: null
+        character: character
       }
     }).error((req, status, error) => {
       console.error(error)
     }).done((data) => {
       this.setState({
         content: data,
-        loaded: true
+        loaded: true,
+        page: page,
+        character: character
       });
     })
   },
   componentDidMount() {
     console.log(this.state.loaded);
     if (!this.state.loaded) {
-      this.requestContent(this.state.page);
+      this.requestContent(this.state.page, null);
     }
   }
 });

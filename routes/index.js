@@ -22,7 +22,11 @@ var React = require("react"),
     BrowseItem = React.createFactory(require("../public/javascripts/components/browseitem")),
     FFMeta = [],
     CharMeta = [],
-    FandomMeta = [];
+    FandomMeta = [],
+    CharNameToQueryValue = {};
+
+// Keep a mapping of char name to value
+// Update every time we request a page (?)
 
 var MongoClient = require('mongodb').MongoClient,
   assert = require('assert');
@@ -170,13 +174,20 @@ var findChars = function(str) {
 }
 
 var processLatestFics = function(page, fandom, character, callback, done) {
-  browse_data = []
-  const url = `https://www.fanfiction.net/book/Harry-Potter/?&srt=1&lan=1&r=10&len=20&p=${page}`;
+  browse_data = [];
+  const char_id = CharNameToQueryValue[character];
+  const url = `https://www.fanfiction.net/book/Harry-Potter/?&srt=1&lan=1&r=10&len=20&p=${page}&c1=${char_id}`;
   download(url, (data) => {
     if (data) {
       var $ = cheerio.load(data);
       $('.cimage').remove();
       var list = '';
+      $('select[name="characterid1"] option').each(function(i, e){
+          if ($(this).val() > 0) {
+            CharNameToQueryValue[$(this).text()] = $(this).val();
+          }
+      });
+      console.log(CharNameToQueryValue);
       $("div.z-list").each(function(i, e) {
         //list = list + $(this).addClass('item').css('width', '100%');
         var title = $(this).find('.stitle').first().text();
@@ -231,6 +242,8 @@ var fillChartData = function() {
 processLatestFics(1, null, null, function(item) {}, function() { });
 
 router.get('/ajax/chart_data', function(req, res) {
+  var character = req.query.character;
+  console.log(character);
   processLatestFics(req.query.page, null, null, function(item) {}, function() {
     fillChartData();
     console.log(chart_data);
@@ -261,6 +274,25 @@ router.get('/', function(req, res) {
     title: 'ficspressiso',
     markup: markup,
     initialSection: 'Library'
+  });
+});
+
+router.get('/ajax/browse_filter', function(req, res) {
+  var query = req.query.q;
+  var results = []
+  for (var p in CharNameToQueryValue) {
+    console.log(p);
+    if (p.toLowerCase().indexOf(query.toLowerCase()) > -1) {
+      results.push({ title: p });
+    }
+  }
+  res.json({
+    results: {
+      characters: {
+        name: "Characters",
+        results: results
+      }
+    }
   });
 });
 
