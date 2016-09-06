@@ -1,5 +1,9 @@
 # ficspressiso
 
+have the latest version of npm and nodejs
+have mongodb installed and running
+
+
 ```
 npm install
 ```
