@@ -1,7 +1,8 @@
 engineering
 # add redux
+# add linting
 
 product
 # add dark view
 # kick off downloads from browse
-
+# browse opens in app reader
