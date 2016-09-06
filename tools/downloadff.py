@@ -9,7 +9,7 @@ OUTPUT_DIR = 'fanfiction/'
 def main(argv):
    ff_id = None
    site = None
-   driver = webdriver.Chrome()
+   driver = webdriver.Chrome('/home/carrie/chromedriver')
    try:
        opts, args = getopt.getopt(argv,"h",["ffnet=","ao3=","update"])
    except getopt.GetoptError:
