@@ -42,12 +42,12 @@ var randomColor = function() {
 
 var updateFFMeta = function() {
   tempMeta = []
-  fs.readdir('/Users/carolyn/Desktop/fanfiction/', (err, files) => {
+  fs.readdir('/home/carrie/Desktop/fanfiction/', (err, files) => {
     if (err) throw err;
     for (var i = 0; i < files.length; i++) {
       var fileName = files[i];
       if (fileName != '.DS_Store') {
-        fs.readFile('/Users/carolyn/Desktop/fanfiction/' + fileName + '/metadata.json', 'utf8', (err, data) => {
+        fs.readFile('/home/carrie/Desktop/fanfiction/' + fileName + '/metadata.json', 'utf8', (err, data) => {
           if (err) throw err;
           metadata = JSON.parse(data);
           // TODO: make this intelligent for any de-duping (ao3 vs. ffnet)
@@ -123,7 +123,7 @@ router.get('/ajax/ff_content', function(req, res) {
   var chp = req.query.chp;
   var fic_meta = getMetaForFic(title);
   if (fic_meta) {
-    fs.readFile('/Users/carolyn/Desktop/fanfiction/' + title + '/' + fic_meta['chapters'][chp]['title'] + ".txt", 'utf8', (err, data) => {
+    fs.readFile('/home/carrie/Desktop/fanfiction/' + title + '/' + fic_meta['chapters'][chp]['title'] + ".txt", 'utf8', (err, data) => {
       if (err) throw err;
       res.json(data);
     });
@@ -366,7 +366,7 @@ function processFicJson(fic) {  // here's where we do something with a line
   }
 }
 
-var FF_JSON = '/Users/carolyn/Desktop/compiled_fanfic.json';
+var FF_JSON = '/home/carrie/Desktop/compiled_fanfic.json';
 router.get('/fill_in_db', function(req, res) {
   MongoClient.connect(url, function(err, db) {
     assert.equal(null, err);
