@@ -20,13 +20,12 @@ var React = require("react"),
     App = React.createFactory(require("../public/javascripts/components/app")),
     ChartApp = React.createFactory(require("../public/javascripts/components/chartapp")),
     BrowseItem = React.createFactory(require("../public/javascripts/components/browseitem")),
-    FFMeta = [],
-    CharMeta = [],
-    FandomMeta = [],
     CharNameToQueryValue = {};
 
 // Keep a mapping of char name to value
 // Update every time we request a page (?)
+
+const myLibrary = null;
 
 var MongoClient = require('mongodb').MongoClient,
   assert = require('assert');
@@ -40,77 +39,15 @@ var randomColor = function() {
   return colors[Math.floor(Math.random() * colors.length)]
 }
 
-var updateFFMeta = function() {
-  tempMeta = []
-  fs.readdir('/home/carrie/Desktop/fanfiction/', (err, files) => {
-    if (err) throw err;
-    for (var i = 0; i < files.length; i++) {
-      var fileName = files[i];
-      if (fileName != '.DS_Store') {
-        fs.readFile('/home/carrie/Desktop/fanfiction/' + fileName + '/metadata.json', 'utf8', (err, data) => {
-          if (err) throw err;
-          metadata = JSON.parse(data);
-          // TODO: make this intelligent for any de-duping (ao3 vs. ffnet)
-          for (var i = 0; i < metadata['chars'].length; i++) {
-            var char = metadata['chars'][i];
-            if (CharMeta.map((x) => { return x.name }).indexOf(char) === -1) {
-              CharMeta.push({"name": char, "color": randomColor() });
-            }
-          }
-          for (var j = 0; j < metadata['fandoms'].length; j++) {
-            var fandom = metadata['fandoms'][j];
-            if (FandomMeta.map((x) => { return x.name }).indexOf(fandom) === -1) {
-              FandomMeta.push({"name": fandom, "color": randomColor() });
-            }
-          }
-          tempMeta.push(metadata);
-        });
-      }
-    }
-    FFMeta = tempMeta;
-    console.log("Updated fic data.");
-  });
-}
+//updateFFMeta();
 
-updateFFMeta();
+//setTimeout(updateFFMeta, 120000); // every 2 mins
 
-setTimeout(updateFFMeta, 120000); // every 2 mins
-
-router.get('/ajax/filter_meta', function(req, res) {
-  res.json({
-    'fandoms' : FandomMeta,
-    'characters' : CharMeta
-  });
-});
-
-router.get('/ajax/ff_meta', function(req, res) {
-  q = req.query.q;
-  var result = []
-  // query format: json? { 'character': ... , 'fandom': ... }
-  for (var i = 0; i < FFMeta.length; i++) {
-    var matchesQuery = true;
-    fic_meta = FFMeta[i];
-    if (q) {
-      var matchesFandom = true;
-      var matchesCharacter = true;
-      if ('fandom' in q) {
-        matchesFandom = fic_meta['fandoms'].indexOf(q['fandom']) > -1
-      }
-      if ('character' in q) {
-        matchesCharacter = fic_meta['chars'].indexOf(q['character']) > -1
-      }
-      matchesQuery = matchesCharacter && matchesFandom
-    }
-    if (matchesQuery) {
-      result.push(fic_meta);
-    }
-  }
-  res.json(result);
-});
 
 var getMetaForFic = function(title) {
-  for (var i = 0; i < FFMeta.length; i++) {
-    var fic = FFMeta[i];
+  const library = myLibrary.get()
+  for (var i = 0; i < library.stories.length; i++) {
+    var fic = library.stories[i];
     if (fic['title'] === title) {
       return fic;
     }
@@ -157,7 +94,6 @@ var cleanCharName = function(str) {
 var findChars = function(str) {
   var items = str.split(' - ');
   var last = items[items.length -1];
-  console.log(last);
   var chars = [];
   if (last === 'Complete') {
 
@@ -169,7 +105,6 @@ var findChars = function(str) {
       }
     }
   }
-  console.log('Found characters:', chars);
   return chars;
 }
 
@@ -187,7 +122,6 @@ var processLatestFics = function(page, fandom, character, callback, done) {
             CharNameToQueryValue[$(this).text()] = $(this).val();
           }
       });
-      console.log(CharNameToQueryValue);
       $("div.z-list").each(function(i, e) {
         //list = list + $(this).addClass('item').css('width', '100%');
         var title = $(this).find('.stitle').first().text();
@@ -225,7 +159,6 @@ var fillChartData = function() {
   }
 
   for (var i in browse_data) {
-    console.log(browse_data[i].chars);
     for (var j in browse_data[i].chars) {
       var idx = chart_data.labels.indexOf(browse_data[i].chars[j]);
       if (idx > -1) {
@@ -236,17 +169,14 @@ var fillChartData = function() {
       }
     }
   }
-  console.log(chart_data);
 }
 
 processLatestFics(1, null, null, function(item) {}, function() { });
 
 router.get('/ajax/chart_data', function(req, res) {
   var character = req.query.character;
-  console.log(character);
   processLatestFics(req.query.page, null, null, function(item) {}, function() {
     fillChartData();
-    console.log(chart_data);
     res.json(chart_data);
   })
 });
@@ -281,7 +211,6 @@ router.get('/ajax/browse_filter', function(req, res) {
   var query = req.query.q;
   var results = []
   for (var p in CharNameToQueryValue) {
-    console.log(p);
     if (p.toLowerCase().indexOf(query.toLowerCase()) > -1) {
       results.push({ title: p });
     }
@@ -322,78 +251,44 @@ router.get('/chart', function(req, res) {
   });
 });
 
-var buf = ''
-var fic_db = null;
-var FINISH_SIGNAL = "***FINISHED***"
-function pump() {
-  var pos;
+module.exports = function(library) {
+  console.log('HEYYYY', library != null);
+  myLibrary = library;
 
-  while ((pos = buf.indexOf('  \}')) >= 0) { // keep going while there's a newline somewhere in the buffer
-    processFicJson(buf.slice(0,pos+3)); // hand off the line
-    buf = buf.slice(pos+3); // and slice the processed data off the buffer
-  }
-
-  console.log(buf);
-
-  if (buf.endsWith(FINISH_SIGNAL)) {
-    fic_db.close()
-    fic_db = null;
-  }
-}
-
-var insertFicDoc = function(fic, callback) {
-  // Get the documents collection
-  var collection = fic_db.collection('documents');
-  // Insert some documents
-  collection.insertOne(fic, function(err, result) {
-    assert.equal(err, null);
-    callback(result);
-  });
-}
-
-function processFicJson(fic) {  // here's where we do something with a line
-  fic = fic.trim()
-
-  if (fic.startsWith(',')) {
-    fic = fic.slice(1)
-  }
-
-  if (fic.length > 0) { // ignore empty lines
-    var obj = JSON.parse(fic); // parse the JSON
-    insertFicDoc(obj, function() {
-      console.log("Inserted " + obj['title']);
-    })
-  }
-}
-
-var FF_JSON = '/home/carrie/Desktop/compiled_fanfic.json';
-router.get('/fill_in_db', function(req, res) {
-  MongoClient.connect(url, function(err, db) {
-    assert.equal(null, err);
-    console.log("Connected correctly to server", db);
-    fic_db = db;
-
-    var stream = fs.createReadStream(FF_JSON, {
-      'flags' : 'r',
-      'encoding' : 'utf-8'
-    })
-
-    stream.on('data', function(d) {
-      buf += d.toString().replace('[', '').replace(']', '');
-      // when data is read, stuff it in a string buffer
-      pump();
+  router.get('/ajax/filter_meta', function(req, res) {
+    const lib = library.get();
+    console.log(lib.fandoms);
+    res.json({
+      'fandoms' : lib.fandoms,
+      'characters' : lib.characters
     });
-
-    stream.on('end', () => {
-      console.log("END");
-      pump("***FINSIHED***");
-    })
   });
-  console.log('finished');
-  res.json('OK');
-});
 
-module.exports = function(db) {
-  database = db;
+  router.get('/ajax/ff_meta', function(req, res) {
+    q = req.query.q;
+    var result = []
+    // query format: json? { 'character': ... , 'fandom': ... }
+    const lib = library.get();
+    for (var i = 0; i < lib.stories.length; i++) {
+      var matchesQuery = true;
+      fic_meta = lib.stories[i];
+      if (q) {
+        var matchesFandom = true;
+        var matchesCharacter = true;
+        if ('fandom' in q) {
+          matchesFandom = fic_meta['fandoms'].indexOf(q['fandom']) > -1
+        }
+        if ('character' in q) {
+          matchesCharacter = fic_meta['chars'].indexOf(q['character']) > -1
+        }
+        matchesQuery = matchesCharacter && matchesFandom
+      }
+      if (matchesQuery) {
+        result.push(fic_meta);
+      }
+    }
+    res.json(result);
+  });
+
   return router;
 };

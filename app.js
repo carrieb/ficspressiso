@@ -7,6 +7,9 @@ var bodyParser = require('body-parser');
 
 var users = require('./routes/users');
 
+const config = require('./config');
+const library = require('./src/library')(config);
+
 var MongoClient = require('mongodb').MongoClient,
   assert = require('assert');
 
@@ -20,7 +23,7 @@ MongoClient.connect(url, function(err, db) {
   db.close();
 });
 
-var routes = require('./routes/index')(MongoClient);
+var routes = require('./routes/index')(library);
 
 var app = express();
 
