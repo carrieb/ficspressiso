@@ -1,13 +1,16 @@
-var React = require("react"),
-    ReactDOM = require('react-dom'),
-    App = React.createFactory(require("components/app"));
+import React from 'react';
+import { render } from 'react-dom';
+import { Router, Route, Link, browserHistory } from 'react-router';
+
+import App from './components/app';
 
 if (typeof window !== "undefined") {
   window.onload = function() {
-    console.log(window['initJson']);
-    ReactDOM.render(App({
-      initialSection: window['initJson']['initialSection'],
-      renderChart: true
-    }), document.getElementById("content"));
+    console.log(window.initJson);
+    render(<Router history={browserHistory}>
+        <Route path="/" component={App}>
+
+        </Route>
+      </Router>, document.getElementById("content"));
   };
 }

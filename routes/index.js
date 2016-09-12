@@ -4,6 +4,8 @@ const fs = require('fs');
 const https = require('https');
 const cheerio = require('cheerio');
 
+const ffnet = require('../src/ffnet');
+
 var database = null;
 
 var url = 'mongodb://localhost:27017/fanfic';
@@ -13,19 +15,13 @@ require("node-jsx").install({
     extension: ".jsx"
 });
 
-var browseUrl = 'https://www.fanfiction.net/book/Harry-Potter/?&srt=1&lan=1&r=10&len=20&c1=3';
-
 var React = require("react"),
-    ReactDOMServer = require('react-dom/server'),
-    App = React.createFactory(require("../public/javascripts/components/app")),
-    ChartApp = React.createFactory(require("../public/javascripts/components/chartapp")),
-    BrowseItem = React.createFactory(require("../public/javascripts/components/browseitem")),
     CharNameToQueryValue = {};
 
 // Keep a mapping of char name to value
 // Update every time we request a page (?)
 
-const myLibrary = null;
+let myLibrary = null;
 
 var MongoClient = require('mongodb').MongoClient,
   assert = require('assert');
@@ -183,26 +179,23 @@ router.get('/ajax/chart_data', function(req, res) {
 
 router.get('/ajax/browse', function(req, res) {
   const page = req.query.page;
-  const fandom = req.query.fandom;
-  const character = req.query.character; // TODO: convert to value for ffnet..? (using page??);
-  var list = '';
-  processLatestFics(page, fandom, character, function(fic) {
-    // TOOD: move this to the client
-    list = list + ReactDOMServer.renderToString(BrowseItem(fic));
-  }, function() {
-    res.send(list);
+  const fandom = req.query.fandom || 'Harry Potter';
+  const character = req.query.character;
+  ffnet.retrieveFics(page, fandom, character, (data) => {
+    console.log(data);
+    res.json(data);
   });
 });
 
 /* GET home page. */
 router.get('/', function(req, res) {
-  var markup = ReactDOMServer.renderToString(App({
+  /*var markup = ReactDOMServer.renderToString(App({
     initialSection: 'Library'
-  }));
+  }));*/
 
   res.render('index', {
     title: 'ficspressiso',
-    markup: markup,
+    markup: null,
     initialSection: 'Library'
   });
 });
@@ -226,27 +219,27 @@ router.get('/ajax/browse_filter', function(req, res) {
 });
 
 router.get('/browse', function(req, res) {
-  var markup = ReactDOMServer.renderToString(App({
-    initialSection: 'Browse',
-    renderChart: false
-  }));
+  // var markup = ReactDOMServer.renderToString(App({
+  //   initialSection: 'Browse',
+  //   renderChart: false
+  // }));
 
   res.render('index', {
     title: 'ficspressiso',
-    markup: markup,
+    markup: null,
     initialSection: 'Browse'
   });
 });
 
 router.get('/chart', function(req, res) {
-  var markup = ReactDOMServer.renderToString(App({
-    initialSection: 'Chart',
-    renderChart: false
-  }));
+  // var markup = ReactDOMServer.renderToString(App({
+  //   initialSection: 'Chart',
+  //   renderChart: false
+  // }));
 
   res.render('index', {
     title: 'ficspressiso',
-    markup: markup,
+    markup: null,
     initialSection: 'Chart'
   });
 });

@@ -1,8 +1,13 @@
 engineering
 # add redux
+# switch client-side code to using React.router
+
+setup
 # add linting
 
 product
 # add dark view
 # kick off downloads from browse
 # browse opens in app reader
+# have search terms highlight in browse
+# add animations (change chapter, one by one for fics)

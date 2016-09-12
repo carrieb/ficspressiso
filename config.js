@@ -1,6 +1,4 @@
-var config = {}
-
-console.log(process.env)
+var config = {};
 
 config.fanfiction_dir = process.env.HOME + '/Desktop/fanfiction/';
 
