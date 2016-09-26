@@ -123,7 +123,7 @@ a {
 }
 
 .browse_content .item .image{
-  align-self: center;
+  /*align-self: center;*/
 }
 
 .browse_content .item .description {
@@ -132,4 +132,16 @@ a {
 
 .chart-container {
   text-align: center;
+}
+
+.browse_item_content .header {
+  font-size: 2rem !important;
+}
+
+.meta {
+  padding-bottom: 20px;
+}
+
+.description {
+  padding-bottom: 15px;
 }

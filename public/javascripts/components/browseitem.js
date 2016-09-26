@@ -16,7 +16,7 @@ const BrowseItem = React.createClass({
         <img src={ "https://unsplash.it/200/200/?random=" + cacheBust }/>
       </div>
       <div className="middle aligned content browse_item_content">
-        <a href={"https://www.fanfiction.net" + fic.url } className="header">{ fic.title }</a>
+        <a className="header" style={{ fontSize: '2 rem' }} href={"https://www.fanfiction.net" + fic.url } className="header">{ fic.title }</a>
         <div className="meta"><span>{ fic.author }</span></div>
         <div className="description"><p>{ fic.summary }</p></div>
         <div className="extra">{ extra_labels }</div>

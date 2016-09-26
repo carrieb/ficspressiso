@@ -8,9 +8,8 @@
       }
     </script>
     <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
-    <!-- TODO: move styles.css to before semantic.min.css  -->
-    <link rel="stylesheet" type="text/css" href="/semantic/dist/semantic.min.css">
-    <script src="/semantic/dist/semantic.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/javascripts/dist/semantic.min.css">
+    <script src="/javascripts/dist/semantic.min.js"></script>
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
