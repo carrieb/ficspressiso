@@ -81,14 +81,6 @@ router.get('/ajax/browse', function(req, res) {
   });
 });
 
-router.get('/library', (req, res) => {
-  res.render('library', {
-    title: 'ficspressiso',
-    markup: null,
-    initialSection: 'Library'
-  });
-});
-
 router.get('/about', (req, res) => {
   res.render('library', {
     title: 'ficspressiso',
@@ -100,10 +92,12 @@ router.get('/about', (req, res) => {
 /* GET home page. */
 router.get('/', function(req, res) {
 
+  const initJson = { initialSection: 'Library' };
+
   res.render('index', {
     title: 'ficspressiso',
     markup: null,
-    initJson: JSON.stringify({})
+    initJson: JSON.stringify(initJson)
   });
 });
 

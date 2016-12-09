@@ -58,6 +58,18 @@
 
 	var _app2 = _interopRequireDefault(_app);
 
+	var _library = __webpack_require__(236);
+
+	var _library2 = _interopRequireDefault(_library);
+
+	var _browse = __webpack_require__(244);
+
+	var _browse2 = _interopRequireDefault(_browse);
+
+	var _chartapp = __webpack_require__(247);
+
+	var _chartapp2 = _interopRequireDefault(_chartapp);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	if (typeof window !== "undefined") {
@@ -66,7 +78,13 @@
 	    (0, _reactDom.render)(_react2.default.createElement(
 	      _reactRouter.Router,
 	      { history: _reactRouter.browserHistory },
-	      _react2.default.createElement(_reactRouter.Route, { path: '/', component: _app2.default })
+	      _react2.default.createElement(
+	        _reactRouter.Route,
+	        { path: '/', component: _app2.default },
+	        _react2.default.createElement(_reactRouter.Route, { path: '/library', component: _library2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { path: '/browse', component: _browse2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { path: '/chart', component: _chartapp2.default })
+	      )
 	    ), document.getElementById("content"));
 	  };
 	}
@@ -27093,107 +27111,51 @@
 /* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
-	var React = __webpack_require__(1),
-	    Library = __webpack_require__(236),
-	    Browse = __webpack_require__(244),
-	    ChartApp = __webpack_require__(247);
+	var _react = __webpack_require__(1);
 
-	var App = React.createClass({
-	  displayName: "App",
-	  componentDidMount: function componentDidMount() {
-	    if (this.state.section === "Library") {
-	      this.setState({
-	        library: React.createElement(Library, null)
-	      });
-	    } else if (this.state.section === "Browse") {
-	      this.setState({
-	        browse: React.createElement(Browse, null)
-	      });
-	    } else if (this.state.section === "Chart") {
-	      this.setState({
-	        chart: React.createElement(ChartApp, { renderChart: this.props.renderChart })
-	      });
-	    }
-	  },
-	  setActive: function setActive(ev) {
-	    var section = ev.target.textContent;
-	    if (section === "Library") {
-	      var library = this.state.library;
-	      if (library == null) {
-	        library = React.createElement(Library, null);
-	      }
-	      this.setState({
-	        library: library,
-	        section: section
-	      });
-	    } else if (section === "Browse") {
-	      var browse = this.state.browse;
-	      if (browse == null) {
-	        var browse = React.createElement(Browse, null);
-	      }
-	      this.setState({
-	        browse: browse,
-	        section: section
-	      });
-	    } else if (section === "Chart") {
-	      var chart = this.state.chart;
-	      if (chart == null) {
-	        var chart = React.createElement(ChartApp, { renderChart: this.props.renderChart });
-	      }
-	      this.setState({
-	        chart: chart,
-	        section: section
-	      });
-	    }
-	  },
-	  getInitialState: function getInitialState() {
-	    return {
-	      section: this.props.initialSection,
-	      library: null,
-	      browse: null,
-	      chart: null
-	    };
-	  },
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(172);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var App = _react2.default.createClass({
+	  displayName: 'App',
 	  render: function render() {
-	    var _this = this;
-
-	    var sections = ["Library", "Browse", "Chart"];
-	    var sectionContent = '';
-	    var sectionEls = sections.map(function (section) {
-	      var selected = section === _this.state.section ? " active" : "";
-	      return React.createElement(
-	        "a",
-	        { className: "ui item" + selected, onClick: _this.setActive, key: section },
-	        section
-	      );
-	    });
-	    if (this.state.section === "Library") {
-	      sectionContent = this.state.library;
-	    } else if (this.state.section === "Browse") {
-	      sectionContent = this.state.browse;
-	    } else if (this.state.section === "Chart") {
-	      sectionContent = this.state.chart;
-	    }
-	    return React.createElement(
-	      "div",
+	    return _react2.default.createElement(
+	      'div',
 	      null,
-	      React.createElement(
-	        "div",
-	        { className: "ui teal large secondary pointing menu", style: { marginBottom: '20px' } },
-	        sectionEls,
-	        React.createElement(
-	          "div",
-	          { className: "right menu" },
-	          React.createElement(
-	            "a",
-	            { className: "ui item" + (this.state.section === "Settings" ? " active" : ""), onClick: this.setActive, key: "Settings" },
-	            "Settings"
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'ui teal large secondary pointing menu', style: { marginBottom: '20px' } },
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '/library', activeClassName: 'active', className: 'ui item' },
+	          'Library'
+	        ),
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '/browse', activeClassName: 'active', className: 'ui item' },
+	          'Browse'
+	        ),
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '/chart', activeClassName: 'active', className: 'ui item' },
+	          'Chart'
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'right menu' },
+	          _react2.default.createElement(
+	            _reactRouter.Link,
+	            { to: '/settings', activeClassName: 'active', className: 'ui item' },
+	            'Settings'
 	          )
 	        )
 	      ),
-	      sectionContent
+	      this.props.children
 	    );
 	  }
 	});
@@ -27297,6 +27259,7 @@
 	    }
 	  },
 	  render: function render() {
+	    console.log("library render");
 	    return React.createElement(
 	      "div",
 	      null,

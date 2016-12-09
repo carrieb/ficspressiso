@@ -84,6 +84,7 @@ var Library = React.createClass({
     }
   },
   render() {
+    console.log("library render");
     return (
       <div>
         <div className="left_bar">
