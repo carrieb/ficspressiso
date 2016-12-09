@@ -3,9 +3,13 @@ var path = require("path");
 module.exports = [{
   context: path.join(__dirname, "public", "javascripts"),
   entry: "app.js",
+  entry: {
+    app: 'app.js',
+    library: 'app-library.js'
+  },
   output: {
-    path: path.join(__dirname, "public", "javascripts"),
-    filename: "bundle.js"
+    filename: '[name]-bundle.js',
+    path: path.join(__dirname, "public", "javascripts")
   },
   module: {
     loaders: [

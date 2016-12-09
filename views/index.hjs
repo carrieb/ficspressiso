@@ -3,9 +3,7 @@
   <head>
     <title>{{ title }}</title>
     <script>
-      window['initJson'] = {
-        'initialSection': '{{ initialSection }}'
-      }
+      window.initJson = {{ initJson }};
     </script>
     <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/javascripts/dist/semantic.min.css">
@@ -16,6 +14,6 @@
     <div id="content">
       {{{markup}}}
     </div>
-    <script src="javascripts/bundle.js"></script>
+    <script src="javascripts/app-bundle.js"></script>
   </body>
 </html>
