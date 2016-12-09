@@ -8,7 +8,7 @@ const config = require('../config.js');
 
 const ffnet = require('../src/ffnet');
 
-const newLib = require('../src/library');
+const library = require('../src/library');
 
 var database = null;
 
@@ -24,8 +24,6 @@ var React = require("react"),
 
 // Keep a mapping of char name to value
 // Update every time we request a page (?)
-
-var myLibrary = null;
 
 var MongoClient = require('mongodb').MongoClient,
   assert = require('assert');
@@ -91,8 +89,12 @@ router.get('/about', (req, res) => {
 
 /* GET home page. */
 router.get('/', function(req, res) {
-
-  const initJson = { initialSection: 'Library' };
+  const initJson = {
+    initialSection: 'Library',
+    stories: library.stories,
+    characters: Array.from(library.characters),
+    fandoms: Array.from(library.fandoms)
+  };
 
   res.render('index', {
     title: 'ficspressiso',
@@ -146,43 +148,3 @@ router.get('/chart', function(req, res) {
 });
 
 module.exports = router;
-
-// module.exports = function(library) {
-//   myLibrary = library;
-//
-//   router.get('/ajax/filter_meta', function(req, res) {
-//     const lib = library.get();
-//     res.json({
-//       'fandoms' : lib.fandoms,
-//       'characters' : lib.characters
-//     });
-//   });
-//
-//   router.get('/ajax/ff_meta', function(req, res) {
-//     q = req.query.q;
-//     var result = []
-//     // query format: json? { 'character': ... , 'fandom': ... }
-//     const lib = library.get();
-//     for (var i = 0; i < lib.stories.length; i++) {
-//       var matchesQuery = true;
-//       fic_meta = lib.stories[i];
-//       if (q) {
-//         var matchesFandom = true;
-//         var matchesCharacter = true;
-//         if ('fandom' in q) {
-//           matchesFandom = fic_meta['fandoms'].indexOf(q['fandom']) > -1
-//         }
-//         if ('character' in q) {
-//           matchesCharacter = fic_meta['chars'].indexOf(q['character']) > -1
-//         }
-//         matchesQuery = matchesCharacter && matchesFandom
-//       }
-//       if (matchesQuery) {
-//         result.push(fic_meta);
-//       }
-//     }
-//     res.json(result);
-//   });
-//
-//   return router;
-// };

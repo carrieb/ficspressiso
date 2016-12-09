@@ -1,26 +1,30 @@
-var React = require("react");
+import React from 'react';
+
+const initJson = window.initJson;
+const characters = initJson.characters;
+const fandoms = initJson.fandoms;
 
 // TODO: build clearing out value into this
+
+
 var FFFilter = React.createClass({
   render() {
-    var characterOptions = [];
-    for (var i = 0; i < this.state.characters.length; i++) {
-      characterOptions.push(
-        <div className="item" key={ "char_" + i } data-category="character">
-          <div className={"ui " + this.state.characters[i].color + " empty circular label"}/>
-          <span>{ this.state.characters[i].name }</span>
+    const characterOptions = characters.map((character, idx) => {
+      return (
+        <div className="item" key={`char_${idx}`} data-category="character">
+          <div className="ui blue empty circular label"/>
+          <span>{ character }</span>
         </div>
       );
-    }
-    var fandomOptions = [];
-    for (var j = 0; j < this.state.fandoms.length; j++) {
-      fandomOptions.push(
-        <div className="item" key={ "fandom_" + j } data-category="fandom">
-          <div className={"ui " + this.state.fandoms[j].color + " empty circular label"}/>
-          <span>{ this.state.fandoms[j].name }</span>
+    });
+    const fandomOptions = fandoms.map((fandom, idx) => {
+      return (
+        <div className="item" key={`fandom_${idx}`} data-category="fandom">
+          <div className="ui blue empty circular label"/>
+          <span>{ fandom }</span>
         </div>
       );
-    }
+    });
     var filterDropdown = (
       <div id="fic_filter" className="ui labeled icon top center pointing dropdown button">
         <i className="filter icon"></i>
@@ -51,22 +55,11 @@ var FFFilter = React.createClass({
     );
     return (filterDropdown);
   },
-  getInitialState() {
-    return {
-      "characters": [],
-      "fandoms": []
-    }
-  },
-  requestFilterMeta() {
-    $.ajax('/ajax/filter_meta').error((req, status, error) => {
-      console.log(error);
-    }).done((data) => {
-      this.setState(data);
-    });
-  },
+
   componentDidUpdate() {
     $('.ui.dropdown').dropdown('refresh');
   },
+
   handleChange(value, text, choice) {
     // semantic ui is dumb, prevent invariant violation error
     var childs = $("#selected_filter").children()
@@ -81,15 +74,14 @@ var FFFilter = React.createClass({
       query = {};
       query[cat] = item.textContent;
     }
-    this.props.updateFicMeta(query);
   },
+
   componentDidMount() {
     $('#fic_filter.ui.dropdown').dropdown({
       showOnFocus: false,
       onChange: this.handleChange,
       placeholder: ''
     });
-    this.requestFilterMeta()
   }
 });
 

@@ -27227,37 +27227,6 @@
 	      callback(data, title, chp);
 	    });
 	  },
-	  requestFFMeta: function requestFFMeta(query) {
-	    var _this = this;
-
-	    //console.log("Getting fics for query:'" + query + "'");
-	    $.ajax('/ajax/ff_meta', {
-	      data: {
-	        "q": query ? query : undefined
-	      }
-	    }).error(function (req, status, error) {
-	      console.error(error);
-	    }).done(function (data) {
-	      //console.log("Retrieved " + data.length + " fics.", data);
-	      _this.setState({
-	        "ff_meta": data
-	      });
-	    });
-	  },
-	  componentDidMount: function componentDidMount() {
-	    this.requestFFMeta();
-	    var timeout = window.setTimeout(this.requestFFMeta, 5000);
-	    //console.log(`new timeout ${timeout}`);
-	    this.setState({
-	      timeout: timeout
-	    });
-	  },
-	  componentWillUnmount: function componentWillUnmount() {
-	    //console.log(`clearing ${this.state.timeout}`);
-	    if (this.state.timeout) {
-	      window.clearTimeout(this.state.timeout);
-	    }
-	  },
 	  render: function render() {
 	    console.log("library render");
 	    return React.createElement(
@@ -27269,12 +27238,11 @@
 	        React.createElement(
 	          "div",
 	          { style: { textAlign: 'center', paddingBottom: '25px' } },
-	          React.createElement(FFFilter, { updateFicMeta: this.requestFFMeta })
+	          React.createElement(FFFilter, null)
 	        ),
 	        React.createElement(FFList, { meta: this.state.ff_meta,
 	          currentFic: this.state.fic,
-	          loadFicContent: this.requestFFContent.bind(this, this.onRetrievedFicContent),
-	          updateFicMeta: this.requestFFMeta })
+	          loadFicContent: this.requestFFContent.bind(this, this.onRetrievedFicContent) })
 	      ),
 	      React.createElement(FFReader, { content: this.state.content,
 	        loadFicContent: this.requestFFContent.bind(this, this.onRetrievedFicContent, this.state.fic ? this.state.fic['title'] : null),
@@ -27293,27 +27261,37 @@
 /* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
-	var React = __webpack_require__(1),
-	    FFItem = React.createFactory(__webpack_require__(238)),
-	    FFFilter = __webpack_require__(239);
+	var _react = __webpack_require__(1);
 
-	var FFList = React.createClass({
-	  displayName: "FFList",
+	var _react2 = _interopRequireDefault(_react);
+
+	var _ffitem = __webpack_require__(238);
+
+	var _ffitem2 = _interopRequireDefault(_ffitem);
+
+	var _fffilter = __webpack_require__(239);
+
+	var _fffilter2 = _interopRequireDefault(_fffilter);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var initJson = window.initJson;
+	var stories = initJson.stories;
+
+	var FFList = _react2.default.createClass({
+	  displayName: 'FFList',
 	  render: function render() {
-	    var rows = [];
-	    for (var i = 0; i < this.props.meta.length; i++) {
-	      rows.push(FFItem({
-	        "data": this.props.meta[i],
-	        "key": i,
-	        "loadFicContent": this.props.loadFicContent,
-	        "selected": this.props.currentFic ? this.props.currentFic.title === this.props.meta[i].title : false
-	      }));
-	    }
-	    return React.createElement(
-	      "div",
-	      { className: "fic_list" },
+	    var _this = this;
+
+	    var rows = stories.map(function (story, idx) {
+	      var selected = _this.props.currentFic ? _this.props.currentFic.title === _this.props.meta[i].title : false;
+	      return _react2.default.createElement(_ffitem2.default, { data: story, key: idx, loadFicContent: _this.props.loadFicContent, selected: selected });
+	    });
+	    return _react2.default.createElement(
+	      'div',
+	      { className: 'fic_list' },
 	      rows
 	    );
 	  }
@@ -27404,100 +27382,93 @@
 
 	"use strict";
 
-	var React = __webpack_require__(1);
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var initJson = window.initJson;
+	var characters = initJson.characters;
+	var fandoms = initJson.fandoms;
 
 	// TODO: build clearing out value into this
-	var FFFilter = React.createClass({
+
+
+	var FFFilter = _react2.default.createClass({
 	  displayName: "FFFilter",
 	  render: function render() {
-	    var characterOptions = [];
-	    for (var i = 0; i < this.state.characters.length; i++) {
-	      characterOptions.push(React.createElement(
+	    var characterOptions = characters.map(function (character, idx) {
+	      return _react2.default.createElement(
 	        "div",
-	        { className: "item", key: "char_" + i, "data-category": "character" },
-	        React.createElement("div", { className: "ui " + this.state.characters[i].color + " empty circular label" }),
-	        React.createElement(
+	        { className: "item", key: "char_" + idx, "data-category": "character" },
+	        _react2.default.createElement("div", { className: "ui blue empty circular label" }),
+	        _react2.default.createElement(
 	          "span",
 	          null,
-	          this.state.characters[i].name
+	          character
 	        )
-	      ));
-	    }
-	    var fandomOptions = [];
-	    for (var j = 0; j < this.state.fandoms.length; j++) {
-	      fandomOptions.push(React.createElement(
+	      );
+	    });
+	    var fandomOptions = fandoms.map(function (fandom, idx) {
+	      return _react2.default.createElement(
 	        "div",
-	        { className: "item", key: "fandom_" + j, "data-category": "fandom" },
-	        React.createElement("div", { className: "ui " + this.state.fandoms[j].color + " empty circular label" }),
-	        React.createElement(
+	        { className: "item", key: "fandom_" + idx, "data-category": "fandom" },
+	        _react2.default.createElement("div", { className: "ui blue empty circular label" }),
+	        _react2.default.createElement(
 	          "span",
 	          null,
-	          this.state.fandoms[j].name
+	          fandom
 	        )
-	      ));
-	    }
-	    var filterDropdown = React.createElement(
+	      );
+	    });
+	    var filterDropdown = _react2.default.createElement(
 	      "div",
 	      { id: "fic_filter", className: "ui labeled icon top center pointing dropdown button" },
-	      React.createElement("i", { className: "filter icon" }),
-	      React.createElement(
+	      _react2.default.createElement("i", { className: "filter icon" }),
+	      _react2.default.createElement(
 	        "span",
 	        { className: "text", id: "selected_filter" },
 	        "Filter Stories"
 	      ),
-	      React.createElement(
+	      _react2.default.createElement(
 	        "div",
 	        { className: "menu" },
-	        React.createElement(
+	        _react2.default.createElement(
 	          "div",
 	          { className: "ui search icon input" },
-	          React.createElement("i", { className: "search icon" }),
-	          React.createElement("input", { type: "text", name: "search", placeholder: "Search stories..." })
+	          _react2.default.createElement("i", { className: "search icon" }),
+	          _react2.default.createElement("input", { type: "text", name: "search", placeholder: "Search stories..." })
 	        ),
-	        React.createElement("div", { className: "divider" }),
-	        React.createElement(
+	        _react2.default.createElement("div", { className: "divider" }),
+	        _react2.default.createElement(
 	          "div",
 	          { className: "item", key: "all" },
-	          React.createElement(
+	          _react2.default.createElement(
 	            "span",
 	            null,
 	            "All"
 	          )
 	        ),
-	        React.createElement("div", { className: "divider" }),
-	        React.createElement(
+	        _react2.default.createElement("div", { className: "divider" }),
+	        _react2.default.createElement(
 	          "div",
 	          { className: "header" },
-	          React.createElement("i", { className: "tags icon" }),
+	          _react2.default.createElement("i", { className: "tags icon" }),
 	          "Filter by fandom"
 	        ),
 	        fandomOptions,
-	        React.createElement("div", { className: "divider" }),
-	        React.createElement(
+	        _react2.default.createElement("div", { className: "divider" }),
+	        _react2.default.createElement(
 	          "div",
 	          { className: "header" },
-	          React.createElement("i", { className: "user icon" }),
+	          _react2.default.createElement("i", { className: "user icon" }),
 	          "Filter by characters"
 	        ),
 	        characterOptions
 	      )
 	    );
 	    return filterDropdown;
-	  },
-	  getInitialState: function getInitialState() {
-	    return {
-	      "characters": [],
-	      "fandoms": []
-	    };
-	  },
-	  requestFilterMeta: function requestFilterMeta() {
-	    var _this = this;
-
-	    $.ajax('/ajax/filter_meta').error(function (req, status, error) {
-	      console.log(error);
-	    }).done(function (data) {
-	      _this.setState(data);
-	    });
 	  },
 	  componentDidUpdate: function componentDidUpdate() {
 	    $('.ui.dropdown').dropdown('refresh');
@@ -27516,7 +27487,6 @@
 	      query = {};
 	      query[cat] = item.textContent;
 	    }
-	    this.props.updateFicMeta(query);
 	  },
 	  componentDidMount: function componentDidMount() {
 	    $('#fic_filter.ui.dropdown').dropdown({
@@ -27524,7 +27494,6 @@
 	      onChange: this.handleChange,
 	      placeholder: ''
 	    });
-	    this.requestFilterMeta();
 	  }
 	});
 

@@ -54,47 +54,17 @@ var Library = React.createClass({
       callback(data, title, chp);
     });
   },
-  requestFFMeta(query) {
-    //console.log("Getting fics for query:'" + query + "'");
-    $.ajax('/ajax/ff_meta', {
-      data: {
-        "q" : query ? query : undefined
-      }
-    }).error((req, status, error) => {
-      console.error(error);
-    }).done((data) => {
-      //console.log("Retrieved " + data.length + " fics.", data);
-      this.setState({
-        "ff_meta" : data
-      });
-    });
-  },
-  componentDidMount() {
-    this.requestFFMeta();
-    const timeout = window.setTimeout(this.requestFFMeta, 5000);
-    //console.log(`new timeout ${timeout}`);
-    this.setState({
-      timeout: timeout
-    })
-  },
-  componentWillUnmount() {
-    //console.log(`clearing ${this.state.timeout}`);
-    if (this.state.timeout) {
-      window.clearTimeout(this.state.timeout);
-    }
-  },
   render() {
     console.log("library render");
     return (
       <div>
         <div className="left_bar">
           <div style={{ textAlign: 'center', paddingBottom: '25px'}}>
-             <FFFilter updateFicMeta={ this.requestFFMeta }/>
+             <FFFilter/>
           </div>
           <FFList meta={ this.state.ff_meta }
                   currentFic={ this.state.fic }
-                  loadFicContent={ this.requestFFContent.bind(this, this.onRetrievedFicContent) }
-                  updateFicMeta={ this.requestFFMeta }/>
+                  loadFicContent={ this.requestFFContent.bind(this, this.onRetrievedFicContent) }/>
         </div>
       <FFReader content={ this.state.content }
                 loadFicContent={ this.requestFFContent.bind(this, this.onRetrievedFicContent, this.state.fic ? this.state.fic['title'] : null)}
