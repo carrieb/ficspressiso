@@ -14,7 +14,7 @@ var Library = React.createClass({
     };
   },
   onRetrievedFicContent(data, title, chp) {
-    console.log("Retrieved content for " + title + ": " + chp, data);
+    //console.log("Retrieved content for " + title + ": " + chp, data);
     var meta = this.getMetaForFic(title);
     var split = data.split(/\r\n|\r|\n/);
     var result = split.map((item, index) => {
@@ -42,7 +42,7 @@ var Library = React.createClass({
     return null;
   },
   requestFFContent(callback, title, chp) {
-    console.log("Requesting content for " + title + ": " + chp);
+    //console.log("Requesting content for " + title + ": " + chp);
     $.ajax('/ajax/ff_content', {
       data : {
         "title" : title,
@@ -55,15 +55,15 @@ var Library = React.createClass({
     });
   },
   requestFFMeta(query) {
-    console.log("Getting fics for query:'" + query + "'");
+    //console.log("Getting fics for query:'" + query + "'");
     $.ajax('/ajax/ff_meta', {
       data: {
         "q" : query ? query : undefined
       }
     }).error((req, status, error) => {
-      console.log(error);
+      console.error(error);
     }).done((data) => {
-      console.log("Retrieved " + data.length + " fics.", data);
+      //console.log("Retrieved " + data.length + " fics.", data);
       this.setState({
         "ff_meta" : data
       });
@@ -72,13 +72,13 @@ var Library = React.createClass({
   componentDidMount() {
     this.requestFFMeta();
     const timeout = window.setTimeout(this.requestFFMeta, 5000);
-    console.log(`new timeout ${timeout}`);
+    //console.log(`new timeout ${timeout}`);
     this.setState({
       timeout: timeout
     })
   },
   componentWillUnmount() {
-    console.log(`clearing ${this.state.timeout}`);
+    //console.log(`clearing ${this.state.timeout}`);
     if (this.state.timeout) {
       window.clearTimeout(this.state.timeout);
     }

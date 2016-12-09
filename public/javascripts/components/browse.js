@@ -45,7 +45,7 @@ const Browse = React.createClass({
     </div>);
   },
   next() {
-    console.log('what');
+    //console.log('what');
     this.setState({
       page: this.state.page + 1,
       loaded: false
@@ -53,7 +53,7 @@ const Browse = React.createClass({
     this.requestContent(this.state.page + 1, this.state.character);
   },
   requestContent(page, character) {
-    console.log("requesting fics..", page, character);
+    //console.log("requesting fics..", page, character);
     $.ajax('/ajax/browse', {
       type: 'GET',
       data: {

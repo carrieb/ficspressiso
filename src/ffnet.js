@@ -68,7 +68,6 @@ const FFNet = {
     console.log(url);
     util.download(url, (data) => {
       if (data) {
-        console.log(data);
         var $ = cheerio.load(data);
         $('.cimage').remove();
         $("div.z-list").each(function(i, e) {
