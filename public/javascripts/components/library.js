@@ -10,9 +10,11 @@ var Library = React.createClass({
       "chp" : 0,
       "ff_meta" : [],
       "fic" : null,
-      timeout: null
+      timeout: null,
+      query: {}
     };
   },
+
   onRetrievedFicContent(data, title, chp) {
     //console.log("Retrieved content for " + title + ": " + chp, data);
     var meta = this.getMetaForFic(title);
@@ -31,6 +33,7 @@ var Library = React.createClass({
     })
     window.scrollTo(0, 0);
   },
+
   getMetaForFic(title) {
     for (var i = 0; i < this.state.ff_meta.length; i++) {
       var fic = this.state.ff_meta[i];
@@ -41,6 +44,7 @@ var Library = React.createClass({
     console.error("No data found for " + title, this.state.ff_meta);
     return null;
   },
+
   requestFFContent(callback, title, chp) {
     //console.log("Requesting content for " + title + ": " + chp);
     $.ajax('/ajax/ff_content', {
@@ -54,17 +58,24 @@ var Library = React.createClass({
       callback(data, title, chp);
     });
   },
+
+  updateFilterQuery(query) {
+    this.setState({ query });
+  },
+
   render() {
     console.log("library render");
     return (
       <div>
         <div className="left_bar">
           <div style={{ textAlign: 'center', paddingBottom: '25px'}}>
-             <FFFilter/>
+             <FFFilter updateFilterQuery={this.updateFilterQuery}/>
           </div>
           <FFList meta={ this.state.ff_meta }
                   currentFic={ this.state.fic }
-                  loadFicContent={ this.requestFFContent.bind(this, this.onRetrievedFicContent) }/>
+                  loadFicContent={ this.requestFFContent.bind(this, this.onRetrievedFicContent) }
+                  query={ this.state.query }
+          />
         </div>
       <FFReader content={ this.state.content }
                 loadFicContent={ this.requestFFContent.bind(this, this.onRetrievedFicContent, this.state.fic ? this.state.fic['title'] : null)}

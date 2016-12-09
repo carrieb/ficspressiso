@@ -6,9 +6,29 @@ const initJson = window.initJson;
 const stories = initJson.stories;
 
 var FFList = React.createClass({
+  propTypes: {
+    currentFic: React.PropTypes.string,
+    loadFicContent: React.PropTypes.func,
+    query: React.PropTypes.object
+  },
+
+  storiesForQuery() {
+    const query = this.props.query;
+    return stories.filter((story) => {
+      let matchesQuery = true;
+      if (query.fandom) {
+        matchesQuery = matchesQuery && (query.fandom === story.fandom);
+      }
+      if (query.character) {
+        matchesQuery = matchesQuery && (story.chars.indexOf(query.character) > -1);
+      }
+      return matchesQuery;
+    })
+  },
+
   render() {
-    var rows = stories.map((story, idx) => {
-      const selected = this.props.currentFic ? this.props.currentFic.title === this.props.meta[i].title : false;
+    var rows = this.storiesForQuery().map((story, idx) => {
+      const selected = this.props.currentFic ? this.props.currentFic.title === story.title : false;
       return (
         <FFItem data={story} key={idx} loadFicContent={this.props.loadFicContent} selected={selected}/>
       );

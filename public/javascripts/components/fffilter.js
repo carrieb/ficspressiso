@@ -1,18 +1,23 @@
 import React from 'react';
 
+import util from '../../../src/util';
+
 const initJson = window.initJson;
 const characters = initJson.characters;
 const fandoms = initJson.fandoms;
 
 // TODO: build clearing out value into this
 
-
 var FFFilter = React.createClass({
+  propTypes: {
+      updateFilterQuery: React.PropTypes.func.isRequired
+  },
+
   render() {
     const characterOptions = characters.map((character, idx) => {
       return (
         <div className="item" key={`char_${idx}`} data-category="character">
-          <div className="ui blue empty circular label"/>
+          <div className={`ui ${util.randomColor()} empty circular label`}/>
           <span>{ character }</span>
         </div>
       );
@@ -20,7 +25,7 @@ var FFFilter = React.createClass({
     const fandomOptions = fandoms.map((fandom, idx) => {
       return (
         <div className="item" key={`fandom_${idx}`} data-category="fandom">
-          <div className="ui blue empty circular label"/>
+          <div className={`ui ${util.randomColor()} empty circular label`}/>
           <span>{ fandom }</span>
         </div>
       );
@@ -68,12 +73,14 @@ var FFFilter = React.createClass({
       el.removeAttribute('data-reactid');
     }
     var item = choice[0];
-    var query;
+    var query = {}
     if (item && item.textContent !== "All") {
       var cat = item.getAttribute('data-category');
-      query = {};
       query[cat] = item.textContent;
     }
+
+    console.log(query);
+    this.props.updateFilterQuery(query);
   },
 
   componentDidMount() {

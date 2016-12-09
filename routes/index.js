@@ -79,30 +79,6 @@ router.get('/ajax/browse', function(req, res) {
   });
 });
 
-router.get('/about', (req, res) => {
-  res.render('library', {
-    title: 'ficspressiso',
-    markup: null,
-    initialSection: 'Library'
-  });
-});
-
-/* GET home page. */
-router.get('/', function(req, res) {
-  const initJson = {
-    initialSection: 'Library',
-    stories: library.stories,
-    characters: Array.from(library.characters),
-    fandoms: Array.from(library.fandoms)
-  };
-
-  res.render('index', {
-    title: 'ficspressiso',
-    markup: null,
-    initJson: JSON.stringify(initJson)
-  });
-});
-
 router.get('/ajax/browse_filter', function(req, res) {
   var query = req.query.q;
   var results = []
@@ -121,29 +97,19 @@ router.get('/ajax/browse_filter', function(req, res) {
   });
 });
 
-router.get('/browse', function(req, res) {
-  // var markup = ReactDOMServer.renderToString(App({
-  //   initialSection: 'Browse',
-  //   renderChart: false
-  // }));
+/* GET home page. */
+router.get('*', function(req, res) {
+  const initJson = {
+    initialSection: 'Library',
+    stories: library.stories,
+    characters: Array.from(library.characters),
+    fandoms: Array.from(library.fandoms)
+  };
 
   res.render('index', {
     title: 'ficspressiso',
     markup: null,
-    initialSection: 'Browse'
-  });
-});
-
-router.get('/chart', function(req, res) {
-  // var markup = ReactDOMServer.renderToString(App({
-  //   initialSection: 'Chart',
-  //   renderChart: false
-  // }));
-
-  res.render('index', {
-    title: 'ficspressiso',
-    markup: null,
-    initialSection: 'Chart'
+    initJson: JSON.stringify(initJson)
   });
 });
 
