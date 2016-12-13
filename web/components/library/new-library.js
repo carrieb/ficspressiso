@@ -7,6 +7,12 @@ const stories = initJson.stories;
 const characters = initJson.characters;
 const fandoms = initJson.fandoms;
 
+const labelize = (item) => {
+  return (
+    <div className="ui basic label">{item}</div>
+  );
+}
+
 const NewLibrary = React.createClass({
   getInitialState() {
     return {
@@ -39,7 +45,11 @@ const NewLibrary = React.createClass({
             <div className="meta">{story.fandoms.join('-')}</div>
             <div className="description">{story.summary}</div>
             <div className="extra">
-              {story.chars.join(' - ')}
+              {story.chars.map(labelize)}
+              <div className="ui basic violet label"><i className="tasks icon"></i>{story.word_cnt}</div>
+              <div className="ui basic teal label"><i className="book icon"></i>{story.chapter_cnt}</div>
+              <div className="ui basic blue label"><i className="thumbs up icon"></i>{story.fav_cnt}</div>
+              <div className="ui basic red label"><i className="heart icon"></i>{story.follow_cnt}</div>
             </div>
           </div>
         </div>

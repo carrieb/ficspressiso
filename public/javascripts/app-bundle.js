@@ -59734,6 +59734,14 @@
 	var characters = initJson.characters;
 	var fandoms = initJson.fandoms;
 
+	var labelize = function labelize(item) {
+	  return _react2.default.createElement(
+	    'div',
+	    { className: 'ui basic label' },
+	    item
+	  );
+	};
+
 	var NewLibrary = _react2.default.createClass({
 	  displayName: 'NewLibrary',
 	  getInitialState: function getInitialState() {
@@ -59794,7 +59802,31 @@
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'extra' },
-	            story.chars.join(' - ')
+	            story.chars.map(labelize),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'ui basic violet label' },
+	              _react2.default.createElement('i', { className: 'tasks icon' }),
+	              story.word_cnt
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'ui basic teal label' },
+	              _react2.default.createElement('i', { className: 'book icon' }),
+	              story.chapter_cnt
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'ui basic blue label' },
+	              _react2.default.createElement('i', { className: 'thumbs up icon' }),
+	              story.fav_cnt
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'ui basic red label' },
+	              _react2.default.createElement('i', { className: 'heart icon' }),
+	              story.follow_cnt
+	            )
 	          )
 	        )
 	      );
