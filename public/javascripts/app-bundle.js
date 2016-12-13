@@ -59713,7 +59713,7 @@
 /* 431 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -59723,61 +59723,91 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _newFilter = __webpack_require__(432);
+
+	var _newFilter2 = _interopRequireDefault(_newFilter);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var initJson = window.initJson;
 	var stories = initJson.stories;
+	var characters = initJson.characters;
+	var fandoms = initJson.fandoms;
 
 	var NewLibrary = _react2.default.createClass({
-	  displayName: "NewLibrary",
+	  displayName: 'NewLibrary',
+	  getInitialState: function getInitialState() {
+	    return {
+	      query: {}
+	    };
+	  },
+	  storiesForQuery: function storiesForQuery() {
+	    var query = this.state.query;
+	    return stories.filter(function (story) {
+	      var matchesQuery = true;
+	      if (query.fandoms) {
+	        matchesQuery = matchesQuery && query.fandoms === story.fandom;
+	      }
+	      if (query.characters) {
+	        matchesQuery = matchesQuery && story.chars.indexOf(query.characters) > -1;
+	      }
+	      return matchesQuery;
+	    });
+	  },
 	  render: function render() {
-	    var storyEls = stories.map(function (story, idx) {
+	    var _this = this;
+
+	    console.log(this.state.query);
+	    var storyEls = this.storiesForQuery().map(function (story, idx) {
 	      // TODO: change story url to link to reader route
 	      return _react2.default.createElement(
-	        "div",
-	        { className: "item", key: idx },
+	        'div',
+	        { className: 'item', key: idx },
 	        _react2.default.createElement(
-	          "div",
-	          { className: "content" },
+	          'div',
+	          { className: 'content' },
 	          _react2.default.createElement(
-	            "div",
-	            { className: "header" },
+	            'div',
+	            { className: 'header' },
 	            _react2.default.createElement(
-	              "a",
+	              'a',
 	              { href: story.url },
 	              story.title
 	            ),
-	            " by ",
+	            ' by ',
 	            _react2.default.createElement(
-	              "a",
-	              { href: story.author_url, target: "_blank" },
+	              'a',
+	              { href: story.author_url, target: '_blank' },
 	              story.author
 	            )
 	          ),
 	          _react2.default.createElement(
-	            "div",
-	            { className: "meta" },
+	            'div',
+	            { className: 'meta' },
 	            story.fandoms.join('-')
 	          ),
 	          _react2.default.createElement(
-	            "div",
-	            { className: "description" },
+	            'div',
+	            { className: 'description' },
 	            story.summary
 	          ),
 	          _react2.default.createElement(
-	            "div",
-	            { className: "extra" },
+	            'div',
+	            { className: 'extra' },
 	            story.chars.join(' - ')
 	          )
 	        )
 	      );
 	    });
 	    return _react2.default.createElement(
-	      "div",
-	      { className: "container" },
+	      'div',
+	      { className: 'container' },
+	      _react2.default.createElement(_newFilter2.default, { updateFilterQuery: function updateFilterQuery(query) {
+	          _this.setState({ query: query });
+	        }, options: { fandoms: fandoms, characters: characters } }),
 	      _react2.default.createElement(
-	        "div",
-	        { className: "ui items" },
+	        'div',
+	        { className: 'ui items' },
 	        storyEls
 	      )
 	    );
@@ -59785,6 +59815,115 @@
 	});
 
 	exports.default = NewLibrary;
+
+/***/ },
+/* 432 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _util = __webpack_require__(240);
+
+	var _util2 = _interopRequireDefault(_util);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var NewFilter = _react2.default.createClass({
+	  displayName: 'NewFilter',
+
+	  propTypes: {
+	    updateFilterQuery: _react2.default.PropTypes.func.isRequired,
+	    options: _react2.default.PropTypes.object.isRequired /* e.g. { fandoms: [a, b, c], characters: [x, y, z] } */
+	  },
+
+	  componentDidMount: function componentDidMount() {
+	    $(this.dropdown).dropdown({
+	      showOnFocus: false,
+	      onChange: this.handleChange,
+	      placeholder: ''
+	    });
+	  },
+	  handleChange: function handleChange(value, text, choice) {
+	    var item = choice[0];
+	    var query = {};
+	    if (item && item.textContent !== "All") {
+	      var cat = item.getAttribute('data-category');
+	      query[cat] = item.textContent;
+	    }
+
+	    this.props.updateFilterQuery(query);
+	  },
+	  render: function render() {
+	    var _this = this;
+
+	    var optionSections = Object.keys(this.props.options).map(function (category) {
+	      var optionEls = _this.props.options[category].map(function (option, idx) {
+	        return _react2.default.createElement(
+	          'div',
+	          { className: 'item', key: category + '_' + idx, 'data-category': category },
+	          _react2.default.createElement('div', { className: 'ui ' + _util2.default.randomColor() + ' empty circular label' }),
+	          _react2.default.createElement(
+	            'span',
+	            null,
+	            option
+	          )
+	        );
+	      });
+	      return [_react2.default.createElement('div', { className: 'divider' }), _react2.default.createElement(
+	        'div',
+	        { className: 'header' },
+	        _react2.default.createElement('i', { className: 'tags icon' }),
+	        'Filter by ',
+	        category
+	      )].concat(optionEls);
+	    });
+
+	    var flattenedSections = [].concat.apply([], optionSections);
+	    return _react2.default.createElement(
+	      'div',
+	      { className: 'ui labeled icon top center pointing dropdown button', ref: function ref(dropdown) {
+	          _this.dropdown = dropdown;
+	        } },
+	      _react2.default.createElement('i', { className: 'filter icon' }),
+	      _react2.default.createElement(
+	        'span',
+	        { className: 'text' },
+	        'Filter'
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'menu' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'ui search icon input' },
+	          _react2.default.createElement('i', { className: 'search icon' }),
+	          _react2.default.createElement('input', { type: 'text', name: 'search', placeholder: 'Search stories...' })
+	        ),
+	        _react2.default.createElement('div', { className: 'divider' }),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'item', key: 'all' },
+	          _react2.default.createElement(
+	            'span',
+	            null,
+	            'All'
+	          )
+	        ),
+	        flattenedSections
+	      )
+	    );
+	  }
+	});
+
+	exports.default = NewFilter;
 
 /***/ }
 /******/ ]);
