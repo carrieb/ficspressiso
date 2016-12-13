@@ -70,6 +70,10 @@
 
 	var _chartapp2 = _interopRequireDefault(_chartapp);
 
+	var _newLibrary = __webpack_require__(431);
+
+	var _newLibrary2 = _interopRequireDefault(_newLibrary);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	if (typeof window !== "undefined") {
@@ -81,7 +85,9 @@
 	      _react2.default.createElement(
 	        _reactRouter.Route,
 	        { path: '/', component: _app2.default },
+	        _react2.default.createElement(_reactRouter.IndexRedirect, { to: '/library' }),
 	        _react2.default.createElement(_reactRouter.Route, { path: '/library', component: _library2.default }),
+	        _react2.default.createElement(_reactRouter.Route, { path: '/new-library', component: _newLibrary2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: '/browse', component: _browse2.default }),
 	        _react2.default.createElement(_reactRouter.Route, { path: '/chart', component: _chartapp2.default })
 	      )
@@ -27126,7 +27132,7 @@
 	  render: function render() {
 	    return _react2.default.createElement(
 	      'div',
-	      null,
+	      { className: 'container' },
 	      _react2.default.createElement(
 	        'div',
 	        { className: 'ui teal large secondary pointing menu', style: { marginBottom: '20px' } },
@@ -27134,6 +27140,11 @@
 	          _reactRouter.Link,
 	          { to: '/library', activeClassName: 'active', className: 'ui item' },
 	          'Library'
+	        ),
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '/new-library', activeClassName: 'active', className: 'ui item' },
+	          'New Library'
 	        ),
 	        _react2.default.createElement(
 	          _reactRouter.Link,
@@ -27179,7 +27190,6 @@
 	    return {
 	      "content": "",
 	      "chp": 0,
-	      "ff_meta": [],
 	      "fic": null,
 	      timeout: null,
 	      query: {}
@@ -27232,7 +27242,6 @@
 	    this.setState({ query: query });
 	  },
 	  render: function render() {
-	    console.log("library render");
 	    return React.createElement(
 	      "div",
 	      null,
@@ -27244,8 +27253,7 @@
 	          { style: { textAlign: 'center', paddingBottom: '25px' } },
 	          React.createElement(FFFilter, { updateFilterQuery: this.updateFilterQuery })
 	        ),
-	        React.createElement(FFList, { meta: this.state.ff_meta,
-	          currentFic: this.state.fic,
+	        React.createElement(FFList, { currentFic: this.state.fic,
 	          loadFicContent: this.requestFFContent.bind(this, this.onRetrievedFicContent),
 	          query: this.state.query
 	        })
@@ -59700,6 +59708,64 @@
 		};
 
 	};
+
+/***/ },
+/* 431 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var initJson = window.initJson;
+	var stories = initJson.stories;
+
+	var NewLibrary = _react2.default.createClass({
+	  displayName: "NewLibrary",
+	  render: function render() {
+	    var storyEls = stories.map(function (story) {
+	      return _react2.default.createElement(
+	        "div",
+	        { className: "item" },
+	        _react2.default.createElement(
+	          "div",
+	          { className: "content" },
+	          _react2.default.createElement(
+	            "div",
+	            { className: "header" },
+	            story.title
+	          ),
+	          _react2.default.createElement("div", { className: "meta" }),
+	          _react2.default.createElement(
+	            "div",
+	            { className: "description" },
+	            story.summary
+	          ),
+	          _react2.default.createElement("div", { className: "extra" })
+	        )
+	      );
+	    });
+	    return _react2.default.createElement(
+	      "div",
+	      { className: "container" },
+	      _react2.default.createElement(
+	        "div",
+	        { className: "ui items" },
+	        storyEls
+	      )
+	    );
+	  }
+	});
+
+	exports.default = NewLibrary;
 
 /***/ }
 /******/ ]);
