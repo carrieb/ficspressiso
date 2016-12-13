@@ -2,6 +2,8 @@ import React from 'react';
 
 import NewFilter from '../filter/new-filter';
 
+import sortBy from 'lodash/sortBy';
+
 const initJson = window.initJson;
 const stories = initJson.stories;
 const characters = initJson.characters;
@@ -16,13 +18,14 @@ const labelize = (item) => {
 const NewLibrary = React.createClass({
   getInitialState() {
     return {
-      query: {}
+      query: {},
+      sort: null
     };
   },
 
   storiesForQuery() {
     const query = this.state.query;
-    return stories.filter((story) => {
+    const filtered = stories.filter((story) => {
       let matchesQuery = true;
       if (query.fandoms) {
         matchesQuery = matchesQuery && (query.fandoms === story.fandom);
@@ -32,6 +35,10 @@ const NewLibrary = React.createClass({
       }
       return matchesQuery;
     });
+    if (this.state.sort) {
+      return sortBy(filtered, [this.state.sort]);
+    }
+    return filtered;
   },
 
   render() {
