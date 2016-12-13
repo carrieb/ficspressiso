@@ -1,13 +1,12 @@
-engineering
-# add redux
-# switch client-side code to using React.router
-
 setup
 # add linting
 
 product
-# add dark view
-# kick off downloads from browse
+# library
+** add dark view
+** add sort
+** separate filters into separate
+** add length filters (one-shot, novella, epic)
+# add reader back in
+# kick off downloads from browse (after click)
 # browse opens in app reader
-# have search terms highlight in browse
-# add animations (change chapter, one by one for fics)
