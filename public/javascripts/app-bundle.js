@@ -59731,25 +59731,44 @@
 	var NewLibrary = _react2.default.createClass({
 	  displayName: "NewLibrary",
 	  render: function render() {
-	    var storyEls = stories.map(function (story) {
+	    var storyEls = stories.map(function (story, idx) {
+	      // TODO: change story url to link to reader route
 	      return _react2.default.createElement(
 	        "div",
-	        { className: "item" },
+	        { className: "item", key: idx },
 	        _react2.default.createElement(
 	          "div",
 	          { className: "content" },
 	          _react2.default.createElement(
 	            "div",
 	            { className: "header" },
-	            story.title
+	            _react2.default.createElement(
+	              "a",
+	              { href: story.url },
+	              story.title
+	            ),
+	            " by ",
+	            _react2.default.createElement(
+	              "a",
+	              { href: story.author_url, target: "_blank" },
+	              story.author
+	            )
 	          ),
-	          _react2.default.createElement("div", { className: "meta" }),
+	          _react2.default.createElement(
+	            "div",
+	            { className: "meta" },
+	            story.fandoms.join('-')
+	          ),
 	          _react2.default.createElement(
 	            "div",
 	            { className: "description" },
 	            story.summary
 	          ),
-	          _react2.default.createElement("div", { className: "extra" })
+	          _react2.default.createElement(
+	            "div",
+	            { className: "extra" },
+	            story.chars.join(' - ')
+	          )
 	        )
 	      );
 	    });

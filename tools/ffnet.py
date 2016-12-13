@@ -1,7 +1,7 @@
 from selenium.webdriver.support.ui import Select
 
 def get_story_url(ff_id):
-    return "http://www.fanfiction.net/s/"+ff_id
+    return "http://www.fanfiction.net/s/"+str(ff_id)
 
 def fill_in_raw_data(driver, metadata):
     raw_data_el = driver.find_element_by_css_selector("#profile_top span.xgray")
@@ -9,7 +9,7 @@ def fill_in_raw_data(driver, metadata):
     split = raw_data.split(' - ')
     for i in range(len(split)):
         item = split[i].strip()
-        print i, item
+        #print i, item
         if ':' in item:
             update_count(item, metadata)
         else:
@@ -72,6 +72,10 @@ def get_author(driver):
     author_el = driver.find_element_by_css_selector('#profile_top a.xcontrast_txt[href*="/u/"]')
     return author_el.text
 
+def get_author_url(driver):
+    author_el = driver.find_element_by_css_selector('#profile_top a.xcontrast_txt[href*="/u/"]')
+    return author_el.get_attribute('href')
+
 def get_summary(driver):
     summary_el = driver.find_element_by_css_selector("#profile_top div.xcontrast_txt")
     return summary_el.text
@@ -83,8 +87,11 @@ def get_basic_metadata(driver, ff_id, metadata = {}):
     metadata['title'] = get_title(driver)
     metadata['summary'] = get_summary(driver)
     metadata['author'] = get_author(driver)
+    metadata['author_url'] = get_author_url(driver)
     metadata['chapters'] = []
+    metadata['url'] = get_story_url(ff_id)
     fill_in_raw_data(driver, metadata)
+    print metadata
     return metadata
 
 def get_chapter_data(driver, data = {}):

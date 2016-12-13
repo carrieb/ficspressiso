@@ -100,7 +100,6 @@ router.get('/ajax/browse_filter', function(req, res) {
 /* GET home page. */
 router.get('*', function(req, res) {
   const initJson = {
-    initialSection: 'Library',
     stories: library.stories,
     characters: Array.from(library.characters),
     fandoms: Array.from(library.fandoms)
