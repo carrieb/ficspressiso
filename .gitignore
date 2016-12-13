@@ -39,5 +39,8 @@ public/javascripts/bundle.js
 
 public/javascripts/dist/
 
+#semantic-ui
+semantic
+
 # temp fanfiction download dir
 tools/fanfiction

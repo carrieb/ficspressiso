@@ -8,14 +8,14 @@
       "themes": "src/themes/"
     },
     "output": {
-      "packaged": "../public/javascripts/dist/",
-      "uncompressed": "../public/javascripts/dist/components/",
-      "compressed": "../public/javascripts/dist/components/",
-      "themes": "../public/javascripts/dist/themes/"
+      "packaged": "dist/",
+      "uncompressed": "dist/components/",
+      "compressed": "dist/components/",
+      "themes": "dist/themes/"
     },
     "clean": "dist/"
   },
-  "permission": false,
+  "permission": 744,
   "autoInstall": false,
   "rtl": false,
   "components": [
@@ -69,5 +69,5 @@
     "state",
     "visibility"
   ],
-  "version": "2.2.4"
+  "version": "2.2.6"
 }
