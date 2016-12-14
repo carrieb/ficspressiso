@@ -60,6 +60,7 @@ const NewLibrary = React.createClass({
               <div className="ui basic teal label"><i className="book icon"></i>{story.chapter_cnt}</div>
               <div className="ui basic blue label"><i className="thumbs up icon"></i>{story.fav_cnt}</div>
               <div className="ui basic red label"><i className="heart icon"></i>{story.follow_cnt}</div>
+              <div className="ui basic olive label"><i className="comment icon"></i>{story.review_cnt}</div>
             </div>
           </div>
         </div>
@@ -69,7 +70,7 @@ const NewLibrary = React.createClass({
       <div className="library-container">
         <NewFilter updateFilterQuery={(query) => { this.setState({query}); }}
                    options={{fandoms, characters}}
-                   query={this.state.query}
+                   currentQuery={this.state.query}
         />
         <Sort updateSort={(sort) => { this.setState({sort}); }}
               currentSort={this.state.sort}

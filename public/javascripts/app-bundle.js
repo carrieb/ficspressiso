@@ -59727,11 +59727,11 @@
 
 	var _newFilter2 = _interopRequireDefault(_newFilter);
 
-	var _sort = __webpack_require__(433);
+	var _sort = __webpack_require__(434);
 
 	var _sort2 = _interopRequireDefault(_sort);
 
-	var _ColorMapper = __webpack_require__(434);
+	var _ColorMapper = __webpack_require__(433);
 
 	var _ColorMapper2 = _interopRequireDefault(_ColorMapper);
 
@@ -59845,6 +59845,12 @@
 	              { className: 'ui basic red label' },
 	              _react2.default.createElement('i', { className: 'heart icon' }),
 	              story.follow_cnt
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'ui basic olive label' },
+	              _react2.default.createElement('i', { className: 'comment icon' }),
+	              story.review_cnt
 	            )
 	          )
 	        )
@@ -59857,7 +59863,7 @@
 	          _this.setState({ query: query });
 	        },
 	        options: { fandoms: fandoms, characters: characters },
-	        query: this.state.query
+	        currentQuery: this.state.query
 	      }),
 	      _react2.default.createElement(_sort2.default, { updateSort: function updateSort(sort) {
 	          _this.setState({ sort: sort });
@@ -59893,6 +59899,10 @@
 
 	var _util2 = _interopRequireDefault(_util);
 
+	var _ColorMapper = __webpack_require__(433);
+
+	var _ColorMapper2 = _interopRequireDefault(_ColorMapper);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var NewFilter = _react2.default.createClass({
@@ -59901,14 +59911,20 @@
 	  propTypes: {
 	    updateFilterQuery: _react2.default.PropTypes.func.isRequired,
 	    options: _react2.default.PropTypes.object.isRequired /* e.g. { fandoms: [a, b, c], characters: [x, y, z] } */
+	    , currentQuery: _react2.default.PropTypes.object.isRequired
 	  },
 
 	  componentDidMount: function componentDidMount() {
 	    $(this.dropdown).dropdown({
 	      showOnFocus: false,
-	      onChange: this.handleChange,
-	      placeholder: this.props.query.characters
+	      onChange: this.handleChange
 	    });
+	  },
+	  componentDidUpdate: function componentDidUpdate(prevProps) {
+	    var currentChar = this.props.currentQuery.characters;
+	    if (currentChar && prevProps.currentQuery.characters !== currentChar) {
+	      $(this.dropdown).dropdown('set selected', 'characters_' + currentChar);
+	    }
 	  },
 	  handleChange: function handleChange(value, text, choice) {
 	    var item = choice[0];
@@ -59925,10 +59941,11 @@
 
 	    var optionSections = Object.keys(this.props.options).map(function (category) {
 	      var optionEls = _this.props.options[category].map(function (option, idx) {
+	        var color = _ColorMapper2.default.getColor(category, option);
 	        return _react2.default.createElement(
 	          'div',
-	          { className: 'item', key: category + '_' + idx, 'data-category': category },
-	          _react2.default.createElement('div', { className: 'ui ' + _util2.default.randomColor() + ' empty circular label' }),
+	          { className: 'item', key: category + '_' + idx, 'data-category': category, 'data-value': category + '_' + option },
+	          _react2.default.createElement('div', { className: 'ui ' + color + ' empty circular label' }),
 	          _react2.default.createElement(
 	            'span',
 	            null,
@@ -59986,6 +60003,50 @@
 
 /***/ },
 /* 433 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _util = __webpack_require__(240);
+
+	var _util2 = _interopRequireDefault(_util);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var ColorMapper = {
+	  fandomMap: {},
+	  characterMap: {},
+
+	  getColorForFandom: function getColorForFandom(fandom) {
+	    if (!this.fandomMap.hasOwnProperty(fandom)) {
+	      this.fandomMap[fandom] = _util2.default.randomColor();
+	    }
+	    return this.fandomMap[fandom];
+	  },
+	  getColorForCharacter: function getColorForCharacter(character) {
+	    if (!this.characterMap.hasOwnProperty(character)) {
+	      this.characterMap[character] = _util2.default.randomColor();
+	    }
+	    return this.characterMap[character];
+	  },
+	  getColor: function getColor(category, value) {
+	    switch (category) {
+	      case 'characters':
+	        return this.getColorForCharacter(value);
+	      case 'fandoms':
+	        return this.getColorForCharacter(value);
+	    }
+	  }
+	};
+
+	exports.default = ColorMapper;
+
+/***/ },
+/* 434 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -60080,42 +60141,6 @@
 	});
 
 	exports.default = Sort;
-
-/***/ },
-/* 434 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _util = __webpack_require__(240);
-
-	var _util2 = _interopRequireDefault(_util);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var ColorMapper = {
-	  fandomMap: {},
-	  characterMap: {},
-
-	  getColorForFandom: function getColorForFandom(fandom) {
-	    if (!this.fandomMap.hasOwnProperty(fandom)) {
-	      this.fandomMap[fandom] = _util2.default.randomColor();
-	    }
-	    return this.fandomMap[fandom];
-	  },
-	  getColorForCharacter: function getColorForCharacter(character) {
-	    if (!this.characterMap.hasOwnProperty(character)) {
-	      this.characterMap[character] = _util2.default.randomColor();
-	    }
-	    return this.characterMap[character];
-	  }
-	};
-
-	exports.default = ColorMapper;
 
 /***/ },
 /* 435 */

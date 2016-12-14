@@ -16,6 +16,15 @@ const ColorMapper = {
       this.characterMap[character] = util.randomColor();
     }
     return this.characterMap[character];
+  },
+
+  getColor(category, value) {
+    switch (category) {
+      case 'characters':
+        return this.getColorForCharacter(value);
+      case 'fandoms':
+        return this.getColorForCharacter(value);
+    }
   }
 }
 
