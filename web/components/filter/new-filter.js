@@ -12,7 +12,7 @@ const NewFilter = React.createClass({
     $(this.dropdown).dropdown({
       showOnFocus: false,
       onChange: this.handleChange,
-      placeholder: ''
+      placeholder: this.props.query.characters
     });
   },
 

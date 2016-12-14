@@ -133,3 +133,16 @@ a {
 .chart-container {
   text-align: center;
 }
+
+.library-container .item + .item {
+  padding-top: 28px;
+  border-top: darkgrey 1px solid;
+}
+
+.library-container .items {
+  margin-top: 40px;
+}
+
+.library-container .character-label {
+  cursor: pointer;
+}
