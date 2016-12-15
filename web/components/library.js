@@ -51,8 +51,6 @@ var Library = React.createClass({
         "title" : title,
         "chp" : chp
       }
-    }).error((req, status, error) => {
-      console.error(error);
     }).done((data) => {
       callback(data, title, chp);
     });

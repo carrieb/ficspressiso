@@ -20,6 +20,24 @@ def fill_in_raw_data(driver, metadata):
             else:
                 update_chars(item, metadata)
 
+def parse_fields(metadata_string, metadata = {}):
+    split = metadata_string.split(' - ')
+    for i in range(len(split)):
+        item = split[i].strip()
+        #print i, item
+        if ':' in item:
+            update_count(item, metadata)
+        else:
+            if item == "English":
+                continue # don't care about language
+            if item == "Complete":
+                continue # don't care about completion
+            if i < 3:
+                update_genre(item, metadata)
+            else:
+                update_chars(item, metadata)
+    return metadata
+
 def update_genre(item, metadata):
     metadata['genres'] = []
     item = item.replace('Hurt/Comfort', 'Hurt-Comfort') #special case stupid genre
@@ -79,6 +97,32 @@ def get_author_url(driver):
 def get_summary(driver):
     summary_el = driver.find_element_by_css_selector("#profile_top div.xcontrast_txt")
     return summary_el.text
+
+def get_story_metadata_from_list(driver):
+    title_els = driver.find_elements_by_css_selector(".stitle");
+    author_els = driver.find_elements_by_css_selector(".stitle + a")
+    metadata_els = driver.find_elements_by_css_selector(".z-padtop2.xgray")
+    assert len(title_els) is len(author_els) and len(metadata_els) is len(title_els)
+    metadata = []
+    for i in range(25):
+        parsed_fields = parse_fields(metadata_els[i].text)
+        metadata.append({
+            'site': 'ffnet',
+            'title': title_els[i].text,
+            'url': title_els[i].get_attribute('href'),
+            'author': author_els[i].text,
+            'author_url': author_els[i].get_attribute('href'),
+            'chracters': parsed_fields['chars'] if 'chars' in parsed_fields else [],
+            'genres': parsed_fields['genres'] if 'genres' in parsed_fields else [],
+            'rating': parsed_fields['rating'],
+            'word_cnt': parsed_fields['word_cnt'],
+            'chapter_cnt': parsed_fields['chapter_cnt'],
+            'review_cnt': parsed_fields['review_cnt'] if 'review_cnt' in parsed_fields else 0,
+            'fav_cnt': parsed_fields['fav_cnt'] if 'fav_cnt' in parsed_fields else 0,
+            'follow_cnt': parsed_fields['follow_cnt'] if 'follow_cnt' in parsed_fields else 0,
+            'publish_date': parsed_fields['publish_date']
+        })
+    return metadata
 
 def get_basic_metadata(driver, ff_id, metadata = {}):
     metadata['site'] = "ffnet"

@@ -146,3 +146,45 @@ a {
 .library-container .character-label {
   cursor: pointer;
 }
+
+.library-container .header {
+  font-weight: 700;
+  font-size: 1.75rem;
+}
+
+.library-container .stats-container {
+  width: 425px;
+}
+
+.library-container .sub-header {
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.library-container .summary {
+  font-size: 1.2rem;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.example-enter {
+  opacity: 0.01;
+  width: 0px;
+}
+
+.example-enter.example-enter-active {
+  opacity: 1;
+  width: 100px;
+  transition: 700ms;
+}
+
+.example-leave {
+  opacity: 1;
+  width: 100px;
+}
+
+.example-leave.example-leave-active {
+  opacity: 0.01;
+  width: 0px;
+  transition: 700ms;
+}
