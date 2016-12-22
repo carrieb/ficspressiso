@@ -18,6 +18,7 @@ const Browse = React.createClass({
       return (<BrowseItem key={i} fic={fic} highlight={[this.state.character]}/>);
     });
     if (this.state.loaded) {
+      console.log(this.state.fics);
       browseContent = (
         <div>
           <div style={{ float: "right", paddingLeft: '25px' }}><button onClick={ this.next } className="ui blue button">Next</button></div>
@@ -61,8 +62,6 @@ const Browse = React.createClass({
         fandom: null,
         character: character
       }
-    }).error((req, status, error) => {
-      console.error(error)
     }).done((data) => {
       //console.log(data);
       this.setState({

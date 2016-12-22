@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import uniqueId from 'lodash/uniqueId';
 
@@ -14,7 +13,7 @@ const CharacterLabel = React.createClass({
 
   getInitialState() {
     return {
-      hober: false
+      hover: false
     }
   },
 
@@ -25,9 +24,7 @@ const CharacterLabel = React.createClass({
            ref={(label) => {this.label = label;}}
            onClick={() => {this.props.onClick({query: {characters: char}})}}>
         <img src={`/images/characters/${char}.jpg`}/>
-        <ReactCSSTransitionGroup transitionName="example" transitionEnterTimeout={700} transitionLeaveTimeout={700}>
-          { this.state.hover && (<span key={uniqueId()}>{char}</span>) }
-        </ReactCSSTransitionGroup>
+        { this.state.hover && (<span key={uniqueId()}>{char}</span>) }
       </div>
     );
   }

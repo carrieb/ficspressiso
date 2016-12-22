@@ -59,7 +59,11 @@ const NewLibrary = React.createClass({
         <div className="item" key={idx}>
           <div className="content">
             <div className="ui grid">
-              <div className="six wide column header"><a href={story.url}>{story.title}</a></div>
+              <div className="six wide column header">
+                <a className="hover-anchor" href={story.url}>{story.title}</a>
+                <div className="sub-header hover-target"> by <a href={story.author_url} target="_blank">{story.author}</a></div>
+                <div className="sub-header hover-target">{story.fandoms.join('-')}</div>
+              </div>
               <div className="ten wide right aligned column stats-container">
                 <div className="ui basic violet label"><i className="tasks icon"></i>{story.word_cnt}</div>
                 <div className="ui basic teal label"><i className="book icon"></i>{story.chapter_cnt}</div>

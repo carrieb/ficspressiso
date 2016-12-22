@@ -168,23 +168,35 @@ a {
 }
 
 .example-enter {
-  opacity: 0.01;
-  width: 0px;
-}
-
-.example-enter.example-enter-active {
-  opacity: 1;
-  width: 100px;
-  transition: 700ms;
-}
-
-.example-leave {
-  opacity: 1;
-  width: 100px;
+  transform: translateX(150%);
 }
 
 .example-leave.example-leave-active {
-  opacity: 0.01;
-  width: 0px;
-  transition: 700ms;
+  transform: translateX(150%);
+  transition: 100ms;
+}
+
+.example-enter.example-enter-active {
+  transform: translateX(0%);
+  transition: 100ms;
+}
+
+.example-leave {
+  transform: translateX(0%);
+}
+
+.hover-anchor ~ .hover-target {
+  display:none;
+}
+
+.hover-anchor:hover ~ .hover-target {
+  display:block;
+}
+
+.hover-target:hover {
+  display: block;
+}
+
+.hover-target:hover ~ .hover-target {
+  display: block;
 }

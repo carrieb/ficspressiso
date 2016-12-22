@@ -58,6 +58,61 @@ var findChars = function(str) {
   return chars;
 }
 
+const update_count = function(countString, metadata) {
+    // Special case rating
+    const [fieldName, fieldValue] = countString.split(':').map((s) => { return s.trim(); });
+    console.log(fieldName, fieldValue);
+    switch(fieldName) {
+      case "Rated":
+        metadata.rating = fieldValue;
+        break;
+      case "Chapters":
+        metadata.chapter_cnt = parseInt(fieldValue.replace(/,/g, ''));
+        break;
+      case "Words":
+        metadata.word_cnt = parseInt(fieldValue.replace(/,/g, ''));
+        break;
+      case "Reviews":
+        metadata.review_cnt = parseInt(fieldValue.replace(/,/g, ''));
+        break;
+      case "Favs":
+        metadata.fav_cnt = parseInt(fieldValue.replace(/,/g, ''));
+        break;
+      case "Follows":
+        metadata.follow_cnt = parseInt(fieldValue.replace(/,/g, ''));
+        break;
+      case "Status":
+        metadata.status = fieldValue;
+        break;
+      case "Published":
+        metadata.publish_date = fieldValue;
+        break;
+      case "Updated":
+        metadata.update_date = fieldValue;
+        break;
+    }
+}
+
+const parseFields = function(fic) {
+  const split = fic.extra.split(' - ');
+  for (const idx in split) {
+    const item = split[idx].trim()
+    if (item.indexOf(':') > -1) {
+      update_count(item, fic)
+    } else {
+      if (item === "English") {
+        continue;
+      }
+      if (item === "Complete") {
+        continue;
+      }
+      else {
+        // todo:
+      }
+    }
+  }
+}
+
 const FFNet = {
   retrieveFics(page, fandom, character, callback) {
     console.log(page, fandom, character);
@@ -79,6 +134,8 @@ const FFNet = {
           var summary = $(this).find('div.z-padtop').first().contents().first().text();
           var characters = findChars(extra);
           var fic = { title, url, author, extra, summary, characters };
+          parseFields(fic);
+          console.log(fic);
           browse_data.push(fic);
         });
         console.log('Retrieved ' + browse_data.length + ' fics from ff.net');
