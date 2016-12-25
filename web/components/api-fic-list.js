@@ -9,7 +9,8 @@ import isEqual from 'lodash/isEqual';
 
 const ApiFicList = React.createClass({
   propTypes: {
-    currentQuery: React.PropTypes.object.isRequired /* of the form { page: 1, characters: [] } */
+    currentQuery: React.PropTypes.object.isRequired, /* of the form { page: 1, characters: [] } */
+    updateQuery: React.PropTypes.func
   },
 
   getInitialState() {
@@ -28,14 +29,14 @@ const ApiFicList = React.createClass({
   componentWillReceiveProps(newProps) {
     console.log('new props', newProps.currentQuery, this.props.currentQuery, isEqual(newProps.currentQuery, this.props.currentQuery));
     if (!isEqual(newProps.currentQuery, this.props.currentQuery)) {
-      this.setState({
-        loading: true
-      });
       this.requestContent(newProps.currentQuery);
     }
   },
 
   requestContent(query = this.props.currentQuery) {
+    this.setState({
+      loaded: false
+    });
     ApiUtils.browseFics(query)
       .done((fics) => {
         console.log(fics);
@@ -43,6 +44,7 @@ const ApiFicList = React.createClass({
           fics,
           loaded: true
         });
+        this.props.onLoaded();
     });
   },
 
@@ -50,7 +52,12 @@ const ApiFicList = React.createClass({
     let content = null;
     if (this.state.loaded) {
       const browseItems = this.state.fics.map((fic, idx) => {
-        return (<BrowseItem key={idx} fic={fic} highlight={this.props.currentQuery.characters}/>);
+        return (
+          <BrowseItem key={idx}
+                      fic={fic}
+                      highlight={this.props.currentQuery.characters}
+                      updateQuery={this.props.updateQuery}/>
+        );
       });
       content = (
         <div className="ui relaxed items">

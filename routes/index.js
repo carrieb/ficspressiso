@@ -89,7 +89,7 @@ router.get('/ajax/browse_filter', function(req, res) {
 });
 
 /* GET home page. */
-router.get(['/', '/browse', '/library', '/new-library', '/settings'], function(req, res) {
+router.get(['/', '/browse', '/library', '/new-library', '/chart', '/settings'], function(req, res) {
   const initJson = {
     stories: library.stories,
     characters: Array.from(library.characters),

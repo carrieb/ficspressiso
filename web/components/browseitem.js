@@ -7,14 +7,23 @@ import uniqueId from 'lodash/uniqueId';
 const BrowseItem = React.createClass({
   propTypes: {
     fic: React.PropTypes.object.isRequired,
-    highlight: React.PropTypes.array
+    highlight: React.PropTypes.array,
+    updateQuery: React.PropTypes.func
+  },
+
+  getDefaultProps() {
+    return {
+      updateQuery: () => {}
+    }
   },
 
   render() {
     const fic = this.props.fic;
     const characterLabels = fic.characters.map((char) => {
       return (
-        <CharacterLabel character={char} key={uniqueId()}/>
+        <CharacterLabel character={char}
+                        key={uniqueId()}
+                        onClick={() => { this.props.updateQuery({ characters: [char] }); }}/>
       );
     });
     return(
@@ -42,7 +51,6 @@ const BrowseItem = React.createClass({
             <div>
                 {characterLabels}
             </div>
-
           </div>
         </div>
     </div>

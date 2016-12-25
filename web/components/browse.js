@@ -25,19 +25,12 @@ const Browse = React.createClass({
       page: this.state.page + 1,
       loaded: false
     });
-    this.refreshSticky();
-  },
-
-  componentDidMount() {
-    this.refreshSticky();
   },
 
   refreshSticky() {
-    setTimeout(() => {
-      $(this.sticky).sticky({
-        context: '#sticky-context'
-      });
-    }, 2000);
+    $(this.sticky).sticky({
+      context: '#sticky-context'
+    });
   },
 
   handleCharacterFilterChange(newQuery) {
@@ -83,7 +76,9 @@ const Browse = React.createClass({
           </div>
         </div>
         <div id="sticky-context">
-          <ApiFicList currentQuery={{ page: this.state.page, characters: this.state.characters, fandom: this.state.fandom }}/>
+          <ApiFicList currentQuery={{ page: this.state.page, characters: this.state.characters, fandom: this.state.fandom }}
+                      updateQuery={(newQuery) => { this.setState(newQuery); }}
+                      onLoaded={() => { this.refreshSticky() }}/>
         </div>
       </div>
     );

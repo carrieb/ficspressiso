@@ -25,6 +25,16 @@ const ApiUtils = {
     return get('/api/characters', {
       fandom
     });
+  },
+
+  getChartData({
+    start = null,
+    end = null
+  } = {}) {
+    return get('/api/chart/data', {
+      start,
+      end
+    });
   }
 }
 

@@ -1,5 +1,7 @@
 import util from 'src/util';
 
+import randomColor from 'randomcolor';
+
 const ColorMapper = {
   fandomMap: {},
   characterMap: {},
@@ -11,11 +13,25 @@ const ColorMapper = {
     return this.fandomMap[fandom];
   },
 
+  initializeCharacterColors(character) {
+    this.characterMap[character] = {
+      rgbArray: randomColor({ format: 'rgbArray', luminosity: 'light' }),
+      color: util.randomColor()
+    };
+  },
+
   getColorForCharacter(character) {
     if (!this.characterMap.hasOwnProperty(character)) {
-      this.characterMap[character] = util.randomColor();
+      this.initializeCharacterColors(character);
     }
-    return this.characterMap[character];
+    return this.characterMap[character].color;
+  },
+
+  getRgbArrayForCharacter(character) {
+    if (!this.characterMap.hasOwnProperty(character)) {
+      initializeCharacterColors(character);
+    }
+    return this.characterMap[character].rgbArray;
   },
 
   getColor(category, value) {

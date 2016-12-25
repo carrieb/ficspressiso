@@ -233,3 +233,16 @@ a {
 .right.aligned {
   text-align: right;
 }
+
+.chart-container {
+  width: 100%;
+  height: 50vh;
+}
+
+.browse-container .character-label {
+  cursor: pointer;
+}
+
+.chart-container button.ui.button {
+  margin-top: 25px;
+}

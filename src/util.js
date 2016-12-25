@@ -21,6 +21,27 @@ const util = {
   randomColor() {
     const colors = ["red", "orange", "yellow", "olive", "green", "teal", "blue", "violet", "purple", "pink", "brown", "grey", "black"];
     return colors[Math.floor(Math.random() * colors.length)]
+  },
+
+  emptyFicObj() {
+    return {
+      title: '',
+      url: '',
+      id: null,
+      author: '',
+      author_url: '',
+      summary: '',
+      raw_extra: '',
+      characters: [],
+      rating: '',
+      word_cnt: 0,
+      chapter_cnt: 0,
+      review_cnt: 0,
+      fav_cnt: 0,
+      follow_cnt: 0,
+      publish_date: '',
+      update_date: ''
+    }
   }
 };
 
