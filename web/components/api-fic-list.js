@@ -36,7 +36,6 @@ const ApiFicList = React.createClass({
   },
 
   requestContent(query = this.props.currentQuery) {
-    console.log('requesting content', this.props.currentQuery);
     ApiUtils.browseFics(query)
       .done((fics) => {
         console.log(fics);

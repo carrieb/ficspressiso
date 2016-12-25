@@ -35,9 +35,14 @@ const BrowseItem = React.createClass({
               <div className="ui basic teal label"><i className="book icon"></i>{fic.chapter_cnt.toLocaleString()}</div>
             </div>
             </div>
+            <div className="right floated right aligned" style={{ fontSize: '.75rem' }}>
+              Updated: {fic.update_date}<br/>
+            Published: {fic.publish_date}
+            </div>
             <div>
                 {characterLabels}
             </div>
+
           </div>
         </div>
     </div>

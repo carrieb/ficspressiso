@@ -225,3 +225,11 @@ a {
 .ui.dropdown .scrolling.menu, .ui.scrolling.dropdown .menu {
   max-height: 25rem; !important;
 }
+
+.api-character-filter-container {
+  display: inline-block;
+}
+
+.right.aligned {
+  text-align: right;
+}

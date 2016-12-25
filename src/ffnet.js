@@ -7,23 +7,25 @@ const baseUrl = 'https://www.fanfiction.net';
 const defaultQuery = '?&srt=1&lan=1&r=10&len=20'; // over 20k
 
 const fandomToPathMap = {
-  'Harry Potter': '/book/Harry-Potter/'
+  'Harry Potter': '/book/Harry-Potter/',
+  'Star Wars': '/movie/Star-Wars/'
 }
 
 const characterToQueryValue = {};
 
 const loadCharactersForFandom = function(fandom, callback = null) {
   const url = baseUrl + fandomToPathMap[fandom];
+  characterToQueryValue[fandom] = {};
   util.download(url, (data) => {
     if (data) {
       var $ = cheerio.load(data);
       $('select[name="characterid1"] option').each(function(i, e){
           if ($(this).val() > 0) {
-            characterToQueryValue[$(this).text()] = $(this).val();
+            characterToQueryValue[fandom][$(this).text()] = $(this).val();
           }
       });
       if (callback) {
-        callback(characterToQueryValue);
+        callback(characterToQueryValue[fandom]);
       }
     }
   });
@@ -37,7 +39,7 @@ const getUrl = function(fandom, page, characters) {
   console.log(url);
   if (characters.length > 0) {
     // TODO: multiple chars support?
-    const charId = characterToQueryValue[characters[0]];
+    const charId = characterToQueryValue[fandom][characters[0]];
     if (charId) {
       url += `&c1=${charId}`;
     }
@@ -130,7 +132,6 @@ const FFNet = {
     browse_data = [];
     // TODO: decide a better place to do this
     //loadCharactersForFandom(fandom);
-    console.log('hey', getUrl);
     const url = getUrl(fandom, page, characters);
     console.log(url);
     util.download(url, (data) => {
@@ -145,12 +146,12 @@ const FFNet = {
           var extra = $(this).find('div.z-padtop2').first().text();
           var summary = $(this).find('div.z-padtop').first().contents().first().text();
           var characters = findChars(extra);
-          var fic = { title, url, author, extra, summary, characters };
+          var fic = { title, url, author, extra, summary, characters, word_cnt: 0, chapter_cnt: 0, fav_cnt: 0, follow_cnt: 0, review_cnt: 0 };
           parseFields(fic);
           //console.log(fic);
           browse_data.push(fic);
         });
-        console.log('Retrieved ' + browse_data.length + ' fics from ff.net');
+        console.log('Retrieved ' + browse_data.length + ' fics from ff.net for ' + fandom);
         callback(browse_data);
       } else {
         console.error(`Could not retrieve data for url ${url}`);
@@ -163,7 +164,7 @@ const FFNet = {
 
   retrieveCharacters(fandom, callback) {
     loadCharactersForFandom(fandom, () => {
-      callback(Object.keys(characterToQueryValue));
+      callback(Object.keys(characterToQueryValue[fandom]));
     });
   }
 }

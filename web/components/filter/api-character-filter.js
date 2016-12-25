@@ -18,12 +18,20 @@ const ApiCharacterFilter = React.createClass({
   },
 
   componentWillReceiveProps(newProps) {
-    // TODO: check if currentQuery.fandom is the same and if not, reload characters 
+    // TODO: check if currentQuery.fandom is the same and if not, reload characters
+    if (newProps.currentQuery.fandom !== this.props.currentQuery.fandom) {
+      this.requestCharacters(newProps.currentQuery.fandom);
+    }
   },
 
   componentWillMount() {
-    ApiUtils.getCharacters()
+    this.requestCharacters();
+  },
+
+  requestCharacters(fandom = this.props.currentQuery.fandom) {
+    ApiUtils.getCharacters({fandom})
       .done((characters) => {
+        console.log(characters);
         this.setState({
           characters,
           loaded: true

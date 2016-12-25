@@ -20,6 +20,9 @@ const NewFilter = React.createClass({
       showOnFocus: false,
       onChange: this.handleChange
     });
+    if (this.props.currentQuery.fandoms) {
+      $(this.dropdown).dropdown('set selected', `fandoms_${this.props.currentQuery.fandoms}`);
+    }
   },
 
   componentDidUpdate(prevProps) {

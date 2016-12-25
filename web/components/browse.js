@@ -1,6 +1,7 @@
 import React from 'react';
 
 import ApiCharacterFilter from './filter/api-character-filter.js';
+import Filter from './filter/new-filter.js';
 import ApiFicList from './api-fic-list.js';
 
 import BrowseItem from './browseitem.js';
@@ -14,7 +15,8 @@ const Browse = React.createClass({
     // TODO: add a fandom tag
     return {
       page: 1, // TODO: hook these into a router path
-      characters: []
+      characters: [],
+      fandom: 'Harry Potter'
     }
   },
 
@@ -23,23 +25,38 @@ const Browse = React.createClass({
       page: this.state.page + 1,
       loaded: false
     });
+    this.refreshSticky();
   },
 
-  componentDidUpdate() {
-    if (this.sticky) {
+  componentDidMount() {
+    this.refreshSticky();
+  },
+
+  refreshSticky() {
+    setTimeout(() => {
       $(this.sticky).sticky({
         context: '#sticky-context'
       });
-    }
+    }, 2000);
   },
 
   handleCharacterFilterChange(newQuery) {
     const newCharacters = [newQuery.characters];// TODO: make this not bad
     this.setState({
       characters: newCharacters,
-      loaded: false,
       page: 1
     });
+    //this.refreshSticky();
+  },
+
+  handleFandomFilterChange(newQuery) {
+    console.log(newQuery);
+    this.setState({
+      fandom: newQuery.fandoms,
+      page: 1,
+      characters: []
+    });
+    //this.refreshSticky();
   },
 
   render() {
@@ -49,7 +66,13 @@ const Browse = React.createClass({
           <div className="browse-navbar">
             <div className="ui grid">
               <div className="twelve wide column">
-                <ApiCharacterFilter currentQuery={{ characters: this.state.characters.length === 1 ? this.state.characters[0] : '' }} updateQuery={ this.handleCharacterFilterChange }/>
+                <Filter options={{ fandoms: ['Harry Potter', 'Star Wars'] }}
+                        updateFilterQuery={ this.handleFandomFilterChange }
+                        currentQuery={{ fandoms: this.state.fandom || '' }}
+                        labelText="Filter Fandom"
+                        searchPlaceholder="Search fandoms..."/>
+                      <ApiCharacterFilter currentQuery={{ characters: this.state.characters.length === 1 ? this.state.characters[0] : '', fandom: this.state.fandom }}
+                                    updateQuery={ this.handleCharacterFilterChange }/>
               </div>
               <div className="right aligned four wide column">
                 <div className="right floated">
@@ -60,7 +83,7 @@ const Browse = React.createClass({
           </div>
         </div>
         <div id="sticky-context">
-          <ApiFicList currentQuery={{ page: this.state.page , characters: this.state.characters }}/>
+          <ApiFicList currentQuery={{ page: this.state.page, characters: this.state.characters, fandom: this.state.fandom }}/>
         </div>
       </div>
     );
