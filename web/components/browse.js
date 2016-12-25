@@ -1,82 +1,70 @@
-const React = require('react');
-const BrowseSearch = require('./browsesearch');
-const BrowseItem = require('./browseitem');
+import React from 'react';
+
+import ApiCharacterFilter from './filter/api-character-filter.js';
+import ApiFicList from './api-fic-list.js';
+
+import BrowseItem from './browseitem.js';
+
+import LoadingBar from './loading/loading-bar.js';
+
+import ApiUtils from '../api/util.js';
 
 const Browse = React.createClass({
   getInitialState() {
+    // TODO: add a fandom tag
     return {
-      fics: [],
-      page: 1,
-      loaded: false,
-      character: null
+      page: 1, // TODO: hook these into a router path
+      characters: []
     }
   },
-  render() {
-    var loadingBar = null;
-    var browseContent = null;
-    const browseItems = this.state.fics.map((fic, i) => {
-      return (<BrowseItem key={i} fic={fic} highlight={[this.state.character]}/>);
-    });
-    if (this.state.loaded) {
-      console.log(this.state.fics);
-      browseContent = (
-        <div>
-          <div style={{ float: "right", paddingLeft: '25px' }}><button onClick={ this.next } className="ui blue button">Next</button></div>
-          <BrowseSearch requestContent={ this.requestContent }/>
-          <div className="ui relaxed items">
-            { browseItems }
-          </div>
-        </div>
-      );
-    } else {
-      loadingBar = (
-        <div className="ui segment" style={{ border: 'none', boxShadow: 'none'}}>
-          <div className="ui active inverted dimmer">
-            <div className="ui medium text loader">Loading</div>
-          </div>
-          <p>hihihihi</p>
-          <p>hihihihi</p>
-          <p>hihihihi</p>
-        </div>
-      );
-    }
-    return (<div className="browse_content">
-      {loadingBar}
-      {browseContent}
-    </div>);
-  },
+
   next() {
-    //console.log('what');
     this.setState({
       page: this.state.page + 1,
       loaded: false
     });
-    this.requestContent(this.state.page + 1, this.state.character);
   },
-  requestContent(page, character) {
-    //console.log("requesting fics..", page, character);
-    $.ajax('/ajax/browse', {
-      type: 'GET',
-      data: {
-        page: page,
-        fandom: null,
-        character: character
-      }
-    }).done((data) => {
-      //console.log(data);
-      this.setState({
-        fics: data,
-        loaded: true,
-        page: page,
-        character: character
+
+  componentDidUpdate() {
+    if (this.sticky) {
+      $(this.sticky).sticky({
+        context: '#sticky-context'
       });
-    })
-  },
-  componentWillMount() {
-    if (!this.state.loaded) {
-      this.requestContent(this.state.page, null);
     }
-  }
+  },
+
+  handleCharacterFilterChange(newQuery) {
+    const newCharacters = [newQuery.characters];// TODO: make this not bad
+    this.setState({
+      characters: newCharacters,
+      loaded: false,
+      page: 1
+    });
+  },
+
+  render() {
+    return (
+      <div className="browse-container">
+        <div className="ui sticky" ref={(sticky) => { this.sticky = sticky; }}>
+          <div className="browse-navbar">
+            <div className="ui grid">
+              <div className="twelve wide column">
+                <ApiCharacterFilter currentQuery={{ characters: this.state.characters.length === 1 ? this.state.characters[0] : '' }} updateQuery={ this.handleCharacterFilterChange }/>
+              </div>
+              <div className="right aligned four wide column">
+                <div className="right floated">
+                  <button onClick={ this.next } className="ui blue button">Next</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="sticky-context">
+          <ApiFicList currentQuery={{ page: this.state.page , characters: this.state.characters }}/>
+        </div>
+      </div>
+    );
+  },
 });
 
 module.exports = Browse;

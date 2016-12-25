@@ -70,15 +70,6 @@ router.get('/ajax/chart_data', function(req, res) {
   })
 });
 
-router.get('/ajax/browse', function(req, res) {
-  const page = req.query.page;
-  const fandom = req.query.fandom || 'Harry Potter';
-  const character = req.query.character;
-  ffnet.retrieveFics(page, fandom, character, (data) => {
-    res.json(data);
-  });
-});
-
 router.get('/ajax/browse_filter', function(req, res) {
   var query = req.query.q;
   var results = []
@@ -98,7 +89,7 @@ router.get('/ajax/browse_filter', function(req, res) {
 });
 
 /* GET home page. */
-router.get('*', function(req, res) {
+router.get(['/', '/browse', '/library', '/new-library', '/settings'], function(req, res) {
   const initJson = {
     stories: library.stories,
     characters: Array.from(library.characters),

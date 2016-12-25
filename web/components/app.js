@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 var App = React.createClass({
   render() {
     return (<div className="container">
-      <div className="ui teal large secondary pointing menu" style={{ marginBottom: '20px' }}>
+      <div className="ui teal large secondary pointing menu">
         <Link to="/library" activeClassName="active" className="ui item">Library</Link>
         <Link to="/new-library" activeClassName="active" className="ui item">New Library</Link>
         <Link to="/browse" activeClassName="active" className="ui item">Browse</Link>

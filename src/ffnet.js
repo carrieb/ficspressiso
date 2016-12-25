@@ -4,7 +4,7 @@ const util = require('./util');
 
 const baseUrl = 'https://www.fanfiction.net';
 
-const defaultQuery = '?&srt=1&lan=1&r=10';
+const defaultQuery = '?&srt=1&lan=1&r=10&len=20'; // over 20k
 
 const fandomToPathMap = {
   'Harry Potter': '/book/Harry-Potter/'
@@ -12,7 +12,7 @@ const fandomToPathMap = {
 
 const characterToQueryValue = {};
 
-const loadCharactersForFandom = function(fandom) {
+const loadCharactersForFandom = function(fandom, callback = null) {
   const url = baseUrl + fandomToPathMap[fandom];
   util.download(url, (data) => {
     if (data) {
@@ -22,14 +22,22 @@ const loadCharactersForFandom = function(fandom) {
             characterToQueryValue[$(this).text()] = $(this).val();
           }
       });
+      if (callback) {
+        callback(characterToQueryValue);
+      }
     }
   });
 }
 
-const getUrl = function(fandom, page, character) {
+const getUrl = function(fandom, page, characters) {
+  console.log('get url', fandom, page, characters);
+  console.log(baseUrl);
+  console.log(fandomToPathMap);
   let url = baseUrl + fandomToPathMap[fandom] + defaultQuery + `&p=${page}`;
-  if (character) {
-    const charId = characterToQueryValue[character];
+  console.log(url);
+  if (characters.length > 0) {
+    // TODO: multiple chars support?
+    const charId = characterToQueryValue[characters[0]];
     if (charId) {
       url += `&c1=${charId}`;
     }
@@ -38,7 +46,7 @@ const getUrl = function(fandom, page, character) {
 }
 
 var cleanCharName = function(str) {
-  return str.replace('[', '').replace(']', '').trim();
+  return str.replace(/\[|\]|\,/g, '').trim();
 }
 
 var findChars = function(str) {
@@ -49,9 +57,11 @@ var findChars = function(str) {
 
   } else {
     if (!last.startsWith('Published:')) {
-      var raw_chars = last.split(', ');
+      var raw_chars = last.replace(/\]/g, ',').split(', ');
       for (var raw_char in raw_chars) {
-        chars.push(cleanCharName(raw_chars[raw_char]));
+        if (raw_char !== "") {
+          chars.push(cleanCharName(raw_chars[raw_char]));
+        }
       }
     }
   }
@@ -61,7 +71,7 @@ var findChars = function(str) {
 const update_count = function(countString, metadata) {
     // Special case rating
     const [fieldName, fieldValue] = countString.split(':').map((s) => { return s.trim(); });
-    console.log(fieldName, fieldValue);
+    //console.log(fieldName, fieldValue);
     switch(fieldName) {
       case "Rated":
         metadata.rating = fieldValue;
@@ -114,12 +124,14 @@ const parseFields = function(fic) {
 }
 
 const FFNet = {
-  retrieveFics(page, fandom, character, callback) {
-    console.log(page, fandom, character);
+  retrieveFics(page, fandom, characters, callback) {
+    try {
+    console.log(page, fandom, characters);
     browse_data = [];
     // TODO: decide a better place to do this
-    loadCharactersForFandom(fandom);
-    const url = getUrl(fandom, page, character);
+    //loadCharactersForFandom(fandom);
+    console.log('hey', getUrl);
+    const url = getUrl(fandom, page, characters);
     console.log(url);
     util.download(url, (data) => {
       if (data) {
@@ -135,7 +147,7 @@ const FFNet = {
           var characters = findChars(extra);
           var fic = { title, url, author, extra, summary, characters };
           parseFields(fic);
-          console.log(fic);
+          //console.log(fic);
           browse_data.push(fic);
         });
         console.log('Retrieved ' + browse_data.length + ' fics from ff.net');
@@ -143,6 +155,15 @@ const FFNet = {
       } else {
         console.error(`Could not retrieve data for url ${url}`);
       }
+    });
+  } catch (e) {
+    console.error(e);
+  }
+  },
+
+  retrieveCharacters(fandom, callback) {
+    loadCharactersForFandom(fandom, () => {
+      callback(Object.keys(characterToQueryValue));
     });
   }
 }

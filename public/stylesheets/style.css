@@ -117,7 +117,7 @@ a {
   margin-bottom: 25px;
 }
 
-.browse_content .item + .item {
+.browse-container .item + .item {
   border-top: darkgrey 1px solid;
   padding-top: 20px;
 }
@@ -126,7 +126,7 @@ a {
   /*align-self: center;*/
 }
 
-.browse_content .item .description {
+.browse-container .item .description {
   text-align: justify
 }
 
@@ -199,4 +199,29 @@ a {
 
 .hover-target:hover ~ .hover-target {
   display: block;
+}
+
+.ui.items>.item .extra>.right.floated {
+  margin: 0;
+}
+
+.description {
+  margin-bottom: 15px;
+}
+
+.browse_item_content .statistics {
+  margin-bottom: 10px;
+}
+
+.browse-navbar {
+  background: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(255,255,255,.75) 90%,rgba(125,185,232,0) 100%);
+  padding: 20px 0 10px 0;
+}
+
+.browse-container .item .header {
+  font-size: 2rem;
+}
+
+.ui.dropdown .scrolling.menu, .ui.scrolling.dropdown .menu {
+  max-height: 25rem; !important;
 }

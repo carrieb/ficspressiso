@@ -21,6 +21,13 @@ const Sort = React.createClass({
     });
   },
 
+  updateSort() {
+    this.props.updateSort({
+      by: this.props.currentSort.by,
+      order: this.props.currentSort.order === 'ascending' ? 'descending' : 'ascending'
+    });
+  },
+
   render() {
     return (
       <span className="sort-container">
@@ -34,7 +41,7 @@ const Sort = React.createClass({
             <div className="item" data-value="review_cnt">Reviews</div>
           </div>
         </div>
-        <button className="ui icon button" onClick={() => {this.props.updateSort({by: this.props.currentSort.by, order: this.props.currentSort.order === 'ascending' ? 'descending' : 'ascending'});} }>
+        <button className="ui icon button" onClick={this.updateSort}>
           <i className={`sort content ${this.props.currentSort.order} icon`}></i>
         </button>
       </span>
