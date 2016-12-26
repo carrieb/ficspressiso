@@ -130,7 +130,7 @@ a {
   text-align: justify
 }
 
-.chart-container {
+.chart-page {
   text-align: center;
 }
 
@@ -243,6 +243,10 @@ a {
   cursor: pointer;
 }
 
-.chart-container button.ui.button {
+.chart-page form.ui.form {
+  margin-top: 25px;
+}
+
+.chart-page button.ui.button {
   margin-top: 25px;
 }

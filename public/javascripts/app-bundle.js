@@ -35607,12 +35607,15 @@
 	  },
 	  getChartData: function getChartData() {
 	    var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+	        _ref3$characters = _ref3.characters,
+	        characters = _ref3$characters === undefined ? [] : _ref3$characters,
 	        _ref3$start = _ref3.start,
 	        start = _ref3$start === undefined ? null : _ref3$start,
 	        _ref3$end = _ref3.end,
 	        end = _ref3$end === undefined ? null : _ref3$end;
 
 	    return get('/api/chart/data', {
+	      characters: characters,
 	      start: start,
 	      end: end
 	    });
@@ -35785,7 +35788,7 @@
 	  },
 	  initializeCharacterColors: function initializeCharacterColors(character) {
 	    this.characterMap[character] = {
-	      rgbArray: (0, _randomcolor2.default)({ format: 'rgbArray', luminosity: 'light' }),
+	      rgbArray: (0, _randomcolor2.default)({ format: 'rgbArray' }),
 	      color: _util2.default.randomColor()
 	    };
 	  },
@@ -39470,18 +39473,215 @@
 
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-	var NewChart = _react2.default.createClass({
-	  displayName: 'NewChart',
-	  componentWillMount: function componentWillMount() {
-	    this.updateChart();
+	var ApiMultipleCharacterDropdown = _react2.default.createClass({
+	  displayName: 'ApiMultipleCharacterDropdown',
+
+	  propTypes: {
+	    characters: _react2.default.PropTypes.array.isRequired,
+	    updateCharacters: _react2.default.PropTypes.func.isRequired
 	  },
+
 	  componentDidMount: function componentDidMount() {
-	    this.initializeChart();
+	    $(this.dropdown).dropdown({
+	      onChange: this.onChange
+	    });
+	  },
+	  onChange: function onChange(valueString) {
+	    this.props.updateCharacters(valueString.split(','));
+	  },
+	  componentDidUpdate: function componentDidUpdate(prevProps, prevState) {
+	    if (this.state.loaded && !prevState.loaded) {
+	      $(this.dropdown).dropdown({
+	        onChange: this.onChange
+	      });
+	    }
 	  },
 	  getInitialState: function getInitialState() {
 	    return {
-	      chart: null,
+	      loaded: false,
+	      characterOptions: []
+	    };
+	  },
+	  componentWillMount: function componentWillMount() {
+	    this.loadCharacterOptions();
+	  },
+	  loadCharacterOptions: function loadCharacterOptions() {
+	    var _this = this;
+
+	    this.setState({ loaded: false });
+	    _util2.default.getCharacters().done(function (characterOptions) {
+	      _this.setState({
+	        loaded: true,
+	        characterOptions: characterOptions
+	      });
+	    });
+	  },
+	  render: function render() {
+	    var _this2 = this;
+
+	    var options = this.state.characterOptions.map(function (character, idx) {
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'item', key: idx, 'data-value': character, 'data-text': character },
+	        character
+	      );
+	    });
+	    return _react2.default.createElement(
+	      'div',
+	      { className: 'ui ' + (this.state.loaded ? '' : 'loading ') + 'fluid multiple search selection dropdown', ref: function ref(dropdown) {
+	          _this2.dropdown = dropdown;
+	        } },
+	      _react2.default.createElement('input', { type: 'hidden', name: 'characters', value: this.props.characters.join(',') }),
+	      _react2.default.createElement('i', { className: 'dropdown icon' }),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'default text' },
+	        'Characters...'
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'menu' },
+	        options
+	      )
+	    );
+	  }
+	});
+
+	var ApiFicsPerCharacterChart = _react2.default.createClass({
+	  displayName: 'ApiFicsPerCharacterChart',
+	  getInitialState: function getInitialState() {
+	    return {
+	      characters: ['Hermione G.', 'Harry P.', 'Ginny W.', 'Ron W.'],
+	      start: '2016-01-01',
+	      end: '2016-12-31',
 	      data: {}
+	    };
+	  },
+	  componentWillMount: function componentWillMount() {
+	    this.updateData();
+	  },
+	  updateData: function updateData() {
+	    var _this3 = this;
+
+	    var characters = this.state.characters;
+	    var start = this.state.start;
+	    var end = this.state.end;
+	    _util2.default.getChartData({
+	      characters: characters, start: start, end: end
+	    }).done(function (_ref) {
+	      var datasets = _ref.datasets,
+	          labels = _ref.labels;
+
+	      datasets.forEach(function (dataset, idx) {
+	        var color = _ColorMapper2.default.getColorForCharacter(dataset.label);
+	        var colorArr = _ColorMapper2.default.getRgbArrayForCharacter(dataset.label);
+
+	        dataset.fill = false;
+	        dataset.borderJoinStyle = 'miter';
+	        dataset.lineTension = 0.25;
+	        dataset.backgroundColor = "rgba(" + colorArr.join(',') + ",0.4)";
+	        dataset.borderColor = "rgba(" + colorArr.join(',') + ",1)";
+	      });
+
+	      console.log(datasets, labels);
+	      var data = _this3.state.data;
+	      data.datasets = datasets;
+	      data.labels = labels;
+	      _this3.setState({ data: data });
+	    });
+	  },
+	  render: function render() {
+	    var _this4 = this;
+
+	    console.log(this.state.characters, this.state.end);
+	    return _react2.default.createElement(
+	      'div',
+	      { className: 'chart-page' },
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'api-fics-per-character-chart-container' },
+	        _react2.default.createElement(NewChart, { data: this.state.data }),
+	        _react2.default.createElement(
+	          'form',
+	          { className: 'ui form' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'field' },
+	            _react2.default.createElement(
+	              'label',
+	              null,
+	              'Characters'
+	            ),
+	            _react2.default.createElement(ApiMultipleCharacterDropdown, { updateCharacters: function updateCharacters(characters) {
+	                _this4.setState({ characters: characters });
+	              },
+	              characters: this.state.characters })
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'field' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'two fields' },
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'field' },
+	                _react2.default.createElement(
+	                  'label',
+	                  null,
+	                  'Start'
+	                ),
+	                _react2.default.createElement('input', { type: 'text', name: 'start', value: this.state.start, onChange: function onChange(ev) {
+	                    var start = ev.target.value;_this4.setState({ start: start });
+	                  } })
+	              ),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'field' },
+	                _react2.default.createElement(
+	                  'label',
+	                  null,
+	                  'End'
+	                ),
+	                _react2.default.createElement('input', { type: 'text', name: 'end', value: this.state.end, onChange: function onChange(ev) {
+	                    var end = ev.target.value;_this4.setState({ end: end });
+	                  } })
+	              )
+	            )
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'center aligned' },
+	          _react2.default.createElement(
+	            'button',
+	            { className: 'ui button purple', onClick: this.updateData },
+	            'reload'
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+
+	var NewChart = _react2.default.createClass({
+	  displayName: 'NewChart',
+
+	  propTypes: {
+	    data: _react2.default.PropTypes.object.isRequired
+	  },
+
+	  componentDidMount: function componentDidMount() {
+	    this.initializeChart();
+	  },
+	  componentDidUpdate: function componentDidUpdate() {
+	    if (this.state.chart) {
+	      this.state.chart.update();
+	    }
+	  },
+	  getInitialState: function getInitialState() {
+	    return {
+	      chart: null
 	    };
 	  },
 	  getChartOptions: function getChartOptions() {
@@ -39490,6 +39690,9 @@
 	      maintainAspectRatio: false,
 	      animation: {
 	        duration: 1000
+	      },
+	      legend: {
+	        position: 'right'
 	      },
 	      scales: {
 	        yAxes: [{
@@ -39510,75 +39713,28 @@
 	      duration: 2000
 	    });
 	  },
-	  componentDidUpdate: function componentDidUpdate() {
-	    if (this.state.chart) {
-	      this.state.chart.update();
-	    }
-	  },
 	  initializeChart: function initializeChart() {
 	    var chart = new _chart.Chart(this.context, {
 	      type: 'line',
-	      data: this.state.data,
+	      data: this.props.data,
 	      options: this.getChartOptions()
 	    });
 	    this.setState({ chart: chart });
 	  },
-	  redrawChart: function redrawChart(datasets, labels) {
-	    this.state.data.labels = labels;
-	    this.state.data.datasets = datasets;
-	    console.log(this.state.data);
-	    this.setState({ data: this.state.data });
-	  },
-	  updateChart: function updateChart() {
-	    var _this = this;
-
-	    _util2.default.getChartData().done(function (_ref2) {
-	      var datasets = _ref2.datasets,
-	          labels = _ref2.labels;
-
-	      datasets.forEach(function (dataset, idx) {
-	        var color = _ColorMapper2.default.getColorForCharacter(dataset.label);
-	        var colorArr = _ColorMapper2.default.getRgbArrayForCharacter(dataset.label);
-
-	        dataset.fill = false;
-	        dataset.borderJoinStyle = 'miter';
-	        dataset.lineTension = 0.1;
-	        dataset.backgroundColor = "rgba(" + colorArr.join(',') + ",0.4)";
-	        dataset.borderColor = "rgba(" + colorArr.join(',') + ",1)";
-	      });
-
-	      console.log(datasets, labels);
-
-	      if (_this.state.chart) {
-	        _this.redrawChart(datasets, labels);
-	      } else {
-	        _this.initializeChart(datasets, labels);
-	      }
-	    });
-	  },
 	  render: function render() {
-	    var _this2 = this;
+	    var _this5 = this;
 
 	    return _react2.default.createElement(
 	      'div',
 	      { className: 'chart-container' },
 	      _react2.default.createElement('canvas', { ref: function ref(canvas) {
-	          _this2.context = canvas;
-	        }, width: '400', height: '400' }),
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'center aligned' },
-	        _react2.default.createElement(
-	          'button',
-	          { className: 'ui button purple', onClick: this.updateChart },
-	          'reload'
-	        )
-	      )
+	          _this5.context = canvas;
+	        }, width: '400', height: '400' })
 	    );
 	  }
 	});
 
-	exports.default = NewChart;
+	exports.default = ApiFicsPerCharacterChart;
 
 /***/ },
 /* 391 */

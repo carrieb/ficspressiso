@@ -28,10 +28,12 @@ const ApiUtils = {
   },
 
   getChartData({
+    characters = [],
     start = null,
     end = null
   } = {}) {
     return get('/api/chart/data', {
+      characters,
       start,
       end
     });

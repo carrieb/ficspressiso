@@ -38,6 +38,7 @@ router.get('/chart/data', function(req, res) {
   console.log('hi', req.query);
   const qstart = req.query.start || '2016-07-01'; // yyyy/mm/dd
   const qend = req.query.end || '2016-12-31';
+  console.log(qstart, qend);
   const delta = req.query.delta || 'month';
   const characters = req.query.characters || [
     'Harry P.', 'Hermione G.', 'Tom R. Jr.', 'Ron W.', 'Draco M.'
@@ -66,6 +67,7 @@ router.get('/chart/data', function(req, res) {
   // LOAD INTO DB (write script to consume JSON)
 
   // FOR NOW: mock data
+  console.log(start, end);
   while (start < end) {
     labels.push(start.format(labelFormat));
     characters.forEach((character, idx) => {
