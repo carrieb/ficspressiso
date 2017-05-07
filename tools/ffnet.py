@@ -83,15 +83,15 @@ def get_fandoms(driver):
     return [most_desc_fandom.text]
 
 def get_title(driver):
-    title_el = driver.find_element_by_css_selector("#profile_top b.xcontrast_txt")
+    title_el = driver.find_element_by_css_selector("#profile_top b")
     return title_el.text
 
 def get_author(driver):
-    author_el = driver.find_element_by_css_selector('#profile_top a.xcontrast_txt[href*="/u/"]')
+    author_el = driver.find_element_by_css_selector('a[href*="/u/"]')
     return author_el.text
 
 def get_author_url(driver):
-    author_el = driver.find_element_by_css_selector('#profile_top a.xcontrast_txt[href*="/u/"]')
+    author_el = driver.find_element_by_css_selector('a[href*="/u/"]')
     return author_el.get_attribute('href')
 
 def get_summary(driver):
@@ -100,9 +100,10 @@ def get_summary(driver):
 
 def get_story_metadata_from_list(driver):
     title_els = driver.find_elements_by_css_selector(".stitle");
-    author_els = driver.find_elements_by_css_selector(".stitle + a")
+    author_els = driver.find_elements_by_css_selector('a[href*="/u/"]')
     metadata_els = driver.find_elements_by_css_selector(".z-padtop2.xgray")
-    assert len(title_els) is len(author_els) and len(metadata_els) is len(title_els)
+    if len(title_els) is not len(author_els) or len(metadata_els) is not len(title_els):
+        return []
     metadata = []
     for i in range(25):
         parsed_fields = parse_fields(metadata_els[i].text)
@@ -112,7 +113,7 @@ def get_story_metadata_from_list(driver):
             'url': title_els[i].get_attribute('href'),
             'author': author_els[i].text,
             'author_url': author_els[i].get_attribute('href'),
-            'chracters': parsed_fields['chars'] if 'chars' in parsed_fields else [],
+            'characters': parsed_fields['chars'] if 'chars' in parsed_fields else [],
             'genres': parsed_fields['genres'] if 'genres' in parsed_fields else [],
             'rating': parsed_fields['rating'],
             'word_cnt': parsed_fields['word_cnt'],
@@ -135,18 +136,22 @@ def get_basic_metadata(driver, ff_id, metadata = {}):
     metadata['chapters'] = []
     metadata['url'] = get_story_url(ff_id)
     fill_in_raw_data(driver, metadata)
-    print metadata
     return metadata
 
-def get_chapter_data(driver, data = {}):
+def get_chapter_data(driver):
+    chapter_data = {}
+
+    # get all chapters
     chp_dropdown_el = driver.find_element_by_id("chap_select")
     chp_select = Select(chp_dropdown_el)
-    data['title'] = chp_select.all_selected_options[0].text
+    chapter_data['title'] = chp_select.all_selected_options[0].text
+    print chp_select.all_selected_options[0].text
 
+    # get chapter content and determine word length
     chapter_text_el = driver.find_element_by_id("storytext")
     chapter_text = chapter_text_el.text
-    data['word_cnt'] = len(chapter_text.split())
-    return data, chapter_text
+    chapter_data['word_cnt'] = len(chapter_text.split())
+    return chapter_data, chapter_text
 
 def paginate(driver):
     next_btn = driver.find_element_by_xpath('//button[text()="Next >"]')

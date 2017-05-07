@@ -37,6 +37,17 @@ const ApiUtils = {
       start,
       end
     });
+  },
+
+  // TODO: pass params
+  getTopData(characters, start, end, limit, sort) {
+    return get('/api/top/data', {
+      characters,
+      start,
+      end,
+      limit,
+      sort
+    });
   }
 }
 

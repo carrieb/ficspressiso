@@ -10,6 +10,7 @@ var App = React.createClass({
         <Link to="/new-library" activeClassName="active" className="ui item">New Library</Link>
         <Link to="/browse" activeClassName="active" className="ui item">Browse</Link>
         <Link to="/chart" activeClassName="active" className="ui item">Chart</Link>
+        <Link to="/top" activeClassName="active" className="ui item">Top</Link>
         <div className="right menu">
           <Link to="/settings" activeClassName="active" className="ui item">Settings</Link>
         </div>

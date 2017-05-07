@@ -5,6 +5,8 @@ var router = express.Router();
 
 const moment = require('moment');
 
+const DAO = require('../src/dao');
+
 router.get('/browse', function(req, res) {
   const page = req.query.page;
   const fandom = req.query.fandom || 'Harry Potter';
@@ -32,6 +34,23 @@ const MAX = 125;
 function getRandomArbitrary(min = MIN, max=MAX) {
   return Math.random() * (max - min) + min;
 }
+
+router.get('/top/data', (req, res) => {
+  console.log(req.query);
+  const characters = req.query.characters;
+  const start = req.query.start || '1990-09-27'; // default day i was born
+  const end = req.query.end || moment().format('YYYY-MM-DD'); // default now
+  const field = req.query.sort || 'fav_cnt';
+  const limit = req.query.limit ? parseInt(req.query.limit) : 10;
+
+  try {
+    DAO.getTop(characters, start, end, field, limit, (topList) => {
+      res.json(topList);
+    });
+  } catch (e) {
+    console.error(e)
+  }
+})
 
 
 router.get('/chart/data', function(req, res) {
@@ -71,17 +90,24 @@ router.get('/chart/data', function(req, res) {
   while (start < end) {
     labels.push(start.format(labelFormat));
     characters.forEach((character, idx) => {
-      const random = getRandomArbitrary()
+      const random = getRandomArbitrary() // get # of fics for char from start to end
       datasets[idx].data.push(/* db.query(...char..date..delta) */random);
     });
 
     start.add(1, delta);
   }
 
-  res.json({
-    labels,
-    datasets
-  });
+  try {
+    //DAO.queryNumFics(characters, qstart, qend, delta, (labels, datasets) => {
+      //res.json({ labels, datasets });
+    //});
+    DAO.aggregateNumFics(characters, qstart, qend, delta, (labels, datasets) => {
+      console.log(labels, datasets);
+      res.json({ labels, datasets });
+    });
+  } catch (e) {
+    console.error(e);
+  }
 });
 
 module.exports = router;

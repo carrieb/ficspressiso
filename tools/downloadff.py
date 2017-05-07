@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import sys, getopt, time, os, json, importlib
+import sys, getopt, time, os, json, importlib, time, codecs
 from selenium import webdriver
 import copy
 
@@ -9,7 +9,7 @@ OUTPUT_DIR = 'fanfiction/'
 def main(argv):
    ff_id = None
    site = None
-   driver = webdriver.Chrome('/usr/bin/chromedriver')
+   driver = webdriver.Chrome('/usr/local/bin/chromedriver')
    try:
        opts, args = getopt.getopt(argv,"h",["ffnet=","ao3=","update"])
    except getopt.GetoptError:
@@ -50,8 +50,9 @@ def make_path_if_not_exists(filename):
 def write_chapter_file(title, chapter, text):
     filename = OUTPUT_DIR + title + '/' + chapter + ".txt"
     make_path_if_not_exists(filename)
-    with open(filename, "w") as f:
-        f.write(text.encode('utf-8'))
+    doublespaced = text.replace('\n', '\n\n')
+    with codecs.open(filename, "w", "utf-8") as f:
+        f.write(doublespaced)
 
 def write_metadata_file(metadata):
     filename = OUTPUT_DIR + metadata['title'] + '/metadata.json'
@@ -80,19 +81,31 @@ def update_all_metadata(driver):
                     meta[key] = new_meta[key]
             write_metadata_file(meta)
 
+def write_html_record(ff_id, chp_num, driver):
+    html = driver.page_source
+    filename = 'tmp/%s/%s/%d' % (time.strftime('%Y-%m-%d'), ff_id, chp_num)
+    make_path_if_not_exists(filename)
+    with codecs.open(filename, "w", "utf-8") as f:
+        f.write(html)
+
 def download_fic(driver, ff_id, site):
     url = site.get_story_url(ff_id)
+    chp_num = 1
+    metadata = {}
     driver.get(url)
-    metadata = site.get_basic_metadata(driver, ff_id)
-    print metadata
-    write_metadata_file(metadata)
-    chp_num = 0
     while(True):
-        print "Retrieving chapter " + str(chp_num+1) + " ..."
-        chapter_data, text = site.get_chapter_data(driver)
-        write_chapter_file(metadata['title'], chapter_data['title'], text)
-        metadata['chapters'].append(copy.deepcopy(chapter_data))
-        print metadata
+        print "Retrieved chapter " + str(chp_num) + " ..."
+        write_html_record(ff_id, chp_num, driver)
+
+        if not metadata:
+            metadata = site.get_basic_metadata(driver, ff_id)
+            #print json.dumps(metadata, sort_keys=True, indent=4)
+            write_metadata_file(metadata)
+
+        chapter_data, chapter_text = site.get_chapter_data(driver)
+        write_chapter_file(metadata['title'], chapter_data['title'], chapter_text)
+        metadata['chapters'].append(chapter_data)
+
         try:
             site.paginate(driver)
             time.sleep(1)

@@ -6,72 +6,7 @@ import ApiUtils from '../../api/util.js'
 
 import ColorMapper from '../../state/ColorMapper.js';
 
-const ApiMultipleCharacterDropdown = React.createClass({
-  propTypes: {
-    characters: React.PropTypes.array.isRequired,
-    updateCharacters: React.PropTypes.func.isRequired
-  },
-
-  componentDidMount() {
-    $(this.dropdown).dropdown({
-      onChange: this.onChange
-    });
-  },
-
-  onChange(valueString) {
-    this.props.updateCharacters(valueString.split(','));
-  },
-
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.loaded && !prevState.loaded) {
-      $(this.dropdown).dropdown({
-        onChange: this.onChange
-      });
-    }
-  },
-
-  getInitialState() {
-    return {
-      loaded: false,
-      characterOptions: []
-    };
-  },
-
-  componentWillMount() {
-    this.loadCharacterOptions();
-  },
-
-  loadCharacterOptions() {
-    this.setState({ loaded: false });
-    ApiUtils.getCharacters()
-    .done((characterOptions) => {
-      this.setState({
-        loaded: true,
-        characterOptions
-      })
-    });
-  },
-
-  render() {
-    const options = this.state.characterOptions.map((character, idx) => {
-      return (
-        <div className="item" key={idx} data-value={character} data-text={character}>
-          {character}
-        </div>
-      );
-    });
-    return (
-      <div className={`ui ${this.state.loaded ? '' : 'loading '}fluid multiple search selection dropdown`} ref={(dropdown) => { this.dropdown = dropdown; }}>
-        <input type="hidden" name="characters" value={this.props.characters.join(',')}/>
-        <i className="dropdown icon"></i>
-        <div className="default text">Characters...</div>
-        <div className="menu">
-          { options }
-        </div>
-      </div>
-    );
-  }
-});
+import ApiMultipleCharacterDropdown from '../forms/ApiMultipleCharacterDropdown';
 
 const ApiFicsPerCharacterChart = React.createClass({
   getInitialState() {
@@ -79,7 +14,8 @@ const ApiFicsPerCharacterChart = React.createClass({
       characters: ['Hermione G.', 'Harry P.', 'Ginny W.', 'Ron W.'],
       start: '2016-01-01',
       end: '2016-12-31',
-      data: {}
+      data: {},
+      loaded: false
     }
   },
 
@@ -91,6 +27,9 @@ const ApiFicsPerCharacterChart = React.createClass({
     const characters = this.state.characters;
     const start = this.state.start;
     const end = this.state.end;
+    this.setState({
+      loaded: false
+    });
     ApiUtils.getChartData({
       characters, start, end
     })
@@ -110,16 +49,19 @@ const ApiFicsPerCharacterChart = React.createClass({
       const data = this.state.data;
       data.datasets = datasets;
       data.labels = labels;
-      this.setState({ data });
+      this.setState({ data, loaded: true });
     });
   },
 
   render() {
-    console.log(this.state.characters, this.state.end);
+    console.log(this.state.characters, this.state.end, this.state.loaded);
     return (
       <div className="chart-page">
-        <div className="api-fics-per-character-chart-container">
+        <div className="ui basic segment api-fics-per-character-chart-container">
+          { !this.state.loaded && <div className="ui active large text loader">Loading..</div> }
           <NewChart data={this.state.data}/>
+        </div>
+        <div>
           <form className="ui form">
             <div className="field">
                 <label>Characters</label>

@@ -7,6 +7,7 @@ import Library from './components/library';
 import Browse from './components/browse';
 import NewChart from './components/chart/new-chart';
 import NewLibrary from './components/library/new-library';
+import ApiTopList from './components/top/api-top-list';
 
 if (typeof window !== "undefined") {
   window.onload = function() {
@@ -18,6 +19,7 @@ if (typeof window !== "undefined") {
           <Route path="/new-library" component={NewLibrary}/>
           <Route path="/browse" component={Browse}/>
           <Route path="/chart" component={NewChart}/>
+          <Route path="/top" component={ApiTopList}/>
         </Route>
       </Router>, document.getElementById("content"));
   };
