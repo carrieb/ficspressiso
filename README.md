@@ -1,16 +1,44 @@
 # ficspressiso
 
-have the latest version of npm and nodejs
-have mongodb installed and running
-have chromedriver downloaded and on path
+#### dependencies
+###### webapp
+* nodejs
+* mongodb
 
+###### crawler
+* chromedriver
+
+#### setup & running
+###### webapp
 ```
 npm install
 ```
 
 ```
-webpack --watch
-DEBUG=ficspressiso ./bin/www 
+$> webpack --watch
+$> DEBUG=ficspressiso ./bin/www
+  ~ OR ~
+$> ./run.sh
 ```
 
-Made with the [expressio|https://github.com/jcreamer898/expressiso] skeleton.
+###### crawler
+```
+pip install ??
+```
+```
+$ /tools> ./metadata_crawler.py
+```
+
+### credits
+
+* express
+* react
+* webpack
+* mongodb
+* selenium
+* chromedriver
+* cheerio
+* semantic-ui
+* lodash
+* chart.js
+* randomcolor  
