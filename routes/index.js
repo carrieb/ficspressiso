@@ -14,11 +14,6 @@ var database = null;
 
 var url = 'mongodb://localhost:27017/fanfic';
 
-require("node-jsx").install({
-    harmony: true,
-    extension: ".jsx"
-});
-
 var React = require("react"),
     CharNameToQueryValue = {};
 
