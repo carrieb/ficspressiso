@@ -69,7 +69,8 @@ const NewFilter = React.createClass({
     const flattenedSections = [].concat.apply([], optionSections);
     return (
       <div className="ui labeled icon top center pointing scrolling dropdown button" ref={(dropdown) => {this.dropdown = dropdown}}>
-        <i className="filter icon"></i><span className="text">{this.props.labelText || 'Filter'}</span>
+        <i className="filter icon"></i>
+        <span className="text">{this.props.labelText || 'Filter'}</span>
         <div className="menu">
           <div className="ui search icon input">
             <i className="search icon"></i>

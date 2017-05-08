@@ -62,6 +62,7 @@ const Browse = React.createClass({
                 <Filter options={{ fandoms: ['Harry Potter', 'Star Wars'] }}
                         updateFilterQuery={ this.handleFandomFilterChange }
                         currentQuery={{ fandoms: this.state.fandom || '' }}
+                        cornerIcon="book"
                         labelText="Filter Fandom"
                         searchPlaceholder="Search fandoms..."/>
                       <ApiCharacterFilter currentQuery={{ characters: this.state.characters.length === 1 ? this.state.characters[0] : '', fandom: this.state.fandom }}

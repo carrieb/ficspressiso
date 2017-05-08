@@ -1,12 +1,15 @@
 from selenium.webdriver.support.ui import Select
+import pprint as pp
+import re
 
 def get_story_url(ff_id):
     return "http://www.fanfiction.net/s/"+str(ff_id)
 
 def fill_in_raw_data(driver, metadata):
     raw_data_el = driver.find_element_by_css_selector("#profile_top span.xgray")
-    raw_data = raw_data_el.text
+    raw_data = raw_data_el.get_attribute('innerHTML')
     split = raw_data.split(' - ')
+    #print split
     for i in range(len(split)):
         item = split[i].strip()
         #print i, item
@@ -20,7 +23,7 @@ def fill_in_raw_data(driver, metadata):
             else:
                 update_chars(item, metadata)
 
-def parse_fields(metadata_string, metadata = {}):
+def parse_fields(metadata_string, metadata):
     split = metadata_string.split(' - ')
     for i in range(len(split)):
         item = split[i].strip()
@@ -55,7 +58,7 @@ def update_chars(item, metadata):
 
 def update_count(item, metadata):
     # Special case rating
-    field, value = map(lambda s: s.strip(), item.split(':'))
+    field, value = map(lambda s: s.strip(), item.split(':', 1))
     if field == "Rated":
         metadata['rating'] = value.replace("Fiction ", "")
     if field == "Chapters":
@@ -63,8 +66,8 @@ def update_count(item, metadata):
         metadata['chapters'] = []
     if field == "Words":
         metadata['word_cnt'] = int(value.replace(',', ''))
-    if field == "Reviews":
-        metadata['review_cnt']= int(value.replace(',', ''))
+    #if field == "Reviews":
+    #    metadata['review_cnt']= int(value.replace(',', ''))
     if field == "Favs":
         metadata['fav_cnt'] = int(value.replace(',', ''))
     if field == "Follows":
@@ -73,12 +76,20 @@ def update_count(item, metadata):
         metadata['status'] = value
     # TODO: convert these to ISO dates
     if field == "Published":
-        metadata['publish_date'] = value
+        metadata['publish_date'] = get_published_ts(value)
     if field == "Updated":
         metadata['update_date'] = value
 
+published_ts_p = re.compile(r'data-xutime="(?P<published_ts>[0-9]+)"')
+def get_published_ts(raw_string):
+    #print published_ts_p.pattern, raw_string
+    published_ts_match = published_ts_p.search(raw_string)
+    #print published_ts_match.group('published_ts')
+    return int(published_ts_match.group('published_ts'))
+
 def get_fandoms(driver):
     fandom_cont_els = driver.find_elements_by_css_selector('#pre_story_links a');
+    #print fandom_cont_els
     most_desc_fandom = fandom_cont_els[-1]
     return [most_desc_fandom.text]
 
@@ -98,6 +109,12 @@ def get_summary(driver):
     summary_el = driver.find_element_by_css_selector("#profile_top div.xcontrast_txt")
     return summary_el.text
 
+id_p = re.compile(r'/s/(?P<id>[0-9]+)/')
+def get_id(url):
+    id_m = id_p.search(url);
+    #print id_m, id_m.group('id');
+    return int(id_m.group('id'))
+
 def get_story_metadata_from_list(driver):
     title_els = driver.find_elements_by_css_selector(".stitle");
     author_els = driver.find_elements_by_css_selector('a[href*="/u/"]')
@@ -105,12 +122,16 @@ def get_story_metadata_from_list(driver):
     if len(title_els) is not len(author_els) or len(metadata_els) is not len(title_els):
         return []
     metadata = []
-    for i in range(25):
-        parsed_fields = parse_fields(metadata_els[i].text)
-        metadata.append({
+    for i in range(len(metadata_els)):
+        parsed_fields = parse_fields(metadata_els[i].get_attribute('innerHTML'), {})
+
+        url = title_els[i].get_attribute('href')
+        id = get_id(url)
+        meta = {
             'site': 'ffnet',
             'title': title_els[i].text,
-            'url': title_els[i].get_attribute('href'),
+            'url': url,
+            'id': id,
             'author': author_els[i].text,
             'author_url': author_els[i].get_attribute('href'),
             'characters': parsed_fields['chars'] if 'chars' in parsed_fields else [],
@@ -122,7 +143,9 @@ def get_story_metadata_from_list(driver):
             'fav_cnt': parsed_fields['fav_cnt'] if 'fav_cnt' in parsed_fields else 0,
             'follow_cnt': parsed_fields['follow_cnt'] if 'follow_cnt' in parsed_fields else 0,
             'publish_date': parsed_fields['publish_date']
-        })
+        }
+        #pp.pprint(meta)
+        metadata.append(meta)
     return metadata
 
 def get_basic_metadata(driver, ff_id, metadata = {}):
@@ -138,14 +161,17 @@ def get_basic_metadata(driver, ff_id, metadata = {}):
     fill_in_raw_data(driver, metadata)
     return metadata
 
-def get_chapter_data(driver):
+def get_chapter_data(driver, metadata):
     chapter_data = {}
 
     # get all chapters
-    chp_dropdown_el = driver.find_element_by_id("chap_select")
-    chp_select = Select(chp_dropdown_el)
-    chapter_data['title'] = chp_select.all_selected_options[0].text
-    print chp_select.all_selected_options[0].text
+    try:
+        chp_dropdown_el = driver.find_element_by_id("chap_select")
+        chp_select = Select(chp_dropdown_el)
+        chapter_data['title'] = chp_select.all_selected_options[0].text
+        #print chp_select.all_selected_options[0].text
+    except:
+        chapter_data['title'] = metadata['title']
 
     # get chapter content and determine word length
     chapter_text_el = driver.find_element_by_id("storytext")

@@ -4,13 +4,14 @@ import sys
 from pymongo import MongoClient
 import json
 from datetime import datetime
+import pprint as pp
 import copy
 
 mongodb_url = 'mongodb://localhost:27017/fanfic'
 db_name = 'fanfic'
 collection_name = 'documents'
 
-json_dir = 'output/'
+json_dir = 'output/2017-05-07/'
 
 now = datetime.now()
 current_year = now.year - 1 # fucking 2017
@@ -25,10 +26,10 @@ def main(argv):
 
     curr = 0
     bulk = coll.initialize_ordered_bulk_op()
-    min_ts = 1454284800 # jan, 1 2016, so we don't need to worry about dupes
-    last_ts = 1454284800 + 100 # it doesn't matter what i am, as long as i'm bigger than min_ts
-    max_file = 201
-    curr_file = 200
+    #min_ts = 1454284800 # jan, 1 2016, so we don't need to worry about dupes
+    #last_ts = 1454284800 + 100 # it doesn't matter what i am, as long as i'm bigger than min_ts
+    max_file = 0
+    curr_file = 0
     skipped = 0
     while True:
         curr_file_name = json_dir + str(curr_file) + ".json"
@@ -38,19 +39,23 @@ def main(argv):
                 for line in f:
                     fic = json.loads(line)
                     publish_date = fic['publish_date']
+                    publish_ts = publish_date
 
-                    # try to parse publish_date (guaranteed to exist)
-                    try:
-                        published = datetime.strptime(fic['publish_date'], "%b %d")
-                        published = published.replace(year=current_year)
-                    except ValueError:
-                        try:
-                            published = datetime.strptime(fic['publish_date'], "%b %d, %Y")
-                        except ValueError:
-                            published = datetime(2016, 12, 14)
-                    publish_ts = int(published.strftime("%s"))
-                    #print publish_ts
+                    # try to parse string publish_date into publish_ts
+                    #if not isinstance(publish_date, (int, long)):
+                        #try:
+                            #published = datetime.strptime(fic['publish_date'], "%b %d")
+                            #published = published.replace(year=current_year)
+                        #except ValueError:
+                            #try:
+                                #published = datetime.strptime(fic['publish_date'], "%b %d, %Y")
+                            #except ValueError:
+                                #published = datetime(2016, 12, 14)
+                            #publish_ts = int(published.strftime("%s"))
+                            #print publish_ts
+
                     fic['publish_ts'] = publish_ts
+                    pp.pprint(fic)
 
                     # handle missing author
                     if fic['author'] == "":
@@ -61,12 +66,12 @@ def main(argv):
                         pass
                     else:
                         # handle bad chracter string
-                        try:
-                            temp = copy.copy(fic['chracters'])
-                            fic['characters'] = temp
-                            fic.pop('chracters', None)
-                        except KeyError:
-                            pass # nothing to do
+                        #try:
+                            #temp = copy.copy(fic['chracters'])
+                            #fic['characters'] = temp
+                            #fic.pop('chracters', None)
+                        #except KeyError:
+                            #pass # nothing to do
 
                         seen_hash = fic['title'] + ' by ' + fic['author']
                         if seen_hash in seen_set:
@@ -86,6 +91,7 @@ def main(argv):
                     last_ts = publish_ts
         except:
             print "error", curr_file_name
+            raise
             break
         curr_file += 1
         if (curr_file > max_file):

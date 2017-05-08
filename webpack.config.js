@@ -10,20 +10,21 @@ module.exports = [{
     path: path.join(__dirname, "public", "javascripts")
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'babel',
-        query: { presets: ['react', 'es2015']}
+        exclude: [/node_modules/],
+        use: [{
+          loader: 'babel-loader',
+          options: { presets: ['react', 'es2015']}
+        }]
       }
     ]
   },
   resolve: {
    // you can now require('file') instead of require('file.coffee')
-   extensions: ["", ".js", ".jsx"],
-   root: [path.join(__dirname, "web")],
-   modulesDirectories: ["node_modules"],
+   extensions: [".js", ".jsx"],
+   modules: ["node_modules", path.join(__dirname, "web")],
    alias: {
      src: path.join(__dirname, "src"),
      components: path.join(__dirname, "web", "components")

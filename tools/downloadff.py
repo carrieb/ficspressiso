@@ -9,7 +9,9 @@ OUTPUT_DIR = 'fanfiction/'
 def main(argv):
    ff_id = None
    site = None
-   driver = webdriver.Chrome('/usr/local/bin/chromedriver')
+   #driver = webdriver.Chrome('/usr/local/bin/chromedriver')
+   options = ["--load-images=false"]
+   driver = webdriver.PhantomJS(service_args=options)
    try:
        opts, args = getopt.getopt(argv,"h",["ffnet=","ao3=","update"])
    except getopt.GetoptError:
@@ -102,7 +104,7 @@ def download_fic(driver, ff_id, site):
             #print json.dumps(metadata, sort_keys=True, indent=4)
             write_metadata_file(metadata)
 
-        chapter_data, chapter_text = site.get_chapter_data(driver)
+        chapter_data, chapter_text = site.get_chapter_data(driver, metadata)
         write_chapter_file(metadata['title'], chapter_data['title'], chapter_text)
         metadata['chapters'].append(chapter_data)
 

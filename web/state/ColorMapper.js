@@ -15,7 +15,7 @@ const ColorMapper = {
 
   initializeCharacterColors(character) {
     this.characterMap[character] = {
-      rgbArray: randomColor({ format: 'rgbArray' }),
+      rgbArray: randomColor({ format: 'rgbArray', hue: 'random' }),
       color: util.randomColor()
     };
   },
@@ -29,7 +29,7 @@ const ColorMapper = {
 
   getRgbArrayForCharacter(character) {
     if (!this.characterMap.hasOwnProperty(character)) {
-      initializeCharacterColors(character);
+      this.initializeCharacterColors(character);
     }
     return this.characterMap[character].rgbArray;
   },

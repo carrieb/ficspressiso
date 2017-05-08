@@ -20,10 +20,18 @@ const ApiMultipleCharacterDropdown = React.createClass({
     this.props.updateCharacters(valueString.split(','));
   },
 
+  onLabelCreate(value, text) {
+    const character = value;
+    const colorArr = ColorMapper.getRgbArrayForCharacter(character);
+    const rgba = "rgba(" + colorArr.join(',') + ",0.4)";
+    return $(`<a class="ui label" data-value="${character}" style="background-color: ${rgba};">${character}<i class="delete icon"></i></a>`);
+  },
+
   componentDidUpdate(prevProps, prevState) {
     if (this.state.loaded && !prevState.loaded) {
       $(this.dropdown).dropdown({
-        onChange: this.onChange
+        onChange: this.onChange,
+        onLabelCreate: this.onLabelCreate
       });
     }
   },
@@ -58,6 +66,7 @@ const ApiMultipleCharacterDropdown = React.createClass({
         </div>
       );
     });
+
     return (
       <div className={`ui ${this.state.loaded ? '' : 'loading '}fluid multiple search selection dropdown`}
            ref={(dropdown) => { this.dropdown = dropdown; }}>
