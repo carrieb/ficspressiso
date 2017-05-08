@@ -3,6 +3,7 @@ import React from 'react';
 import ApiUtils from '../../api/util';
 
 import ApiMultipleCharacterDropdown from '../forms/ApiMultipleCharacterDropdown';
+import TopList from './top-list';
 
 const ApiTopList = React.createClass({
   getInitialState() {
@@ -38,24 +39,9 @@ const ApiTopList = React.createClass({
   },
 
   render() {
-    let accordionContent = []
-    this.state.fics.forEach((fic) => {
-      accordionContent.push(
-        <div className="title" key={`${fic._id}_title`}>{fic.title}<span style={{ float: 'right'}}>{fic.fav_cnt}</span></div>
-      );
-      accordionContent.push(
-        <div className="content" key={`${fic._id}_content`}>
-          {fic.characters} {fic.word_cnt}
-          <a href={fic.url} target="_blank">GO</a>
-        </div>
-      );
-    });
-
     return (
-      <div className="top-list container">
-        <div className="top-list fic-list ui fluid styled accordion">
-          { accordionContent }
-        </div>
+      <div className="api-top-list container">
+        <TopList items={this.state.fics}/>
         <div className="top-list options-section">
           <form className="top-list ui form">
             <div className="field">

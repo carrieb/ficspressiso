@@ -3,10 +3,24 @@ const url = 'mongodb://localhost:27017/fanfic';
 const moment = require('moment');
 
 const MongoClient = require('mongodb').MongoClient;
+const ObjectID = require('mongodb').ObjectID;
 
 const assert = require('assert');
 
 const DAO = {
+  replaceFicData(mongoId, data, callback) {
+
+    MongoClient.connect(url, (err, db) => {
+      assert.equal(null, err);
+      const coll = db.collection('documents')
+      const id = ObjectID(mongoId);
+      coll.findOneAndReplace({ "_id": id }, data, (err, res) => {
+        assert.equal(null, err);
+        callback();
+      });
+    });
+  },
+
   getTop(characters, startDate, endDate, field, limit, callback) {
     const start = moment(startDate)
     const end = moment(endDate)
@@ -29,48 +43,6 @@ const DAO = {
         assert.equal(null, err)
         callback(docs)
       });
-    });
-  },
-
-  queryNumFics(characters, startDate, endDate, delta = 'month', callback) {
-    const start = moment(startDate);
-    const end = moment(endDate);
-    const numDelta = start.diff(end, delta + 's');
-    console.log(numDelta);
-
-    const labels = [];
-    const datasets =  characters.map((character) => {
-      return {
-        label: character,
-        data: []
-      };
-    });
-
-    // TODO: move out chart specific things
-
-    MongoClient.connect(url, function(err, db) {
-      assert.equal(null, err);
-      const coll = db.collection('documents');
-      while (start < end) {
-        const tempStart = start.clone();
-        const tempEnd = start.clone().add(1, delta);
-
-        labels.push(tempStart.format('MMMM YY'));
-
-        characters.map((character, idx) => {
-          coll.count({
-            characters: character,
-            publish_ts: {'$gt': tempStart.unix(), '$lt': tempEnd.unix() }
-          }, (err, count) => {
-            datasets[idx].data.push(count);
-            if (idx == characters.length - 1 && tempEnd.isSameOrAfter(end)) {
-              callback(labels, datasets);
-            }
-          });
-        });
-
-        start.add(1, delta);
-      }
     });
   },
 

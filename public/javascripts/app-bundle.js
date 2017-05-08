@@ -70,11 +70,11 @@
 
 	var _newChart2 = _interopRequireDefault(_newChart);
 
-	var _newLibrary = __webpack_require__(546);
+	var _newLibrary = __webpack_require__(547);
 
 	var _newLibrary2 = _interopRequireDefault(_newLibrary);
 
-	var _apiTopList = __webpack_require__(593);
+	var _apiTopList = __webpack_require__(594);
 
 	var _apiTopList2 = _interopRequireDefault(_apiTopList);
 
@@ -35678,12 +35678,19 @@
 
 	  // TODO: pass params
 	  getTopData: function getTopData(characters, start, end, limit, sort) {
+	    console.log(characters, start, end, limit, sort);
 	    return get('/api/top/data', {
 	      characters: characters,
 	      start: start,
 	      end: end,
 	      limit: limit,
 	      sort: sort
+	    });
+	  },
+	  reindex: function reindex(ffnetId, mongoId) {
+	    return get('/api/reindex', {
+	      id: ffnetId,
+	      '_id': mongoId
 	    });
 	  }
 	};
@@ -39535,7 +39542,7 @@
 
 	var _ColorMapper2 = _interopRequireDefault(_ColorMapper);
 
-	var _ApiMultipleCharacterDropdown = __webpack_require__(594);
+	var _ApiMultipleCharacterDropdown = __webpack_require__(546);
 
 	var _ApiMultipleCharacterDropdown2 = _interopRequireDefault(_ApiMultipleCharacterDropdown);
 
@@ -66367,11 +66374,112 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _util = __webpack_require__(294);
+
+	var _util2 = _interopRequireDefault(_util);
+
+	var _ColorMapper = __webpack_require__(296);
+
+	var _ColorMapper2 = _interopRequireDefault(_ColorMapper);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var ApiMultipleCharacterDropdown = _react2.default.createClass({
+	  displayName: 'ApiMultipleCharacterDropdown',
+
+	  propTypes: {
+	    characters: _react2.default.PropTypes.array.isRequired,
+	    updateCharacters: _react2.default.PropTypes.func.isRequired
+	  },
+
+	  componentDidMount: function componentDidMount() {
+	    $(this.dropdown).dropdown({
+	      onChange: this.onChange
+	    });
+	  },
+	  onChange: function onChange(valueString) {
+	    this.props.updateCharacters(valueString.split(','));
+	  },
+	  componentDidUpdate: function componentDidUpdate(prevProps, prevState) {
+	    if (this.state.loaded && !prevState.loaded) {
+	      $(this.dropdown).dropdown({
+	        onChange: this.onChange
+	      });
+	    }
+	  },
+	  getInitialState: function getInitialState() {
+	    return {
+	      loaded: false,
+	      characterOptions: []
+	    };
+	  },
+	  componentWillMount: function componentWillMount() {
+	    this.loadCharacterOptions();
+	  },
+	  loadCharacterOptions: function loadCharacterOptions() {
+	    var _this = this;
+
+	    this.setState({ loaded: false });
+	    _util2.default.getCharacters().done(function (characterOptions) {
+	      _this.setState({
+	        loaded: true,
+	        characterOptions: characterOptions
+	      });
+	    });
+	  },
+	  render: function render() {
+	    var _this2 = this;
+
+	    var options = this.state.characterOptions.map(function (character, idx) {
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'item', key: idx, 'data-value': character, 'data-text': character },
+	        character
+	      );
+	    });
+	    return _react2.default.createElement(
+	      'div',
+	      { className: 'ui ' + (this.state.loaded ? '' : 'loading ') + 'fluid multiple search selection dropdown',
+	        ref: function ref(dropdown) {
+	          _this2.dropdown = dropdown;
+	        } },
+	      _react2.default.createElement('input', { type: 'hidden', name: 'characters', value: this.props.characters.join(',') }),
+	      _react2.default.createElement('i', { className: 'dropdown icon' }),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'default text' },
+	        'Characters...'
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'menu' },
+	        options
+	      )
+	    );
+	  }
+	});
+
+	exports.default = ApiMultipleCharacterDropdown;
+
+/***/ },
+/* 547 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
 	var _newFilter = __webpack_require__(295);
 
 	var _newFilter2 = _interopRequireDefault(_newFilter);
 
-	var _sort = __webpack_require__(547);
+	var _sort = __webpack_require__(548);
 
 	var _sort2 = _interopRequireDefault(_sort);
 
@@ -66383,7 +66491,7 @@
 
 	var _ColorMapper2 = _interopRequireDefault(_ColorMapper);
 
-	var _sortBy = __webpack_require__(548);
+	var _sortBy = __webpack_require__(549);
 
 	var _sortBy2 = _interopRequireDefault(_sortBy);
 
@@ -66561,7 +66669,7 @@
 	exports.default = NewLibrary;
 
 /***/ },
-/* 547 */
+/* 548 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -66606,6 +66714,7 @@
 	  render: function render() {
 	    var _this = this;
 
+	    var sortType = this.props.currentSort.by === 'title' ? 'alphabet' : 'content';
 	    return _react2.default.createElement(
 	      'span',
 	      { className: 'sort-container' },
@@ -66653,7 +66762,7 @@
 	      _react2.default.createElement(
 	        'button',
 	        { className: 'ui icon button', onClick: this.updateSort },
-	        _react2.default.createElement('i', { className: 'sort content ' + this.props.currentSort.order + ' icon' })
+	        _react2.default.createElement('i', { className: 'sort ' + sortType + ' ' + this.props.currentSort.order + ' icon' })
 	      )
 	    );
 	  }
@@ -66662,13 +66771,13 @@
 	exports.default = Sort;
 
 /***/ },
-/* 548 */
+/* 549 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var baseFlatten = __webpack_require__(549),
-	    baseOrderBy = __webpack_require__(552),
-	    baseRest = __webpack_require__(584),
-	    isIterateeCall = __webpack_require__(592);
+	var baseFlatten = __webpack_require__(550),
+	    baseOrderBy = __webpack_require__(553),
+	    baseRest = __webpack_require__(585),
+	    isIterateeCall = __webpack_require__(593);
 
 	/**
 	 * Creates an array of elements, sorted in ascending order by the results of
@@ -66716,11 +66825,11 @@
 
 
 /***/ },
-/* 549 */
+/* 550 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var arrayPush = __webpack_require__(550),
-	    isFlattenable = __webpack_require__(551);
+	var arrayPush = __webpack_require__(551),
+	    isFlattenable = __webpack_require__(552);
 
 	/**
 	 * The base implementation of `_.flatten` with support for restricting flattening.
@@ -66760,7 +66869,7 @@
 
 
 /***/ },
-/* 550 */
+/* 551 */
 /***/ function(module, exports) {
 
 	/**
@@ -66786,7 +66895,7 @@
 
 
 /***/ },
-/* 551 */
+/* 552 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Symbol = __webpack_require__(301),
@@ -66812,16 +66921,16 @@
 
 
 /***/ },
-/* 552 */
+/* 553 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var arrayMap = __webpack_require__(304),
-	    baseIteratee = __webpack_require__(553),
-	    baseMap = __webpack_require__(575),
-	    baseSortBy = __webpack_require__(581),
+	    baseIteratee = __webpack_require__(554),
+	    baseMap = __webpack_require__(576),
+	    baseSortBy = __webpack_require__(582),
 	    baseUnary = __webpack_require__(378),
-	    compareMultiple = __webpack_require__(582),
-	    identity = __webpack_require__(571);
+	    compareMultiple = __webpack_require__(583),
+	    identity = __webpack_require__(572);
 
 	/**
 	 * The base implementation of `_.orderBy` without param guards.
@@ -66852,14 +66961,14 @@
 
 
 /***/ },
-/* 553 */
+/* 554 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var baseMatches = __webpack_require__(554),
-	    baseMatchesProperty = __webpack_require__(559),
-	    identity = __webpack_require__(571),
+	var baseMatches = __webpack_require__(555),
+	    baseMatchesProperty = __webpack_require__(560),
+	    identity = __webpack_require__(572),
 	    isArray = __webpack_require__(305),
-	    property = __webpack_require__(572);
+	    property = __webpack_require__(573);
 
 	/**
 	 * The base implementation of `_.iteratee`.
@@ -66889,12 +66998,12 @@
 
 
 /***/ },
-/* 554 */
+/* 555 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var baseIsMatch = __webpack_require__(555),
-	    getMatchData = __webpack_require__(556),
-	    matchesStrictComparable = __webpack_require__(558);
+	var baseIsMatch = __webpack_require__(556),
+	    getMatchData = __webpack_require__(557),
+	    matchesStrictComparable = __webpack_require__(559);
 
 	/**
 	 * The base implementation of `_.matches` which doesn't clone `source`.
@@ -66917,7 +67026,7 @@
 
 
 /***/ },
-/* 555 */
+/* 556 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Stack = __webpack_require__(318),
@@ -66985,10 +67094,10 @@
 
 
 /***/ },
-/* 556 */
+/* 557 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isStrictComparable = __webpack_require__(557),
+	var isStrictComparable = __webpack_require__(558),
 	    keys = __webpack_require__(367);
 
 	/**
@@ -67015,7 +67124,7 @@
 
 
 /***/ },
-/* 557 */
+/* 558 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var isObject = __webpack_require__(336);
@@ -67036,7 +67145,7 @@
 
 
 /***/ },
-/* 558 */
+/* 559 */
 /***/ function(module, exports) {
 
 	/**
@@ -67062,16 +67171,16 @@
 
 
 /***/ },
-/* 559 */
+/* 560 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var baseIsEqual = __webpack_require__(316),
-	    get = __webpack_require__(560),
-	    hasIn = __webpack_require__(568),
-	    isKey = __webpack_require__(563),
-	    isStrictComparable = __webpack_require__(557),
-	    matchesStrictComparable = __webpack_require__(558),
-	    toKey = __webpack_require__(567);
+	    get = __webpack_require__(561),
+	    hasIn = __webpack_require__(569),
+	    isKey = __webpack_require__(564),
+	    isStrictComparable = __webpack_require__(558),
+	    matchesStrictComparable = __webpack_require__(559),
+	    toKey = __webpack_require__(568);
 
 	/** Used to compose bitmasks for value comparisons. */
 	var COMPARE_PARTIAL_FLAG = 1,
@@ -67101,10 +67210,10 @@
 
 
 /***/ },
-/* 560 */
+/* 561 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var baseGet = __webpack_require__(561);
+	var baseGet = __webpack_require__(562);
 
 	/**
 	 * Gets the value at `path` of `object`. If the resolved value is
@@ -67140,11 +67249,11 @@
 
 
 /***/ },
-/* 561 */
+/* 562 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var castPath = __webpack_require__(562),
-	    toKey = __webpack_require__(567);
+	var castPath = __webpack_require__(563),
+	    toKey = __webpack_require__(568);
 
 	/**
 	 * The base implementation of `_.get` without support for default values.
@@ -67170,12 +67279,12 @@
 
 
 /***/ },
-/* 562 */
+/* 563 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var isArray = __webpack_require__(305),
-	    isKey = __webpack_require__(563),
-	    stringToPath = __webpack_require__(564),
+	    isKey = __webpack_require__(564),
+	    stringToPath = __webpack_require__(565),
 	    toString = __webpack_require__(299);
 
 	/**
@@ -67197,7 +67306,7 @@
 
 
 /***/ },
-/* 563 */
+/* 564 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var isArray = __webpack_require__(305),
@@ -67232,10 +67341,10 @@
 
 
 /***/ },
-/* 564 */
+/* 565 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var memoizeCapped = __webpack_require__(565);
+	var memoizeCapped = __webpack_require__(566);
 
 	/** Used to match property names within property paths. */
 	var reLeadingDot = /^\./,
@@ -67266,10 +67375,10 @@
 
 
 /***/ },
-/* 565 */
+/* 566 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var memoize = __webpack_require__(566);
+	var memoize = __webpack_require__(567);
 
 	/** Used as the maximum memoize cache size. */
 	var MAX_MEMOIZE_SIZE = 500;
@@ -67298,7 +67407,7 @@
 
 
 /***/ },
-/* 566 */
+/* 567 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var MapCache = __webpack_require__(341);
@@ -67377,7 +67486,7 @@
 
 
 /***/ },
-/* 567 */
+/* 568 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var isSymbol = __webpack_require__(306);
@@ -67404,11 +67513,11 @@
 
 
 /***/ },
-/* 568 */
+/* 569 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var baseHasIn = __webpack_require__(569),
-	    hasPath = __webpack_require__(570);
+	var baseHasIn = __webpack_require__(570),
+	    hasPath = __webpack_require__(571);
 
 	/**
 	 * Checks if `path` is a direct or inherited property of `object`.
@@ -67444,7 +67553,7 @@
 
 
 /***/ },
-/* 569 */
+/* 570 */
 /***/ function(module, exports) {
 
 	/**
@@ -67463,15 +67572,15 @@
 
 
 /***/ },
-/* 570 */
+/* 571 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var castPath = __webpack_require__(562),
+	var castPath = __webpack_require__(563),
 	    isArguments = __webpack_require__(370),
 	    isArray = __webpack_require__(305),
 	    isIndex = __webpack_require__(374),
 	    isLength = __webpack_require__(377),
-	    toKey = __webpack_require__(567);
+	    toKey = __webpack_require__(568);
 
 	/**
 	 * Checks if `path` exists on `object`.
@@ -67508,7 +67617,7 @@
 
 
 /***/ },
-/* 571 */
+/* 572 */
 /***/ function(module, exports) {
 
 	/**
@@ -67535,13 +67644,13 @@
 
 
 /***/ },
-/* 572 */
+/* 573 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var baseProperty = __webpack_require__(573),
-	    basePropertyDeep = __webpack_require__(574),
-	    isKey = __webpack_require__(563),
-	    toKey = __webpack_require__(567);
+	var baseProperty = __webpack_require__(574),
+	    basePropertyDeep = __webpack_require__(575),
+	    isKey = __webpack_require__(564),
+	    toKey = __webpack_require__(568);
 
 	/**
 	 * Creates a function that returns the value at `path` of a given object.
@@ -67573,7 +67682,7 @@
 
 
 /***/ },
-/* 573 */
+/* 574 */
 /***/ function(module, exports) {
 
 	/**
@@ -67593,10 +67702,10 @@
 
 
 /***/ },
-/* 574 */
+/* 575 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var baseGet = __webpack_require__(561);
+	var baseGet = __webpack_require__(562);
 
 	/**
 	 * A specialized version of `baseProperty` which supports deep paths.
@@ -67615,10 +67724,10 @@
 
 
 /***/ },
-/* 575 */
+/* 576 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var baseEach = __webpack_require__(576),
+	var baseEach = __webpack_require__(577),
 	    isArrayLike = __webpack_require__(384);
 
 	/**
@@ -67643,11 +67752,11 @@
 
 
 /***/ },
-/* 576 */
+/* 577 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var baseForOwn = __webpack_require__(577),
-	    createBaseEach = __webpack_require__(580);
+	var baseForOwn = __webpack_require__(578),
+	    createBaseEach = __webpack_require__(581);
 
 	/**
 	 * The base implementation of `_.forEach` without support for iteratee shorthands.
@@ -67663,10 +67772,10 @@
 
 
 /***/ },
-/* 577 */
+/* 578 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var baseFor = __webpack_require__(578),
+	var baseFor = __webpack_require__(579),
 	    keys = __webpack_require__(367);
 
 	/**
@@ -67685,10 +67794,10 @@
 
 
 /***/ },
-/* 578 */
+/* 579 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var createBaseFor = __webpack_require__(579);
+	var createBaseFor = __webpack_require__(580);
 
 	/**
 	 * The base implementation of `baseForOwn` which iterates over `object`
@@ -67707,7 +67816,7 @@
 
 
 /***/ },
-/* 579 */
+/* 580 */
 /***/ function(module, exports) {
 
 	/**
@@ -67738,7 +67847,7 @@
 
 
 /***/ },
-/* 580 */
+/* 581 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var isArrayLike = __webpack_require__(384);
@@ -67776,7 +67885,7 @@
 
 
 /***/ },
-/* 581 */
+/* 582 */
 /***/ function(module, exports) {
 
 	/**
@@ -67803,10 +67912,10 @@
 
 
 /***/ },
-/* 582 */
+/* 583 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var compareAscending = __webpack_require__(583);
+	var compareAscending = __webpack_require__(584);
 
 	/**
 	 * Used by `_.orderBy` to compare multiple properties of a value to another
@@ -67853,7 +67962,7 @@
 
 
 /***/ },
-/* 583 */
+/* 584 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var isSymbol = __webpack_require__(306);
@@ -67900,12 +68009,12 @@
 
 
 /***/ },
-/* 584 */
+/* 585 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var identity = __webpack_require__(571),
-	    overRest = __webpack_require__(585),
-	    setToString = __webpack_require__(587);
+	var identity = __webpack_require__(572),
+	    overRest = __webpack_require__(586),
+	    setToString = __webpack_require__(588);
 
 	/**
 	 * The base implementation of `_.rest` which doesn't validate or coerce arguments.
@@ -67923,10 +68032,10 @@
 
 
 /***/ },
-/* 585 */
+/* 586 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var apply = __webpack_require__(586);
+	var apply = __webpack_require__(587);
 
 	/* Built-in method references for those with the same name as other `lodash` methods. */
 	var nativeMax = Math.max;
@@ -67965,7 +68074,7 @@
 
 
 /***/ },
-/* 586 */
+/* 587 */
 /***/ function(module, exports) {
 
 	/**
@@ -67992,11 +68101,11 @@
 
 
 /***/ },
-/* 587 */
+/* 588 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var baseSetToString = __webpack_require__(588),
-	    shortOut = __webpack_require__(591);
+	var baseSetToString = __webpack_require__(589),
+	    shortOut = __webpack_require__(592);
 
 	/**
 	 * Sets the `toString` method of `func` to return `string`.
@@ -68012,12 +68121,12 @@
 
 
 /***/ },
-/* 588 */
+/* 589 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var constant = __webpack_require__(589),
-	    defineProperty = __webpack_require__(590),
-	    identity = __webpack_require__(571);
+	var constant = __webpack_require__(590),
+	    defineProperty = __webpack_require__(591),
+	    identity = __webpack_require__(572);
 
 	/**
 	 * The base implementation of `setToString` without support for hot loop shorting.
@@ -68040,7 +68149,7 @@
 
 
 /***/ },
-/* 589 */
+/* 590 */
 /***/ function(module, exports) {
 
 	/**
@@ -68072,7 +68181,7 @@
 
 
 /***/ },
-/* 590 */
+/* 591 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var getNative = __webpack_require__(333);
@@ -68089,7 +68198,7 @@
 
 
 /***/ },
-/* 591 */
+/* 592 */
 /***/ function(module, exports) {
 
 	/** Used to detect hot functions by number of calls within a span of milliseconds. */
@@ -68132,7 +68241,7 @@
 
 
 /***/ },
-/* 592 */
+/* 593 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var eq = __webpack_require__(323),
@@ -68168,7 +68277,7 @@
 
 
 /***/ },
-/* 593 */
+/* 594 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -68185,9 +68294,13 @@
 
 	var _util2 = _interopRequireDefault(_util);
 
-	var _ApiMultipleCharacterDropdown = __webpack_require__(594);
+	var _ApiMultipleCharacterDropdown = __webpack_require__(546);
 
 	var _ApiMultipleCharacterDropdown2 = _interopRequireDefault(_ApiMultipleCharacterDropdown);
+
+	var _topList = __webpack_require__(595);
+
+	var _topList2 = _interopRequireDefault(_topList);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -68220,40 +68333,10 @@
 	  render: function render() {
 	    var _this2 = this;
 
-	    var accordionContent = [];
-	    this.state.fics.forEach(function (fic) {
-	      accordionContent.push(_react2.default.createElement(
-	        'div',
-	        { className: 'title', key: fic._id + '_title' },
-	        fic.title,
-	        _react2.default.createElement(
-	          'span',
-	          { style: { float: 'right' } },
-	          fic.fav_cnt
-	        )
-	      ));
-	      accordionContent.push(_react2.default.createElement(
-	        'div',
-	        { className: 'content', key: fic._id + '_content' },
-	        fic.characters,
-	        ' ',
-	        fic.word_cnt,
-	        _react2.default.createElement(
-	          'a',
-	          { href: fic.url, target: '_blank' },
-	          'GO'
-	        )
-	      ));
-	    });
-
 	    return _react2.default.createElement(
 	      'div',
-	      { className: 'top-list container' },
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'top-list fic-list ui fluid styled accordion' },
-	        accordionContent
-	      ),
+	      { className: 'api-top-list container' },
+	      _react2.default.createElement(_topList2.default, { items: this.state.fics }),
 	      _react2.default.createElement(
 	        'div',
 	        { className: 'top-list options-section' },
@@ -68324,7 +68407,7 @@
 	exports.default = ApiTopList;
 
 /***/ },
-/* 594 */
+/* 595 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -68337,91 +68420,200 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _util = __webpack_require__(294);
+	var _characterLabel = __webpack_require__(597);
 
-	var _util2 = _interopRequireDefault(_util);
+	var _characterLabel2 = _interopRequireDefault(_characterLabel);
 
-	var _ColorMapper = __webpack_require__(296);
+	var _ficSettingsButton = __webpack_require__(598);
 
-	var _ColorMapper2 = _interopRequireDefault(_ColorMapper);
+	var _ficSettingsButton2 = _interopRequireDefault(_ficSettingsButton);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var ApiMultipleCharacterDropdown = _react2.default.createClass({
-	  displayName: 'ApiMultipleCharacterDropdown',
+	var TopList = _react2.default.createClass({
+	  displayName: 'TopList',
 
 	  propTypes: {
-	    characters: _react2.default.PropTypes.array.isRequired,
-	    updateCharacters: _react2.default.PropTypes.func.isRequired
+	    items: _react2.default.PropTypes.array.isRequired
 	  },
 
-	  componentDidMount: function componentDidMount() {
-	    $(this.dropdown).dropdown({
-	      onChange: this.onChange
-	    });
-	  },
-	  onChange: function onChange(valueString) {
-	    this.props.updateCharacters(valueString.split(','));
-	  },
-	  componentDidUpdate: function componentDidUpdate(prevProps, prevState) {
-	    if (this.state.loaded && !prevState.loaded) {
-	      $(this.dropdown).dropdown({
-	        onChange: this.onChange
+	  render: function render() {
+	    var accordionContent = [];
+	    this.props.items.forEach(function (fic) {
+	      accordionContent.push(_react2.default.createElement(
+	        'div',
+	        { className: 'title', key: fic._id + '_title' },
+	        fic.title,
+	        _react2.default.createElement(
+	          'span',
+	          { style: { float: 'right' } },
+	          fic.fav_cnt
+	        )
+	      ));
+	      var characterLabels = fic.characters.map(function (character) {
+	        return _react2.default.createElement(_characterLabel2.default, { key: fic._id + '_' + character, character: character });
 	      });
-	    }
+	      accordionContent.push(_react2.default.createElement(
+	        'div',
+	        { className: 'content', key: fic._id + '_content' },
+	        characterLabels,
+	        ' ',
+	        _react2.default.createElement(
+	          'b',
+	          null,
+	          fic.word_cnt
+	        ),
+	        _react2.default.createElement(_ficSettingsButton2.default, null),
+	        _react2.default.createElement(
+	          'a',
+	          { className: 'ui green button', href: fic.url, target: '_blank', style: { float: 'right' } },
+	          'GO'
+	        )
+	      ));
+	    });
+	    return _react2.default.createElement(
+	      'div',
+	      { className: 'top-list fic-list ui fluid styled accordion' },
+	      accordionContent
+	    );
+	  }
+	});
+
+	exports.default = TopList;
+
+/***/ },
+/* 596 */,
+/* 597 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _uniqueId = __webpack_require__(298);
+
+	var _uniqueId2 = _interopRequireDefault(_uniqueId);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var CharacterLabel = _react2.default.createClass({
+	  displayName: 'CharacterLabel',
+
+	  propTypes: {
+	    character: _react2.default.PropTypes.string.isRequired,
+	    onClick: _react2.default.PropTypes.func
 	  },
+
 	  getInitialState: function getInitialState() {
 	    return {
-	      loaded: false,
-	      characterOptions: []
+	      hover: false
 	    };
 	  },
-	  componentWillMount: function componentWillMount() {
-	    this.loadCharacterOptions();
-	  },
-	  loadCharacterOptions: function loadCharacterOptions() {
+	  componentDidMount: function componentDidMount() {
 	    var _this = this;
 
-	    this.setState({ loaded: false });
-	    _util2.default.getCharacters().done(function (characterOptions) {
-	      _this.setState({
-	        loaded: true,
-	        characterOptions: characterOptions
-	      });
+	    $(this.label).hover(function () {
+	      _this.setState({ hover: true });
+	    }, function () {
+	      _this.setState({ hover: false });
 	    });
+	  },
+	  handleClick: function handleClick(character) {
+	    if (this.props.onClick) {
+	      this.props.onClick(character);
+	    }
 	  },
 	  render: function render() {
 	    var _this2 = this;
 
-	    var options = this.state.characterOptions.map(function (character, idx) {
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'item', key: idx, 'data-value': character, 'data-text': character },
-	        character
-	      );
-	    });
+	    var char = this.props.character;
 	    return _react2.default.createElement(
 	      'div',
-	      { className: 'ui ' + (this.state.loaded ? '' : 'loading ') + 'fluid multiple search selection dropdown', ref: function ref(dropdown) {
-	          _this2.dropdown = dropdown;
+	      { className: 'ui huge basic image label character-label',
+	        ref: function ref(label) {
+	          _this2.label = label;
+	        },
+	        onClick: function onClick() {
+	          return _this2.handleClick(character);
 	        } },
-	      _react2.default.createElement('input', { type: 'hidden', name: 'characters', value: this.props.characters.join(',') }),
-	      _react2.default.createElement('i', { className: 'dropdown icon' }),
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'default text' },
-	        'Characters...'
-	      ),
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'menu' },
-	        options
+	      _react2.default.createElement('img', { src: '/images/characters/' + char + '.jpg' }),
+	      this.state.hover && _react2.default.createElement(
+	        'span',
+	        { key: (0, _uniqueId2.default)() },
+	        char
 	      )
 	    );
 	  }
 	});
 
-	exports.default = ApiMultipleCharacterDropdown;
+	exports.default = CharacterLabel;
+
+/***/ },
+/* 598 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var FicSettingsButton = _react2.default.createClass({
+	  displayName: "FicSettingsButton",
+
+	  propTypes: {
+	    reindex: _react2.default.PropTypes.func
+	  },
+
+	  componentDidMount: function componentDidMount() {
+	    $(this.dropdown).dropdown();
+	  },
+	  reindex: function reindex() {
+	    if (this.props.reindex) {
+	      this.props.reindex();
+	    }
+	  },
+	  render: function render() {
+	    var _this = this;
+
+	    return _react2.default.createElement(
+	      "div",
+	      { className: "fic-settings-button ui top right pointing dropdown icon button",
+	        ref: function ref(_ref) {
+	          _this.dropdown = _ref;
+	        } },
+	      _react2.default.createElement("i", { className: "wrench icon" }),
+	      _react2.default.createElement(
+	        "div",
+	        { className: "menu" },
+	        _react2.default.createElement(
+	          "div",
+	          { className: "header" },
+	          "Fic Record Options"
+	        ),
+	        _react2.default.createElement(
+	          "div",
+	          { className: "item", onClick: this.reindex },
+	          "Clean Re-index"
+	        )
+	      )
+	    );
+	  }
+	});
+
+	exports.default = FicSettingsButton;
 
 /***/ }
 /******/ ]);

@@ -59,7 +59,8 @@ const ApiMultipleCharacterDropdown = React.createClass({
       );
     });
     return (
-      <div className={`ui ${this.state.loaded ? '' : 'loading '}fluid multiple search selection dropdown`} ref={(dropdown) => { this.dropdown = dropdown; }}>
+      <div className={`ui ${this.state.loaded ? '' : 'loading '}fluid multiple search selection dropdown`}
+           ref={(dropdown) => { this.dropdown = dropdown; }}>
         <input type="hidden" name="characters" value={this.props.characters.join(',')}/>
         <i className="dropdown icon"></i>
         <div className="default text">Characters...</div>

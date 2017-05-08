@@ -41,12 +41,20 @@ const ApiUtils = {
 
   // TODO: pass params
   getTopData(characters, start, end, limit, sort) {
+    console.log(characters, start, end, limit, sort)
     return get('/api/top/data', {
       characters,
       start,
       end,
       limit,
       sort
+    });
+  },
+
+  reindex(ffnetId, mongoId) {
+    return get('/api/reindex', {
+      id: ffnetId,
+      '_id': mongoId
     });
   }
 }

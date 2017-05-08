@@ -251,6 +251,10 @@ a {
   margin-top: 25px;
 }
 
-.top-list .fic-list {
+.top-list {
   margin-bottom: 30px;
+}
+
+.top-list .fic-settings-button {
+  float: right;
 }

@@ -29,6 +29,7 @@ const Sort = React.createClass({
   },
 
   render() {
+    const sortType = this.props.currentSort.by === 'title' ? 'alphabet' : 'content';
     return (
       <span className="sort-container">
         <div className="ui labeled icon top center pointing dropdown button sort-dropdown" ref={(dropdown) => {this.dropdown = dropdown}}>
@@ -42,7 +43,7 @@ const Sort = React.createClass({
           </div>
         </div>
         <button className="ui icon button" onClick={this.updateSort}>
-          <i className={`sort content ${this.props.currentSort.order} icon`}></i>
+          <i className={`sort ${sortType} ${this.props.currentSort.order} icon`}></i>
         </button>
       </span>
     )

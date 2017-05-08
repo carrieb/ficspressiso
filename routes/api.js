@@ -7,6 +7,13 @@ const moment = require('moment');
 
 const DAO = require('../src/dao');
 
+router.get('/reindex', function(req, res) {
+  const id = req.query.id;
+  const _id = req.query._id;
+  const data = ffnet.retrieveFic(data);
+  DAO.replaceFicData(_id, data);
+});
+
 router.get('/browse', function(req, res) {
   const page = req.query.page;
   const fandom = req.query.fandom || 'Harry Potter';
