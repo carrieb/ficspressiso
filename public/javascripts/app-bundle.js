@@ -35681,6 +35681,10 @@ var _topList = __webpack_require__(313);
 
 var _topList2 = _interopRequireDefault(_topList);
 
+var _moment = __webpack_require__(1);
+
+var _moment2 = _interopRequireDefault(_moment);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var ApiTopList = _react2.default.createClass({
@@ -35699,18 +35703,58 @@ var ApiTopList = _react2.default.createClass({
     this.updateData();
   },
   componentDidMount: function componentDidMount() {
+    var _this = this;
+
     $('.ui.accordion').accordion();
+    $('#startDate').calendar({
+      type: 'date',
+      startMode: 'year',
+      today: true,
+      formatter: {
+        date: function date(_date, settings) {
+          var d = (0, _moment2.default)(_date);
+          return d.format('YYYY-MM-DD');
+        }
+      },
+      onChange: function onChange(date, text, mode) {
+        console.log(date, text, mode);
+        _this.setState({ start: text });
+      },
+      popupOptions: {
+        position: 'top center'
+      }
+    });
+    // value={this.state.start} onChange={(ev) => { const start = ev.target.value; this.setState({ start }); }
+    $('#endDate').calendar({
+      type: 'date',
+      startMode: 'year',
+      today: true,
+      formatter: {
+        date: function date(_date2, settings) {
+          var d = (0, _moment2.default)(_date2);
+          return d.format('YYYY-MM-DD');
+        }
+      },
+      onChange: function onChange(date, text, mode) {
+        console.log(date, text, mode);
+        _this.setState({ end: text });
+      },
+      popupOptions: {
+        position: 'top center'
+      }
+    });
+    // value={this.state.end} onChange={(ev) => { const end = ev.target.value; this.setState({ end }); }}
   },
   updateData: function updateData() {
-    var _this = this;
+    var _this2 = this;
 
     _util2.default.getTopData(this.state.characters, this.state.start, this.state.end, this.state.limit, this.state.sort).done(function (fics) {
       console.log(fics);
-      _this.setState({ fics: fics });
+      _this2.setState({ fics: fics });
     });
   },
   render: function render() {
-    var _this2 = this;
+    var _this3 = this;
 
     return _react2.default.createElement(
       'div',
@@ -35718,7 +35762,7 @@ var ApiTopList = _react2.default.createClass({
       _react2.default.createElement(_topList2.default, { items: this.state.fics, update: this.updateData }),
       _react2.default.createElement(
         'div',
-        { className: 'top-list options-section' },
+        { className: 'top-list options-section', style: { textAlign: 'center' } },
         _react2.default.createElement(
           'form',
           { className: 'top-list ui form' },
@@ -35732,7 +35776,7 @@ var ApiTopList = _react2.default.createClass({
             ),
             _react2.default.createElement(_ApiMultipleCharacterDropdown2.default, {
               updateCharacters: function updateCharacters(characters) {
-                _this2.setState({ characters: characters });
+                _this3.setState({ characters: characters });
               },
               characters: this.state.characters })
           ),
@@ -35744,27 +35788,23 @@ var ApiTopList = _react2.default.createClass({
               { className: 'two fields' },
               _react2.default.createElement(
                 'div',
-                { className: 'field' },
+                { className: 'ui calendar field', id: 'startDate' },
                 _react2.default.createElement(
                   'label',
                   null,
                   'Start'
                 ),
-                _react2.default.createElement('input', { type: 'text', name: 'start', value: this.state.start, onChange: function onChange(ev) {
-                    var start = ev.target.value;_this2.setState({ start: start });
-                  } })
+                _react2.default.createElement('input', { type: 'text', name: 'start', value: this.state.start })
               ),
               _react2.default.createElement(
                 'div',
-                { className: 'field' },
+                { className: 'ui calendar field', id: 'endDate' },
                 _react2.default.createElement(
                   'label',
                   null,
                   'End'
                 ),
-                _react2.default.createElement('input', { type: 'text', name: 'end', value: this.state.end, onChange: function onChange(ev) {
-                    var end = ev.target.value;_this2.setState({ end: end });
-                  } })
+                _react2.default.createElement('input', { type: 'text', name: 'end', value: this.state.end })
               )
             )
           )
@@ -36711,18 +36751,35 @@ var TopList = _react2.default.createClass({
       accordionContent.push(_react2.default.createElement(
         'div',
         { className: 'content', key: fic._id + '_content' },
-        characterLabels,
-        ' ',
         _react2.default.createElement(
-          'b',
-          null,
-          fic.word_cnt
-        ),
-        _react2.default.createElement(_ficSettingsButton2.default, { reindex: reindex }),
-        _react2.default.createElement(
-          'a',
-          { className: 'ui green button', href: fic.url, target: '_blank', style: { float: 'right' } },
-          'GO'
+          'div',
+          { className: 'ui grid' },
+          _react2.default.createElement(
+            'div',
+            { className: 'thirteen wide column' },
+            _react2.default.createElement(
+              'p',
+              null,
+              fic.summary
+            ),
+            characterLabels,
+            ' ',
+            _react2.default.createElement(
+              'b',
+              null,
+              fic.word_cnt
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'three wide column' },
+            _react2.default.createElement(
+              'a',
+              { className: 'ui green button', href: fic.url, target: '_blank', style: { float: 'right' } },
+              'GO'
+            ),
+            _react2.default.createElement(_ficSettingsButton2.default, { reindex: reindex })
+          )
         )
       ));
     });

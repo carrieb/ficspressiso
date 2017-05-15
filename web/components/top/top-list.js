@@ -31,9 +31,16 @@ const TopList = React.createClass({
       }
       accordionContent.push(
         <div className="content" key={`${fic._id}_content`}>
-          {characterLabels} <b>{fic.word_cnt}</b>
-        <FicSettingsButton reindex={reindex}/>
-          <a className="ui green button" href={fic.url} target="_blank" style={{ float: 'right' }}>GO</a>
+          <div className="ui grid">
+            <div className="thirteen wide column">
+              <p>{fic.summary}</p>
+              {characterLabels} <b>{fic.word_cnt}</b>
+            </div>
+            <div className="three wide column">
+              <a className="ui green button" href={fic.url} target="_blank" style={{ float: 'right' }}>GO</a>
+              <FicSettingsButton reindex={reindex}/>
+            </div>
+          </div>
         </div>
       );
     });
