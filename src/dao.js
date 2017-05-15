@@ -3,18 +3,34 @@ const url = 'mongodb://localhost:27017/fanfic';
 const moment = require('moment');
 
 const MongoClient = require('mongodb').MongoClient;
-const ObjectID = require('mongodb').ObjectID;
 
 const assert = require('assert');
 
 const DAO = {
-  replaceFicData(mongoId, data, callback) {
-
+  replaceFicData(ficUrl, data, callback) {
     MongoClient.connect(url, (err, db) => {
       assert.equal(null, err);
-      const coll = db.collection('documents')
-      const id = ObjectID(mongoId);
-      coll.findOneAndReplace({ "_id": id }, data, (err, res) => {
+      const coll = db.collection('documents');
+      console.log(url);
+      coll.findOneAndReplace({ "url": ficUrl }, data, (err, res) => {
+        if (err) {
+          console.error(err);
+        }
+        assert.equal(null, err);
+        callback();
+      });
+    });
+  },
+
+  markAsDeleted(ficUrl, callback) {
+    MongoClient.connect(url, (err, db) => {
+      assert.equal(null, err);
+      const coll = db.collection('documents');
+      console.log(url);
+      coll.update({ "url": ficUrl }, { "deleted" : true }, (err, res) => {
+        if (err) {
+          console.error(err);
+        }
         assert.equal(null, err);
         callback();
       });
@@ -33,6 +49,7 @@ const DAO = {
       console.log(sort)
       // TODO: put in character to find query
       query = {
+        deleted: {'$exists': false},
         publish_ts: {'$gt': start.unix(), '$lt': end.unix() }
       };
       if (characters && characters.length > 0) {

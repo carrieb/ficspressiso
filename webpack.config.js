@@ -27,7 +27,8 @@ module.exports = [{
    modules: ["node_modules", path.join(__dirname, "web")],
    alias: {
      src: path.join(__dirname, "src"),
-     components: path.join(__dirname, "web", "components")
+     components: path.join(__dirname, "web", "components"),
+     api: path.join(__dirname, "web", "api")
    }
  }
 }];

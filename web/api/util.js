@@ -2,6 +2,9 @@ const get = function(url, data) {
   return $.ajax(url, {
     type: 'GET',
     data
+  }).then((res) => {
+    console.log(url, res);
+    return res;
   });
 }
 
@@ -51,10 +54,9 @@ const ApiUtils = {
     });
   },
 
-  reindex(ffnetId, mongoId) {
+  reindex(url) {
     return get('/api/reindex', {
-      id: ffnetId,
-      '_id': mongoId
+      url: url
     });
   }
 }

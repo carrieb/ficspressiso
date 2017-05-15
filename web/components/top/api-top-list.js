@@ -33,7 +33,7 @@ const ApiTopList = React.createClass({
       this.state.limit,
       this.state.sort
     ).done((fics) => {
-        console.log(fics)
+        console.log(fics);
         this.setState({ fics });
       });
   },
@@ -41,7 +41,7 @@ const ApiTopList = React.createClass({
   render() {
     return (
       <div className="api-top-list container">
-        <TopList items={this.state.fics}/>
+        <TopList items={this.state.fics} update={this.updateData}/>
         <div className="top-list options-section">
           <form className="top-list ui form">
             <div className="field">

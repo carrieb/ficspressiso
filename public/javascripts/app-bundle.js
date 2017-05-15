@@ -9250,6 +9250,9 @@ var get = function get(url, data) {
   return $.ajax(url, {
     type: 'GET',
     data: data
+  }).then(function (res) {
+    console.log(url, res);
+    return res;
   });
 };
 
@@ -9308,10 +9311,9 @@ var ApiUtils = {
       sort: sort
     });
   },
-  reindex: function reindex(ffnetId, mongoId) {
+  reindex: function reindex(url) {
     return get('/api/reindex', {
-      id: ffnetId,
-      '_id': mongoId
+      url: url
     });
   }
 };
@@ -12849,22 +12851,22 @@ var util = {
   },
   emptyFicObj: function emptyFicObj() {
     return {
-      title: '',
-      url: '',
+      title: null,
+      url: null,
       id: null,
-      author: '',
-      author_url: '',
-      summary: '',
-      raw_extra: '',
+      author: null,
+      author_url: null,
+      summary: null,
+      raw_extra: null,
       characters: [],
-      rating: '',
+      rating: null,
       word_cnt: 0,
       chapter_cnt: 0,
       review_cnt: 0,
       fav_cnt: 0,
       follow_cnt: 0,
-      publish_date: '',
-      update_date: ''
+      publish_date: null,
+      update_date: null
     };
   }
 };
@@ -35713,7 +35715,7 @@ var ApiTopList = _react2.default.createClass({
     return _react2.default.createElement(
       'div',
       { className: 'api-top-list container' },
-      _react2.default.createElement(_topList2.default, { items: this.state.fics }),
+      _react2.default.createElement(_topList2.default, { items: this.state.fics, update: this.updateData }),
       _react2.default.createElement(
         'div',
         { className: 'top-list options-section' },
@@ -36668,18 +36670,25 @@ var _ficSettingsButton = __webpack_require__(305);
 
 var _ficSettingsButton2 = _interopRequireDefault(_ficSettingsButton);
 
+var _util = __webpack_require__(31);
+
+var _util2 = _interopRequireDefault(_util);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var TopList = _react2.default.createClass({
   displayName: 'TopList',
 
   propTypes: {
-    items: _react2.default.PropTypes.array.isRequired
+    items: _react2.default.PropTypes.array.isRequired,
+    update: _react2.default.PropTypes.func.isRequired
   },
 
   render: function render() {
+    var _this = this;
+
     var accordionContent = [];
-    this.props.items.forEach(function (fic) {
+    this.props.items.forEach(function (fic, i) {
       accordionContent.push(_react2.default.createElement(
         'div',
         { className: 'title', key: fic._id + '_title' },
@@ -36693,6 +36702,12 @@ var TopList = _react2.default.createClass({
       var characterLabels = fic.characters.map(function (character) {
         return _react2.default.createElement(_characterLabel2.default, { key: fic._id + '_' + character, character: character });
       });
+      var reindex = function reindex() {
+        console.log(fic.url);
+        _util2.default.reindex(fic.url).done(function (res) {
+          _this.props.update();
+        });
+      };
       accordionContent.push(_react2.default.createElement(
         'div',
         { className: 'content', key: fic._id + '_content' },
@@ -36703,7 +36718,7 @@ var TopList = _react2.default.createClass({
           null,
           fic.word_cnt
         ),
-        _react2.default.createElement(_ficSettingsButton2.default, null),
+        _react2.default.createElement(_ficSettingsButton2.default, { reindex: reindex }),
         _react2.default.createElement(
           'a',
           { className: 'ui green button', href: fic.url, target: '_blank', style: { float: 'right' } },

@@ -129,6 +129,8 @@ const parseFields = function(fic) {
   }
 }
 
+
+
 const parseFicHtml = function(i, elem) {
   const fic = util.emptyFicObj();
 
@@ -149,7 +151,128 @@ const parseFicHtml = function(i, elem) {
   return fic;
 }
 
+const parseRawExtraHtml = (fic) => {
+  const split = fic.raw_extra.split(' - ');
+  //console.log(split);
+  split.forEach((item, i) => {
+    if (item.startsWith("Rated:")) {
+      const ratingLink = item.replace("Rated: ", '');
+      $ = cheerio.load(ratingLink);
+      fic.rating = $('a').text();
+      return;
+    }
+
+    if (item.startsWith("English")) {
+      return;
+    }
+
+    if (item.startsWith("Words:")) {
+      const words = parseInt(item.replace("Words: ", '').replace(',', ''));
+      fic.word_cnt = words;
+      return;
+    }
+
+    if (item.startsWith("Follows:")) {
+      const follows = parseInt(item.replace("Follows: ", '').replace(',', ''));
+      fic.follow_cnt = follows;
+      return;
+    }
+
+    if (item.startsWith("Favs:")) {
+      const favs = parseInt(item.replace("Favs: ", '').replace(',', ''));
+      fic.fav_cnt = favs;
+      return;
+    }
+
+    if (item.startsWith("Chapters:")) {
+      const chapters = parseInt(item.replace("Chapters: ", ''));
+      fic.chapter_cnt = chapters;
+      return;
+    }
+
+    if (item.startsWith("Published:")) {
+      const $ = cheerio.load(item.replace("Published: ", ''))
+      fic.publish_date = $('span').text();
+      fic.publish_ts = $('span').data('xutime');
+      return;
+    }
+
+    if (item.startsWith("Updated: ")) {
+      const $ = cheerio.load(item.replace("Updated: ", ''))
+      fic.update_date = $('span').text();
+      fic.update_ts = $('span').data('xutime');
+      return;
+    }
+
+    if (item.startsWith("Status:")) {
+      fic.status = item.replace("Status: ", '');
+      if (fic.status === 'Complete') {
+        fic.complete = true;
+      }
+      return;
+    }
+
+    if (i === 2 || i === 3) {
+      fic.characters = findChars(item);
+    }
+  });
+}
+
+const parseStoryBlurb = (html) => {
+  $ = cheerio.load(html);
+  const fic = util.emptyFicObj();
+
+  const profileTop = $('#profile_top');
+  fic.title = profileTop.find('b').first().text()
+
+  const authorEl = profileTop.find('a[href^="/u"]').first();
+  fic.author = authorEl.text();
+  fic.author_url = authorEl.attr('href');
+
+  fic.summary = profileTop.find('div.xcontrast_txt').last().text();
+  fic.raw_extra = profileTop.find('span.xcontrast_txt').last().html();
+
+  parseRawExtraHtml(fic);
+
+  return fic;
+}
+
+const storyIdUrlRegex = new RegExp('/s/([0-9]+)/');
+
 const FFNet = {
+  extractIdFromUrl(url) {
+    const match = url.match(storyIdUrlRegex);
+    if (match && match.length > 1) {
+      return parseInt(match[1]);
+    }
+    return null;
+  },
+
+  retrieveFic(url, callback, notFound) {
+    //console.log(url);
+    try {
+      util.download(url, (html) => {
+        //console.log(html)
+        if (html) {
+          try {
+            const ficData = parseStoryBlurb(html);
+            ficData.url = url;
+            ficData.id = this.extractIdFromUrl(url);
+
+            //console.log(ficData);
+            callback(ficData);
+          } catch (e) {
+            console.error(e);
+            callback(null);
+          }
+        }
+      });
+    } catch (e) {
+      console.log(e);
+      callback(null);
+    }
+  },
+
   retrieveFics(page, fandom, characters, callback) {
     try {
       console.log(page, fandom, characters);

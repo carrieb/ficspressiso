@@ -25,22 +25,22 @@ const util = {
 
   emptyFicObj() {
     return {
-      title: '',
-      url: '',
+      title: null,
+      url: null,
       id: null,
-      author: '',
-      author_url: '',
-      summary: '',
-      raw_extra: '',
+      author: null,
+      author_url: null,
+      summary: null,
+      raw_extra: null,
       characters: [],
-      rating: '',
+      rating: null,
       word_cnt: 0,
       chapter_cnt: 0,
       review_cnt: 0,
       fav_cnt: 0,
       follow_cnt: 0,
-      publish_date: '',
-      update_date: ''
+      publish_date: null,
+      update_date: null
     }
   }
 };

@@ -8,10 +8,20 @@ const moment = require('moment');
 const DAO = require('../src/dao');
 
 router.get('/reindex', function(req, res) {
-  const id = req.query.id;
-  const _id = req.query._id;
-  const data = ffnet.retrieveFic(data);
-  DAO.replaceFicData(_id, data);
+  const url = req.query.url;
+  console.log(url);
+  ffnet.retrieveFic(url, (data) => {
+    console.log(data);
+    if (data) {
+      DAO.replaceFicData(url, data, () => {
+        res.send(data);
+      });
+    } else { // set to deleted
+      DAO.markAsDeleted(url, () => {
+        res.send(null);
+      });
+    }
+  });
 });
 
 router.get('/browse', function(req, res) {
