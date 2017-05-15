@@ -5,10 +5,69 @@ import FicSettingsButton from 'components/common/fic-settings-button';
 
 import ApiUtil from 'api/util';
 
+import _bind from 'lodash/bind';
+
 const TopList = React.createClass({
   propTypes: {
       items: React.PropTypes.array.isRequired,
-      update: React.PropTypes.func.isRequired
+      update: React.PropTypes.func.isRequired,
+  },
+
+  getDefaultProps() {
+    return {
+      items: [],
+      update: () => {}
+    };
+  },
+
+  getInitialState() {
+    return {
+      openIndex: -1
+    }
+  },
+
+  handleKeypress(e) {
+    const key = e.which;
+    console.log(e.which, this.state.openIndex);
+    if (key === 40) { //down
+      if (this.state.openIndex < this.props.items.length - 1) {
+        this.setState({
+          openIndex: this.state.openIndex + 1
+        });
+        $('.ui.accordion').accordion('open', this.state.openIndex)
+        e.preventDefault();
+      }
+    }
+
+    if (key === 38) { // up
+      if (this.state.openIndex > 0) {
+        this.setState({
+          openIndex: this.state.openIndex - 1
+        });
+        $('.ui.accordion').accordion('open', this.state.openIndex)
+        e.preventDefault()
+      }
+    }
+  },
+
+  onAccordionOpen(openIndex) {
+    this.setState({ openIndex });
+  },
+
+  componentDidMount() {
+    const onChange = (function (component) {
+      return function() {
+        console.log(this);
+        const openIndex = $(this).data('index');
+        console.log(component);
+        component.onAccordionOpen(openIndex);
+      };
+    })(this);
+    $('.ui.accordion').accordion({
+      onChange
+    });
+
+    $(window).keydown(this.handleKeypress);
   },
 
   render() {
@@ -30,7 +89,7 @@ const TopList = React.createClass({
         });
       }
       accordionContent.push(
-        <div className="content" key={`${fic._id}_content`}>
+        <div className="content" key={`${fic._id}_content`} data-index={i}>
           <div className="ui grid">
             <div className="thirteen wide column">
               <p>{fic.summary}</p>

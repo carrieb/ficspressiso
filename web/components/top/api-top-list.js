@@ -23,8 +23,9 @@ const ApiTopList = React.createClass({
     this.updateData();
   },
 
+
+
   componentDidMount() {
-    $('.ui.accordion').accordion();
     $('#startDate').calendar({
       type: 'date',
       startMode: 'year',
