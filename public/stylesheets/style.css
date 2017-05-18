@@ -255,6 +255,32 @@ a {
   margin-bottom: 30px;
 }
 
-.top-list .fic-settings-button {
+.api-top-list .paginator-wrapper {
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.api-top-list {
+  width: 400px;
+}
+
+.top-list .title {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.top-list .title span.innerTitle{
+  text-overflow: ellipsis;
+}
+
+.top-list .title span.count {
+  min-width: 10%;
   float: right;
+  margin-left: 10px;
+}
+
+.api-top-list .options-section.right.rail {
+  margin-left: 15px;
+  padding-left: 15px;
 }

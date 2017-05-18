@@ -11,8 +11,8 @@ router.get('/reindex', function(req, res) {
   const url = req.query.url;
   console.log(url);
   ffnet.retrieveFic(url, (data) => {
-    console.log(data);
-    if (data) {
+    console.log('data', data);
+    if (data && data != null) {
       DAO.replaceFicData(url, data, () => {
         res.send(data);
       });
@@ -59,9 +59,12 @@ router.get('/top/data', (req, res) => {
   const end = req.query.end || moment().format('YYYY-MM-DD'); // default now
   const field = req.query.sort || 'fav_cnt';
   const limit = req.query.limit ? parseInt(req.query.limit) : 10;
+  const minWords = req.query.minWords ? parseInt(req.query.minWords) : 0;
+  const maxWords = req.query.maxWords ? parseInt(req.query.maxWords) : 10000000; // 10 million
+  const page = req.query.page ? parseInt(req.query.page) : 1;
 
   try {
-    DAO.getTop(characters, start, end, field, limit, (topList) => {
+    DAO.getTop(characters, start, end, field, limit, minWords, maxWords,  page, (topList) => {
       res.json(topList);
     });
   } catch (e) {

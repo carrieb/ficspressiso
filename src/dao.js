@@ -9,6 +9,7 @@ const assert = require('assert');
 const DAO = {
   replaceFicData(ficUrl, data, callback) {
     MongoClient.connect(url, (err, db) => {
+      console.log('find and replace');
       assert.equal(null, err);
       const coll = db.collection('documents');
       console.log(url);
@@ -26,8 +27,8 @@ const DAO = {
     MongoClient.connect(url, (err, db) => {
       assert.equal(null, err);
       const coll = db.collection('documents');
-      console.log(url);
-      coll.update({ "url": ficUrl }, { "deleted" : true }, (err, res) => {
+      console.log(ficUrl);
+      coll.update({ "url": ficUrl }, {"$set" : { "deleted" : true }}, (err, res) => {
         if (err) {
           console.error(err);
         }
@@ -37,9 +38,10 @@ const DAO = {
     });
   },
 
-  getTop(characters, startDate, endDate, field, limit, callback) {
+  getTop(characters, startDate, endDate, field, limit, minWords, maxWords, page, callback) {
     const start = moment(startDate)
     const end = moment(endDate)
+    const skip = 10 * (page - 1);
 
     MongoClient.connect(url, (err, db) => {
       assert.equal(null, err);
@@ -55,8 +57,17 @@ const DAO = {
       if (characters && characters.length > 0) {
         query.characters = {'$in' : characters};
       }
+      if (minWords || maxWords) {
+        query.word_cnt = {}
+        if (minWords) {
+          query.word_cnt['$gt'] = minWords;
+        }
+        if (maxWords) {
+          query.word_cnt['$lt'] = maxWords;
+        }
+      }
       console.log(query)
-      coll.find(query, { sort, limit }).toArray((err, docs) => {
+      coll.find(query, { sort, limit, skip }).toArray((err, docs) => {
         assert.equal(null, err)
         callback(docs)
       });
