@@ -35,7 +35,7 @@ node_modules
 # Optional REPL history
 .node_repl_history
 
-public/javascripts/bundle.js
+public/javascripts/app-bundle.js
 
 public/javascripts/dist/
 

@@ -11,7 +11,6 @@ db_name = 'fanfic'
 collection_name = 'documents'
 
 def main(argv):
-    # TODO: let you override url, db_name with cmd args
     client = MongoClient(mongodb_url)
     db = client[db_name]
     coll = db[collection_name]

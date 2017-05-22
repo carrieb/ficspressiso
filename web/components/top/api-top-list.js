@@ -123,55 +123,60 @@ const ApiTopList = React.createClass({
         <div className="ui loader"></div>
       </div>
     ) : null;
-    return (
-      <div className="api-top-list ui basic segment">
-        { loader }
-        <div className="options-section ui right dividing rail">
-          <div className="ui basic segment">
-            { loader }
-            <div style={{ textAlign: 'center' }}>
-              <form className="top-list ui form">
-                <div className="field">
-                    <label>Characters</label>
-                    <ApiMultipleCharacterDropdown
-                      updateCharacters={(characters) => { this.setState({ characters }); }}
-                      characters={this.state.characters} />
-                </div>
-                <div className="field">
-                  <div className="two fields">
-                    <div className="ui calendar field" id="startDate">
-                      <label>Start</label>
-                      <input type="text" name="start" value={this.state.start} />
-                    </div>
-                    <div className="ui calendar field" id="endDate">
-                      <label>End</label>
-                      <input type="text" name="end" value={this.state.end} />
-                    </div>
-                  </div>
-                </div>
-                <div className="field">
-                  <div className="two fields">
-                    <div className="ui field">
-                      <label>Min Words</label>
-                      <input type="number" name="minWords" value={this.state.minWords}
-                             onChange={(ev) => this.setState({ minWords : ev.target.value })}/>
-                    </div>
-                    <div className="ui field">
-                      <label>Max Words</label>
-                      <input type="number" name="maxWords" value={this.state.maxWords}
-                             onChange={(ev) => this.setState({ maxWords : ev.target.value })}/>
-                    </div>
-                  </div>
-                </div>
-              </form>
-              <div className="center aligned">
-                <button className="ui button purple" onClick={(ev) => this.updateData(1)}>reload</button>
+    const options = (
+      <div style={{ textAlign: 'center' }}>
+        <form className="top-list ui form">
+          <div className="field">
+              <label>Characters</label>
+              <ApiMultipleCharacterDropdown
+                updateCharacters={(characters) => { this.setState({ characters }); }}
+                characters={this.state.characters} />
+          </div>
+          <div className="field">
+            <div className="two fields">
+              <div className="ui calendar field" id="startDate">
+                <label>Start</label>
+                <input type="text" name="start" value={this.state.start} />
+              </div>
+              <div className="ui calendar field" id="endDate">
+                <label>End</label>
+                <input type="text" name="end" value={this.state.end} />
               </div>
             </div>
           </div>
+          <div className="field">
+            <div className="two fields">
+              <div className="ui field">
+                <label>Min Words</label>
+                <input type="number" name="minWords" value={this.state.minWords}
+                       onChange={(ev) => this.setState({ minWords : ev.target.value })}/>
+              </div>
+              <div className="ui field">
+                <label>Max Words</label>
+                <input type="number" name="maxWords" value={this.state.maxWords}
+                       onChange={(ev) => this.setState({ maxWords : ev.target.value })}/>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div className="center aligned">
+          <button className="ui button purple" onClick={(ev) => this.updateData(1)}>reload</button>
         </div>
-        <Paginator page={this.state.page} goToPage={this.paginate} maxPage={10}/>
-        <TopList items={this.state.fics} update={(callback) => this.updateData(null, callback)}/>
+      </div>
+    );
+    return (
+      <div className="api-top-list ui basic segment">
+        <div className="ui grid">
+          <div className="ten wide column">
+            { loader }
+            <Paginator page={this.state.page} goToPage={this.paginate} maxPage={10}/>
+            <TopList items={this.state.fics} update={(callback) => this.updateData(null, callback)}/>
+          </div>
+          <div className="six wide column">
+            { loader }
+            { options }
+          </div>
+        </div>
       </div>
     );
   }

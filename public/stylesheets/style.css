@@ -260,10 +260,6 @@ a {
   text-align: center;
 }
 
-.api-top-list {
-  width: 400px;
-}
-
 .top-list .title {
   text-overflow: ellipsis;
   overflow: hidden;

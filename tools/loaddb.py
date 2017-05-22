@@ -1,108 +1,102 @@
 #!/usr/bin/env python
 
-import sys
+import sys, copy, json, os
 from pymongo import MongoClient
-import json
 from datetime import datetime
 import pprint as pp
-import copy
+import util
 
-mongodb_url = 'mongodb://localhost:27017/fanfic'
-db_name = 'fanfic'
+mongodb_url = 'mongodb://localhost:27017/fanblob'
+db_name = 'fanblob'
 collection_name = 'documents'
 
-json_dir = 'output/2017-05-07/'
+json_dir = 'output/'
+archive_dir = 'archive/'
 
-now = datetime.now()
-current_year = now.year - 1 # fucking 2017
-
-seen_set = set()
+curr_blob = 0
+skipped = 0
 
 # TODO: read new json files -> insert into DB -> dedub on author / title
 def main(argv):
     client = MongoClient(mongodb_url)
     db = client[db_name]
     coll = db[collection_name]
-
-    curr = 0
     bulk = coll.initialize_ordered_bulk_op()
-    #min_ts = 1454284800 # jan, 1 2016, so we don't need to worry about dupes
-    #last_ts = 1454284800 + 100 # it doesn't matter what i am, as long as i'm bigger than min_ts
-    max_file = 0
-    curr_file = 0
-    skipped = 0
-    while True:
-        curr_file_name = json_dir + str(curr_file) + ".json"
-        try:
-            print "Opening", curr_file_name
-            with open(curr_file_name, 'r') as f:
-                for line in f:
-                    fic = json.loads(line)
-                    publish_date = fic['publish_date']
-                    publish_ts = publish_date
 
-                    # try to parse string publish_date into publish_ts
-                    #if not isinstance(publish_date, (int, long)):
-                        #try:
-                            #published = datetime.strptime(fic['publish_date'], "%b %d")
-                            #published = published.replace(year=current_year)
-                        #except ValueError:
-                            #try:
-                                #published = datetime.strptime(fic['publish_date'], "%b %d, %Y")
-                            #except ValueError:
-                                #published = datetime(2016, 12, 14)
-                            #publish_ts = int(published.strftime("%s"))
-                            #print publish_ts
-
-                    fic['publish_ts'] = publish_ts
-                    pp.pprint(fic)
-
-                    # handle missing author
-                    if fic['author'] == "":
-                        # just skip this entry for now
-                        # we'll need to go back through json and update
-                        #print "Skipping " + str(curr)
-                        skipped += 1
-                        pass
-                    else:
-                        # handle bad chracter string
-                        #try:
-                            #temp = copy.copy(fic['chracters'])
-                            #fic['characters'] = temp
-                            #fic.pop('chracters', None)
-                        #except KeyError:
-                            #pass # nothing to do
-
-                        seen_hash = fic['title'] + ' by ' + fic['author']
-                        if seen_hash in seen_set:
-                            print "DUPE: " + seen_hash
-                        else:
-                            seen_set.add(seen_hash)
-
-                        bulk.find({
-                            'author': fic['author'],
-                            'title': fic['title']
-                        }).upsert().update({'$set': fic})
-
-                    if curr % 100 == 0:
-                        print "Processed %d stories... (%s)" % (curr, curr_file_name)
-
-                    curr += 1
-                    last_ts = publish_ts
-        except:
-            print "error", curr_file_name
-            raise
-            break
-        curr_file += 1
-        if (curr_file > max_file):
-            print curr_file
-            break
+    for root, dirs, files in os.walk(json_dir, topdown=False):
+        for dir_path in dirs:
+            print dir_path
+            process_all_json_blobs_in_dir(dir_path, bulk, True)
     try:
         res = bulk.execute()
-        print res
-        print "Skipped", skipped
+        #print res
+        print "Skipped %d" % skipped
     except:
-        print "error"
+        raise
+
+def current_file(dir_path, curr_file):
+    return json_dir + dir_path + "/" + str(curr_file) + ".json"
+
+def archive_file(dir_path, curr_file):
+    return archive_dir + dir_path + "/" + str(curr_file) + ".json"
+
+def load_json_blob(json_str, bulk):
+    global skipped
+    blob = json.loads(json_str)
+
+    publish_date = blob['publish_date']
+    publish_ts = publish_date
+    blob['publish_ts'] = publish_ts
+
+    #pp.pprint(blob)
+
+    if blob['title'] == "":
+        print "Skipping, no title"
+        # just skip this entry for now
+        skipped += 1
+        return
+
+    if blob['author'] == "":
+        print "Skipping %s, no author" % blob['title']
+        # just skip this entry for now
+        skipped += 1
+        return
+
+    bulk.find({
+        'author': blob['author'],
+        'title': blob['title']
+    }).upsert().update({ '$set': blob })
+
+def process_all_json_blobs_in_dir(dir_path, bulk, archive):
+    global curr_blob
+    curr_file = 0
+    curr_file_name = current_file(dir_path, curr_file)
+    try:
+        while os.path.exists(curr_file_name):
+            print "Opening %s" % curr_file_name
+            with open(curr_file_name, 'r') as f:
+                for line in f:
+                    load_json_blob(line, bulk)
+                    if curr_blob % 100 == 0:
+                        print "Processed %d stories... (%s)" % (curr_blob, curr_file_name)
+                    curr_blob += 1
+            if archive:
+                # make file & path
+                archive_file_name = archive_file(dir_path, curr_file)
+                if os.path.exists(archive_file_name):
+                    pass # TODO: multiple passes of the same day
+                else:
+                    util.make_path_if_not_exists(archive_file_name)
+                    os.rename(curr_file_name, archive_file_name)
+
+            curr_file += 1
+            curr_file_name = current_file(dir_path, curr_file)
+        # remove dir
+        if archive:
+            os.rmdir(json_dir + dir_path)
+    except:
+        print "[Error] on %s" % curr_file_name
+        raise
 
 if __name__ == "__main__":
    main(sys.argv[1:])

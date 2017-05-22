@@ -36527,118 +36527,123 @@ var ApiTopList = _react2.default.createClass({
       { className: 'ui active inverted dimmer' },
       _react2.default.createElement('div', { className: 'ui loader' })
     ) : null;
-    return _react2.default.createElement(
+    var options = _react2.default.createElement(
       'div',
-      { className: 'api-top-list ui basic segment' },
-      loader,
+      { style: { textAlign: 'center' } },
       _react2.default.createElement(
-        'div',
-        { className: 'options-section ui right dividing rail' },
+        'form',
+        { className: 'top-list ui form' },
         _react2.default.createElement(
           'div',
-          { className: 'ui basic segment' },
-          loader,
+          { className: 'field' },
+          _react2.default.createElement(
+            'label',
+            null,
+            'Characters'
+          ),
+          _react2.default.createElement(_ApiMultipleCharacterDropdown2.default, {
+            updateCharacters: function updateCharacters(characters) {
+              _this3.setState({ characters: characters });
+            },
+            characters: this.state.characters })
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'field' },
           _react2.default.createElement(
             'div',
-            { style: { textAlign: 'center' } },
+            { className: 'two fields' },
             _react2.default.createElement(
-              'form',
-              { className: 'top-list ui form' },
+              'div',
+              { className: 'ui calendar field', id: 'startDate' },
               _react2.default.createElement(
-                'div',
-                { className: 'field' },
-                _react2.default.createElement(
-                  'label',
-                  null,
-                  'Characters'
-                ),
-                _react2.default.createElement(_ApiMultipleCharacterDropdown2.default, {
-                  updateCharacters: function updateCharacters(characters) {
-                    _this3.setState({ characters: characters });
-                  },
-                  characters: this.state.characters })
+                'label',
+                null,
+                'Start'
               ),
-              _react2.default.createElement(
-                'div',
-                { className: 'field' },
-                _react2.default.createElement(
-                  'div',
-                  { className: 'two fields' },
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'ui calendar field', id: 'startDate' },
-                    _react2.default.createElement(
-                      'label',
-                      null,
-                      'Start'
-                    ),
-                    _react2.default.createElement('input', { type: 'text', name: 'start', value: this.state.start })
-                  ),
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'ui calendar field', id: 'endDate' },
-                    _react2.default.createElement(
-                      'label',
-                      null,
-                      'End'
-                    ),
-                    _react2.default.createElement('input', { type: 'text', name: 'end', value: this.state.end })
-                  )
-                )
-              ),
-              _react2.default.createElement(
-                'div',
-                { className: 'field' },
-                _react2.default.createElement(
-                  'div',
-                  { className: 'two fields' },
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'ui field' },
-                    _react2.default.createElement(
-                      'label',
-                      null,
-                      'Min Words'
-                    ),
-                    _react2.default.createElement('input', { type: 'number', name: 'minWords', value: this.state.minWords,
-                      onChange: function onChange(ev) {
-                        return _this3.setState({ minWords: ev.target.value });
-                      } })
-                  ),
-                  _react2.default.createElement(
-                    'div',
-                    { className: 'ui field' },
-                    _react2.default.createElement(
-                      'label',
-                      null,
-                      'Max Words'
-                    ),
-                    _react2.default.createElement('input', { type: 'number', name: 'maxWords', value: this.state.maxWords,
-                      onChange: function onChange(ev) {
-                        return _this3.setState({ maxWords: ev.target.value });
-                      } })
-                  )
-                )
-              )
+              _react2.default.createElement('input', { type: 'text', name: 'start', value: this.state.start })
             ),
             _react2.default.createElement(
               'div',
-              { className: 'center aligned' },
+              { className: 'ui calendar field', id: 'endDate' },
               _react2.default.createElement(
-                'button',
-                { className: 'ui button purple', onClick: function onClick(ev) {
-                    return _this3.updateData(1);
-                  } },
-                'reload'
-              )
+                'label',
+                null,
+                'End'
+              ),
+              _react2.default.createElement('input', { type: 'text', name: 'end', value: this.state.end })
+            )
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'field' },
+          _react2.default.createElement(
+            'div',
+            { className: 'two fields' },
+            _react2.default.createElement(
+              'div',
+              { className: 'ui field' },
+              _react2.default.createElement(
+                'label',
+                null,
+                'Min Words'
+              ),
+              _react2.default.createElement('input', { type: 'number', name: 'minWords', value: this.state.minWords,
+                onChange: function onChange(ev) {
+                  return _this3.setState({ minWords: ev.target.value });
+                } })
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'ui field' },
+              _react2.default.createElement(
+                'label',
+                null,
+                'Max Words'
+              ),
+              _react2.default.createElement('input', { type: 'number', name: 'maxWords', value: this.state.maxWords,
+                onChange: function onChange(ev) {
+                  return _this3.setState({ maxWords: ev.target.value });
+                } })
             )
           )
         )
       ),
-      _react2.default.createElement(_paginator2.default, { page: this.state.page, goToPage: this.paginate, maxPage: 10 }),
-      _react2.default.createElement(_topList2.default, { items: this.state.fics, update: function update(callback) {
-          return _this3.updateData(null, callback);
-        } })
+      _react2.default.createElement(
+        'div',
+        { className: 'center aligned' },
+        _react2.default.createElement(
+          'button',
+          { className: 'ui button purple', onClick: function onClick(ev) {
+              return _this3.updateData(1);
+            } },
+          'reload'
+        )
+      )
+    );
+    return _react2.default.createElement(
+      'div',
+      { className: 'api-top-list ui basic segment' },
+      _react2.default.createElement(
+        'div',
+        { className: 'ui grid' },
+        _react2.default.createElement(
+          'div',
+          { className: 'ten wide column' },
+          loader,
+          _react2.default.createElement(_paginator2.default, { page: this.state.page, goToPage: this.paginate, maxPage: 10 }),
+          _react2.default.createElement(_topList2.default, { items: this.state.fics, update: function update(callback) {
+              return _this3.updateData(null, callback);
+            } })
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'six wide column' },
+          loader,
+          options
+        )
+      )
     );
   }
 });
