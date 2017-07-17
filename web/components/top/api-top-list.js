@@ -3,6 +3,7 @@ import React from 'react';
 import ApiUtils from '../../api/util';
 
 import ApiMultipleCharacterDropdown from '../forms/ApiMultipleCharacterDropdown';
+import RatingDropdown from '../forms/rating-dropdown';
 import Paginator from '../common/paginator';
 import TopList from './top-list';
 
@@ -18,6 +19,7 @@ const ApiTopList = React.createClass({
       sort: 'fav_cnt',
       minWords: 0,
       maxWords: 10000000, // ten million
+      rating: [],
       fics: [],
       page: 1,
       loading: false
@@ -44,7 +46,7 @@ const ApiTopList = React.createClass({
         this.setState({ start: text });
       },
       popupOptions: {
-        position: 'top center'
+        position: 'bottom center'
       }
     });
     // value={this.state.start} onChange={(ev) => { const start = ev.target.value; this.setState({ start }); }
@@ -63,7 +65,7 @@ const ApiTopList = React.createClass({
         this.setState({ end: text });
       },
       popupOptions: {
-        position: 'top center'
+        position: 'bottom center'
       }
     });
     // value={this.state.end} onChange={(ev) => { const end = ev.target.value; this.setState({ end }); }}
@@ -105,6 +107,7 @@ const ApiTopList = React.createClass({
       this.state.limit,
       this.state.minWords,
       this.state.maxWords,
+      this.state.rating,
       this.state.sort,
       page || this.state.page
     ).done((fics) => {
@@ -131,6 +134,12 @@ const ApiTopList = React.createClass({
               <ApiMultipleCharacterDropdown
                 updateCharacters={(characters) => { this.setState({ characters }); }}
                 characters={this.state.characters} />
+          </div>
+          <div className="field">
+            <label>Rating</label>
+            <RatingDropdown
+              updateRating={(rating) => { this.setState({ rating }); }}
+              rating={this.state.rating}/>
           </div>
           <div className="field">
             <div className="two fields">

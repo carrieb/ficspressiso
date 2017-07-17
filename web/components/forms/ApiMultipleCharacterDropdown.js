@@ -4,6 +4,8 @@ import ApiUtils from '../../api/util.js'
 
 import ColorMapper from '../../state/ColorMapper.js';
 
+import _isEmpty from 'lodash/isEmpty';
+
 const ApiMultipleCharacterDropdown = React.createClass({
   propTypes: {
     characters: React.PropTypes.array.isRequired,
@@ -17,7 +19,11 @@ const ApiMultipleCharacterDropdown = React.createClass({
   },
 
   onChange(valueString) {
-    this.props.updateCharacters(valueString.split(','));
+    if (!_isEmpty(valueString)) {
+      this.props.updateCharacters(valueString.split(','));
+    } else {
+      this.props.updateCharacters([])
+    }
   },
 
   onLabelCreate(value, text) {

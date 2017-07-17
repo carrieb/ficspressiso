@@ -43,8 +43,8 @@ const ApiUtils = {
   },
 
   // TODO: pass params
-  getTopData(characters, start, end, limit, minWords, maxWords, sort, page) {
-    console.log(characters, start, end, limit, minWords, maxWords, sort, page)
+  getTopData(characters, start, end, limit, minWords, maxWords, rating, sort, page) {
+    console.log(characters, start, end, limit, minWords, maxWords, rating, sort, page)
     return get('/api/top/data', {
       characters,
       start,
@@ -52,6 +52,7 @@ const ApiUtils = {
       limit,
       minWords,
       maxWords,
+      rating,
       sort,
       page
     });

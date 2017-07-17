@@ -99,6 +99,7 @@ const TopList = React.createClass({
       accordionContent.push(
         <div className="content" key={`${fic._id}_content`} data-index={i}>
             <p><b>by <a href={'https://www.fanficiton.net' + fic.author_url}>{fic.author}</a></b></p>
+            <p>{fic.rating}</p>
             <p style={{ textAlign: 'justify', marginBottom: '25px' }}>{fic.summary}</p>
             <div style={{ marginBottom: '20px' }}>{ characterLabels }</div>
             <div style={{ marginBottom: '15px' }}><b>{fic.word_cnt}</b> <span style={{paddingLeft:'20 px'}}>{fic.publish_date} - {fic.update_date}</span></div>
