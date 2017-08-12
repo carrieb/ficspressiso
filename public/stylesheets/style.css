@@ -280,3 +280,24 @@ a {
   margin-left: 15px;
   padding-left: 15px;
 }
+
+.fic-blob .summary {
+  text-align: justify;
+  margin-bottom: 25px;
+}
+
+.fic-blob .characters {
+  margin-bottom: 20px;
+}
+
+.fic-blob .dates {
+  margin-bottom: 15px;
+}
+
+.left-padded {
+  padding-left: 20px;
+}
+
+.ui.label.add-tag i.icon {
+  margin: 0
+}

@@ -9,9 +9,11 @@ import TopList from './top-list';
 
 import moment from 'moment';
 
-const ApiTopList = React.createClass({
-  getInitialState() {
-    return {
+class ApiTopList extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
       characters: [],
       start: '2016-01-01',
       end: '2016-12-31',
@@ -24,11 +26,11 @@ const ApiTopList = React.createClass({
       page: 1,
       loading: false
     };
-  },
+  }
 
   componentWillMount() {
     this.updateData(this.state.page);
-  },
+  }
 
   componentDidMount() {
     $('#startDate').calendar({
@@ -42,7 +44,7 @@ const ApiTopList = React.createClass({
         }
       },
       onChange: (date, text, mode) => {
-        console.log(date, text, mode);
+        //console.log(date, text, mode);
         this.setState({ start: text });
       },
       popupOptions: {
@@ -61,7 +63,7 @@ const ApiTopList = React.createClass({
         }
       },
       onChange: (date, text, mode) => {
-        console.log(date, text, mode);
+        //console.log(date, text, mode);
         this.setState({ end: text });
       },
       popupOptions: {
@@ -71,7 +73,7 @@ const ApiTopList = React.createClass({
     // value={this.state.end} onChange={(ev) => { const end = ev.target.value; this.setState({ end }); }}
 
     $(window).keydown(this.handleKeypress);
-  },
+  }
 
   handleKeypress(e) {
     const key = e.which;
@@ -89,12 +91,12 @@ const ApiTopList = React.createClass({
         e.preventDefault()
       }
     }
-  },
+  }
 
   paginate(page) {
     this.setState({ page });
     this.updateData(page);
-  },
+  }
 
   updateData(page, callback) {
     this.setState({
@@ -111,14 +113,14 @@ const ApiTopList = React.createClass({
       this.state.sort,
       page || this.state.page
     ).done((fics) => {
-        console.log(fics);
+        //console.log(fics);
         this.setState({ fics, loading: false });
-        console.log(callback);
+        //console.log(callback);
         if (callback) {
           callback();
         }
       });
-  },
+  }
 
   render() {
     const loader = this.state.loading ? (
@@ -126,6 +128,7 @@ const ApiTopList = React.createClass({
         <div className="ui loader"></div>
       </div>
     ) : null;
+
     const options = (
       <div style={{ textAlign: 'center' }}>
         <form className="top-list ui form">
@@ -145,11 +148,11 @@ const ApiTopList = React.createClass({
             <div className="two fields">
               <div className="ui calendar field" id="startDate">
                 <label>Start</label>
-                <input type="text" name="start" value={this.state.start} />
+                <input type="text" name="start" defaultValue={this.state.start} />
               </div>
               <div className="ui calendar field" id="endDate">
                 <label>End</label>
-                <input type="text" name="end" value={this.state.end} />
+                <input type="text" name="end" defaultValue={this.state.end} />
               </div>
             </div>
           </div>
@@ -173,22 +176,22 @@ const ApiTopList = React.createClass({
         </div>
       </div>
     );
+
     return (
       <div className="api-top-list ui basic segment">
         <div className="ui grid">
           <div className="ten wide column">
             { loader }
-            <Paginator page={this.state.page} goToPage={this.paginate} maxPage={10}/>
+            <Paginator page={this.state.page} goToPage={(pg) => this.paginate(pg)} maxPage={10}/>
             <TopList items={this.state.fics} update={(callback) => this.updateData(null, callback)}/>
           </div>
           <div className="six wide column">
-            { loader }
             { options }
           </div>
         </div>
       </div>
     );
   }
-});
+}
 
 export default ApiTopList;

@@ -76,16 +76,16 @@ def update_count(item, metadata):
         metadata['status'] = value
     # TODO: convert these to ISO dates
     if field == "Published":
-        metadata['publish_date'] = get_published_ts(value)
+        metadata['publish_date'] = get_ts(value)
     if field == "Updated":
-        metadata['update_date'] = value
+        metadata['update_date'] = get_ts(value)
 
-published_ts_p = re.compile(r'data-xutime="(?P<published_ts>[0-9]+)"')
-def get_published_ts(raw_string):
+ts_p = re.compile(r'data-xutime="(?P<ts>[0-9]+)"')
+def get_ts(raw_string):
     #print published_ts_p.pattern, raw_string
-    published_ts_match = published_ts_p.search(raw_string)
+    ts_match = ts_p.search(raw_string)
     #print published_ts_match.group('published_ts')
-    return int(published_ts_match.group('published_ts'))
+    return int(ts_match.group('ts'))
 
 def get_fandoms(driver):
     fandom_cont_els = driver.find_elements_by_css_selector('#pre_story_links a');
@@ -142,7 +142,8 @@ def get_story_metadata_from_list(driver):
             'review_cnt': parsed_fields['review_cnt'] if 'review_cnt' in parsed_fields else 0,
             'fav_cnt': parsed_fields['fav_cnt'] if 'fav_cnt' in parsed_fields else 0,
             'follow_cnt': parsed_fields['follow_cnt'] if 'follow_cnt' in parsed_fields else 0,
-            'publish_date': parsed_fields['publish_date']
+            'publish_date': parsed_fields['publish_date'],
+            'update_date': parsed_fields['update_date'] if 'update_date' in parsed_fields else parsed_fields['publish_date']
         }
         #pp.pprint(meta)
         metadata.append(meta)

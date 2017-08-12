@@ -24,7 +24,9 @@ const FicSettingsButton = React.createClass({
 
 
   render() {
-    const className = this.state.reindexing ? 'fic-settings-button ui icon loading button' : 'fic-settings-button ui top right pointing dropdown icon button';
+    const className = this.state.reindexing
+      ? 'fic-settings-button ui icon loading button'
+      : 'fic-settings-button ui top left pointing dropdown icon button';
     return (
       <div className={className}
            ref={(ref) => { this.dropdown = ref }}>

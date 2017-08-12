@@ -38,7 +38,7 @@ const DAO = {
     });
   },
 
-  getTop(characters, startDate, endDate, field, limit, minWords, maxWords, page, callback) {
+  getTop(characters, rating, startDate, endDate, field, limit, minWords, maxWords, page, callback) {
     const start = moment(startDate)
     const end = moment(endDate)
     const skip = 10 * (page - 1);
@@ -55,7 +55,10 @@ const DAO = {
         publish_ts: {'$gt': start.unix(), '$lt': end.unix() }
       };
       if (characters && characters.length > 0) {
-        query.characters = {'$in' : characters};
+        query.characters = {'$all' : characters};
+      }
+      if (rating && rating.length > 0) {
+        query.rating = {'$in' : rating.map((r) => `Fiction  ${r}`)}
       }
       if (minWords || maxWords) {
         query.word_cnt = {}

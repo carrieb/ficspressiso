@@ -11,18 +11,7 @@ const api = require('./routes/api');
 const config = require('./config');
 const library = require('./src/library');
 
-var MongoClient = require('mongodb').MongoClient,
-  assert = require('assert');
-
-// Connection URL
-var url = 'mongodb://localhost:27017/fanfic';
-// Use connect method to connect to the Server
-MongoClient.connect(url, function(err, db) {
-  assert.equal(null, err);
-  console.log("Connected correctly to server");
-
-  db.close();
-});
+const  assert = require('assert');
 
 var routes = require('./routes/index');
 
@@ -75,5 +64,8 @@ app.use(function(err, req, res, next) {
     });
 });
 
+app.listen(3000, function () {
+  console.log('Example app listening on port 3000!')
+});
 
 module.exports = app;

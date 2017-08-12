@@ -55,6 +55,7 @@ function getRandomArbitrary(min = MIN, max=MAX) {
 router.get('/top/data', (req, res) => {
   console.log(req.query);
   const characters = req.query.characters;
+  const rating = req.query.rating;
   const start = req.query.start || '1990-09-27'; // default day i was born
   const end = req.query.end || moment().format('YYYY-MM-DD'); // default now
   const field = req.query.sort || 'fav_cnt';
@@ -64,7 +65,7 @@ router.get('/top/data', (req, res) => {
   const page = req.query.page ? parseInt(req.query.page) : 1;
 
   try {
-    DAO.getTop(characters, start, end, field, limit, minWords, maxWords,  page, (topList) => {
+    DAO.getTop(characters, rating, start, end, field, limit, minWords, maxWords,  page, (topList) => {
       res.json(topList);
     });
   } catch (e) {

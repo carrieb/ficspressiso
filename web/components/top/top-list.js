@@ -1,37 +1,29 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import CharacterLabel from 'components/common/character-label';
 import FicSettingsButton from 'components/common/fic-settings-button';
+import FicBlob from 'components/common/fic-blob.react';
 
 import ApiUtil from 'api/util';
 
 import _bind from 'lodash/bind';
 import _isEqual from 'lodash/isEqual';
 
-const TopList = React.createClass({
-  propTypes: {
-      items: React.PropTypes.array.isRequired,
-      update: React.PropTypes.func.isRequired,
-  },
+class TopList extends React.Component {
+  constructor(props) {
+    super(props);
 
-  getDefaultProps() {
-    return {
-      items: [],
-      update: () => {}
-    };
-  },
-
-  getInitialState() {
-    return {
+    this.state =  {
       openIndex: -1
     }
-  },
+  }
 
   componentWillReceiveProps(nextProps) {
     if (!_isEqual(nextProps.items, this.state.items)) {
       this.setState({ openIndex: -1 })
     }
-  },
+  }
 
   handleKeypress(e) {
     const key = e.which;
@@ -55,11 +47,11 @@ const TopList = React.createClass({
         e.preventDefault()
       }
     }
-  },
+  }
 
   onAccordionOpen(openIndex) {
     this.setState({ openIndex });
-  },
+  }
 
   componentDidMount() {
     const onChange = (function (component) {
@@ -74,20 +66,19 @@ const TopList = React.createClass({
       onChange
     });
 
-    $(window).keydown(this.handleKeypress);
-  },
+    $(window).keydown((e) => this.handleKeypress(e));
+  }
 
   render() {
     let accordionContent = []
+
     this.props.items.forEach((fic, i) => {
       accordionContent.push(
         <div className="title" key={`${fic._id}_title`}>
           <span className="count">{fic.fav_cnt}</span><span className="innerTitle">{fic.title}</span>
         </div>
       );
-      let characterLabels = fic.characters.map((character) =>
-        <CharacterLabel key={`${fic._id}_${character}`} character={character}/>
-      );
+
       let reindex = (callback) => {
         //console.log(fic.url);
         ApiUtil.reindex(fic.url)
@@ -96,23 +87,30 @@ const TopList = React.createClass({
           this.props.update(callback);
         });
       }
+
       accordionContent.push(
         <div className="content" key={`${fic._id}_content`} data-index={i}>
-            <p><b>by <a href={'https://www.fanficiton.net' + fic.author_url}>{fic.author}</a></b></p>
-            <p>{fic.rating}</p>
-            <p style={{ textAlign: 'justify', marginBottom: '25px' }}>{fic.summary}</p>
-            <div style={{ marginBottom: '20px' }}>{ characterLabels }</div>
-            <div style={{ marginBottom: '15px' }}><b>{fic.word_cnt}</b> <span style={{paddingLeft:'20 px'}}>{fic.publish_date} - {fic.update_date}</span></div>
-            <div><FicSettingsButton reindex={reindex}/><a className="ui green button" href={fic.url} target="_blank">GO</a></div>
+            <FicBlob fic={fic} reindex={reindex}/>
         </div>
       );
     });
+
     return (
       <div className="top-list fic-list ui styled fluid accordion">
         { accordionContent }
       </div>
-    )
+    );
   }
-});
+}
+
+TopList.propTypes = {
+  items: PropTypes.array.isRequired,
+  update: PropTypes.func.isRequired,
+}
+
+TopList.defaultProps = {
+  items: [],
+  update: () => {}
+}
 
 export default TopList;
