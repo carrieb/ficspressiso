@@ -5,6 +5,8 @@ import ApiUtil from '../../api/util';
 
 import moment from 'moment';
 
+import _uniqBy from 'lodash/uniqBy'
+
 import TimelineChart from 'components/chart/timeline-chart.react';
 
 class ApiTimelineChart extends React.Component {
@@ -27,16 +29,20 @@ class ApiTimelineChart extends React.Component {
     return (
       <div className="api-timeline-chart">
         <TimelineChart values={
-          this.state.timeline
+          _uniqBy(this.state.timeline
             .filter((obj) => obj.earliestReview !== null)
             .map((obj) => {
               return {
                 chapter: obj.chapter,
                 ts: obj.earliestReview,
-                date: moment.unix(obj.earliestReview).format('YYYY-MM-DD'),
-                display: moment.unix(obj.earliestReview).format('ll')
+                date: new Date(obj.earliestReview * 1000),
+                display: moment.unix(obj.earliestReview).format('ll'),
+                count: 1
               }
             })
+            .sort((a, b) => {
+              return b.ts - a.ts;
+            }), 'display')
         }/>
       </div>
     )

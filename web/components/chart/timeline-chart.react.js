@@ -26,6 +26,7 @@ class TimelineChart extends React.Component {
     const earliestDate = _minBy(this.props.values, 'ts');
     const earliest = earliestDate ? moment.unix(earliestDate.ts) : null;
     const days = earliest ? endDate.diff(earliest, 'days') + 30 : 100;
+    // TODO: stop using this it's a piece of crap
     return (
       <CalendarHeatmap
         endDate={end}
