@@ -29,6 +29,27 @@ const findForQuery = (query) => {
 };
 
 const DAO = {
+  saveFics(fics) {
+      MongoClient.connect(url, (err, db) => {
+        console.log('update list of fics');
+        assert.equal(null, err);
+        const coll = db.collection('documents');
+        fics.forEach((fic) => {
+          coll.updateOne(
+            {
+              "title": fic.title,
+              "author": fic.author
+            }, {
+              "$set": fic
+            }, {
+              upsert: true
+            }, (err, res) => {
+                assert.equal(null, err);
+            });
+          });
+      });
+  },
+
   replaceFicData(ficUrl, data, callback) {
     MongoClient.connect(url, (err, db) => {
       console.log('find and replace');

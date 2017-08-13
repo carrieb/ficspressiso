@@ -40,7 +40,9 @@ const util = {
       fav_cnt: 0,
       follow_cnt: 0,
       publish_date: null,
-      update_date: null
+      update_date: null,
+      publish_ts: null,
+      update_ts: null
     }
   }
 };

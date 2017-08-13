@@ -6,6 +6,8 @@ var router = express.Router();
 const moment = require('moment');
 
 const DAO = require('../src/dao');
+const Timeline = require('../src/timeline');
+const Sources = require('../src/constants/sources');
 
 router.get('/reindex', function(req, res) {
   const url = req.query.url;
@@ -29,6 +31,7 @@ router.get('/browse', function(req, res) {
   const fandom = req.query.fandom || 'Harry Potter';
   const characters = req.query.characters || [];
   ffnet.retrieveFics(page, fandom, characters, (data) => {
+    DAO.saveFics(data);
     res.json(data);
   });
 });
@@ -39,18 +42,6 @@ router.get('/characters', function(req, res) {
     res.json(data);
   });
 });
-
-const deltaToLabelFormat = {
-  'month' : 'MMMM'
-}
-
-const MIN = 25;
-const MAX = 125;
-
-// Returns a random number between min (inclusive) and max (exclusive)
-function getRandomArbitrary(min = MIN, max=MAX) {
-  return Math.random() * (max - min) + min;
-}
 
 router.get('/top/data', (req, res) => {
   //console.log(req.query);
@@ -79,6 +70,17 @@ router.get('/chart/data', function(req, res) {
     DAO.aggregateNumFics(req.query, 'month', (labels, datasets) => {
       //console.log(labels, datasets);
       res.json({ labels, datasets });
+    });
+  } catch (e) {
+    console.error(e);
+  }
+});
+
+router.get('/fic/timeline', function(req, res) {
+  try {
+    Timeline.inferTimeline(Sources.FFNET, req.query.id, (timeline) => {
+      // TODO: save timeline to fic in db
+        res.json(timeline);
     });
   } catch (e) {
     console.error(e);

@@ -8,23 +8,23 @@ const baseUrl = 'https://www.fanfiction.net';
 
 const defaultQuery = '?&srt=1&lan=1&r=10&len=20'; // over 20k
 
-const fandomToPathMap = {
+const fandomToPath = {
   'Harry Potter': '/book/Harry-Potter/',
   'Star Wars': '/movie/Star-Wars/'
-}
+};
 
 // initializations
 
 const characterToQueryValue = {};
 
-for (fandom in fandomToPathMap) {
-  if (fandomToPathMap.hasOwnProperty(fandom)) {
+for (fandom in fandomToPath) {
+  if (fandomToPath.hasOwnProperty(fandom)) {
     characterToQueryValue[fandom] = {};
   }
 }
 
 const loadCharactersForFandom = function(fandom, callback = () => {}) {
-  const url = baseUrl + fandomToPathMap[fandom];
+  const url = baseUrl + fandomToPath[fandom];
   if (Object.keys(characterToQueryValue[fandom]).length === 0) {
     util.download(url, (data) => {
       if (data) {
@@ -42,10 +42,10 @@ const loadCharactersForFandom = function(fandom, callback = () => {}) {
   } else {
     callback(characterToQueryValue[fandom]);
   }
-}
+};
 
 const getUrl = function(fandom, page, characters) {
-  let url = baseUrl + fandomToPathMap[fandom] + defaultQuery + `&p=${page}`;
+  let url = baseUrl + fandomToPath[fandom] + defaultQuery + `&p=${page}`;
   if (characters.length > 0) {
     // TODO: multiple chars support
     const charId = characterToQueryValue[fandom][characters[0]];
@@ -54,11 +54,11 @@ const getUrl = function(fandom, page, characters) {
     }
   }
   return url;
-}
+};
 
 var cleanCharName = function(str) {
   return str.replace(/\[|\]|\,/g, '').trim();
-}
+};
 
 var findChars = function(str) {
   const chars = [];
@@ -69,97 +69,47 @@ var findChars = function(str) {
     }
   }
   return chars;
-}
+};
 
-const update_count = function(countString, metadata) {
-    const [fieldName, fieldValue] = countString.split(':').map((s) => { return s.trim(); });
-    switch(fieldName) {
-      case "Rated":
-        metadata.rating = fieldValue;
-        break;
-      case "Chapters":
-        metadata.chapter_cnt = parseInt(fieldValue.replace(/,/g, ''));
-        break;
-      case "Words":
-        metadata.word_cnt = parseInt(fieldValue.replace(/,/g, ''));
-        break;
-      case "Reviews":
-        metadata.review_cnt = parseInt(fieldValue.replace(/,/g, ''));
-        break;
-      case "Favs":
-        metadata.fav_cnt = parseInt(fieldValue.replace(/,/g, ''));
-        break;
-      case "Follows":
-        metadata.follow_cnt = parseInt(fieldValue.replace(/,/g, ''));
-        break;
-      case "Status":
-        metadata.status = fieldValue;
-        break;
-      case "Published":
-        metadata.publish_date = fieldValue;
-        break;
-      case "Updated":
-        metadata.update_date = fieldValue;
-        break;
-    }
-}
-
-const parseFields = function(fic) {
-  const split = fic.raw_extra.split(' - ');
-  for (const i in split) {
-    const idx = parseInt(i);
-    const item = split[idx].trim()
-    if (item.indexOf(':') > -1) {
-      update_count(item, fic)
-    } else {
-      if (item === "English") {
-        continue; // don't care
-      }
-      if (item === "Complete") {
-        fic.status = item;
-        continue;
-      }
-      if (idx === split.length - 1 || idx === split.length - 2) {
-        fic.characters = findChars(item);
-      }
-      else {
-        // todo: genres
-      }
-    }
-  }
-}
-
-
+const idRegex = new RegExp('\/s\/(\\d+)\/', 'g');
 
 const parseFicHtml = function(i, elem) {
   const fic = util.emptyFicObj();
 
   const titleEl = $(this).find('.stitle').first();
   fic.title = titleEl.text();
-  fic.url = titleEl.attr('href');
-  // TODO: extract id from url
+  fic.url = 'https://www.fanfiction.net' + titleEl.attr('href');
+  const idMatch = idRegex.exec(fic.url);
+  if (idMatch) {
+    const id = parseInt(idMatch[1]);
+    fic.id = id;
+  }
 
   const authorEl = $(this).find('a[href^="/u"]').first();
   fic.author = authorEl.text();
-  fic.author_url = authorEl.attr('href');
+  fic.author_url = 'https://www.fanfiction.net' + authorEl.attr('href');
 
-  fic.raw_extra = $(this).find('div.z-padtop2').first().text();
+  fic.raw_extra = $(this).find('div.z-padtop2').first().html();
   fic.summary = $(this).find('div.z-padtop').first().contents().first().text();
 
-  parseFields(fic);
+  parseRawExtraHtml(fic, true);
 
   return fic;
-}
+};
 
-const parseRawExtraHtml = (fic) => {
+const parseRawExtraHtml = (fic, charactersLast=false) => {
   const split = fic.raw_extra.split(' - ');
-  //console.log(split);
   split.forEach((item, i) => {
     if (item.startsWith("Rated:")) {
       const ratingLink = item.replace("Rated: ", '');
-      $ = cheerio.load(ratingLink);
-      fic.rating = $('a').text();
-      return;
+      if (ratingLink.startsWith("<")) {
+          $ = cheerio.load(ratingLink);
+          fic.rating = $('a').text();
+          return;
+      } else {
+        fic.rating = ratingLink;
+        return;
+      }
     }
 
     if (item.startsWith("English")) {
@@ -170,6 +120,12 @@ const parseRawExtraHtml = (fic) => {
       const words = parseInt(item.replace("Words: ", '').replace(',', ''));
       fic.word_cnt = words;
       return;
+    }
+
+    if (item.startsWith("Reviews:")) {
+        const reviews = parseInt(item.replace("Reviews: ", '').replace(',', ''));
+        fic.review_cnt = reviews;
+        return
     }
 
     if (item.startsWith("Follows:")) {
@@ -212,18 +168,22 @@ const parseRawExtraHtml = (fic) => {
       return;
     }
 
-    if (i === 2 || i === 3) {
+    if ((i === 2 || i === 3) && !charactersLast) {
+      fic.characters = findChars(item);
+    }
+
+    if (charactersLast && i === split.length - 1 && !(item === 'Complete' || item === 'Abandoned')) {
       fic.characters = findChars(item);
     }
   });
-}
+};
 
 const parseStoryBlurb = (html) => {
   $ = cheerio.load(html);
   const fic = util.emptyFicObj();
 
   const profileTop = $('#profile_top');
-  fic.title = profileTop.find('b').first().text()
+  fic.title = profileTop.find('b').first().text();
 
   const authorEl = profileTop.find('a[href^="/u"]').first();
   fic.author = authorEl.text();
@@ -235,7 +195,20 @@ const parseStoryBlurb = (html) => {
   parseRawExtraHtml(fic);
 
   return fic;
-}
+};
+
+const parseReviewHtml = function(i, elem) {
+  const review = {};
+
+  const dateEl = $(this).find('span[data-xutime]').first();
+  const ts = parseInt(dateEl.attr('data-xutime'));
+  review.ts = ts;
+  review.date = dateEl.text();
+  review.sentiment = 'todo';
+  review.author = 'todo';
+
+  return review;
+};
 
 const storyIdUrlRegex = new RegExp('/s/([0-9]+)/');
 
@@ -249,17 +222,14 @@ const FFNet = {
   },
 
   retrieveFic(url, callback, notFound) {
-    //console.log(url);
     try {
       util.download(url, (html) => {
-        //console.log(html)
         if (html) {
           try {
             const ficData = parseStoryBlurb(html);
             ficData.url = url;
             ficData.id = this.extractIdFromUrl(url);
 
-            //console.log(ficData);
             callback(ficData);
           } catch (e) {
             console.error(e);
@@ -273,15 +243,23 @@ const FFNet = {
     }
   },
 
+  parseReviews(url, callback) {
+    util.download(url, (data) => {
+      if (data) {
+        $ = cheerio.load(data);
+        const reviews = $('td').map(parseReviewHtml).get();
+        callback(reviews);
+      }
+    });
+  },
+
   retrieveFics(page, fandom, characters, callback) {
     try {
-      console.log(page, fandom, characters);
       result = [];
 
       loadCharactersForFandom(fandom);
 
       const url = getUrl(fandom, page, characters);
-      console.log(url);
 
       util.download(url, (data) => {
         if (data) {
@@ -305,6 +283,6 @@ const FFNet = {
       callback(Object.keys(characterToQueryValue[fandom]));
     });
   }
-}
+};
 
 module.exports = FFNet;
