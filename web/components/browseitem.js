@@ -4,18 +4,16 @@ import CharacterLabel from './library/character-label';
 
 import uniqueId from 'lodash/uniqueId';
 
-const BrowseItem = React.createClass({
-  propTypes: {
-    fic: React.PropTypes.object.isRequired,
-    highlight: React.PropTypes.array,
-    updateQuery: React.PropTypes.func
-  },
+import ApiTimelineChart from 'components/chart/api-timeline-chart.react';
+import TimelineChart from 'components/chart/timeline-chart.react';
 
-  getDefaultProps() {
-    return {
-      updateQuery: () => {}
+class BrowseItem extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      collapsed: true
     }
-  },
+  }
 
   render() {
     const fic = this.props.fic;
@@ -26,10 +24,23 @@ const BrowseItem = React.createClass({
                         onClick={() => { this.props.updateQuery({ characters: [char] }); }}/>
       );
     });
+    const collapsedContent = (
+      <div className="collapsed-content">
+        <ApiTimelineChart id={fic.id}/>
+      </div>
+    );
+    const collapseLink = (
+      <div className="collapse-link">
+        <a onClick={() => this.setState({ collapsed: !this.state.collapsed })}>
+          <i className={`${this.state.collapsed ? 'plus' : 'minus'} icon`}></i>
+          { this.state.collapsed ? 'Expand' : 'Collapse' }
+        </a>
+      </div>
+    );
     return(
       <div className="item">
         <div className="middle aligned content browse_item_content">
-          <a className="header" href={"https://www.fanfiction.net" + fic.url } className="header">{ fic.title }</a>
+          <a className="header" href={"https://www.fanfiction.net" + fic.url }>{ fic.title }</a>
           <div className="meta"><span>{ fic.author }</span></div>
           <div className="description"><p>{ fic.summary }</p></div>
           <div>
@@ -51,11 +62,23 @@ const BrowseItem = React.createClass({
             <div>
                 {characterLabels}
             </div>
+            { !this.state.collapsed && collapsedContent }
+            { collapseLink }
           </div>
         </div>
     </div>
   );
   }
-});
+}
+
+BrowseItem.propTypes = {
+  fic: React.PropTypes.object.isRequired,
+  highlight: React.PropTypes.array,
+  updateQuery: React.PropTypes.func
+};
+
+BrowseItem.defaultProps = {
+  updateQuery: () => {}
+};
 
 export default BrowseItem;

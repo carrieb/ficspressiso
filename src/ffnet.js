@@ -71,7 +71,7 @@ var findChars = function(str) {
   return chars;
 };
 
-const idRegex = new RegExp('\/s\/(\\d+)\/', 'g');
+const idRegex = new RegExp('\/s\/([0-9]+)\/');
 
 const parseFicHtml = function(i, elem) {
   const fic = util.emptyFicObj();
@@ -83,7 +83,10 @@ const parseFicHtml = function(i, elem) {
   if (idMatch) {
     const id = parseInt(idMatch[1]);
     fic.id = id;
+  } else {
+    console.error(idRegex, fic.url);
   }
+
 
   const authorEl = $(this).find('a[href^="/u"]').first();
   fic.author = authorEl.text();
@@ -210,7 +213,7 @@ const parseReviewHtml = function(i, elem) {
   return review;
 };
 
-const storyIdUrlRegex = new RegExp('/s/([0-9]+)/');
+const storyIdUrlRegex = new RegExp('\/s\/([0-9]+)\/');
 
 const FFNet = {
   extractIdFromUrl(url) {

@@ -48,7 +48,13 @@ const ApiUtils = {
     return get('/api/reindex', {
       url: url
     });
+  },
+
+  getTimeline(id) {
+    return get('/api/fic/timeline', {
+      id
+    });
   }
-}
+};
 
 export default ApiUtils;
