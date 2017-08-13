@@ -2,7 +2,6 @@
 
 import sys, json, os, time, datetime
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 import ffnet
 import util
 import pprint as pp
@@ -38,10 +37,7 @@ def update_stop(metas, page):
 def main(argv):
     #phantomjs_options = ["--load-images=false", "--max-disk-cache-size=512"]
     load_crawler_status()
-    chop = webdriver.ChromeOptions()
-    chop.add_extension('/Users/carolyn/projects/ficspressiso/tools/adblockpluschrome-1.8.3.crx')
-    driver = webdriver.Chrome('/usr/local/bin/chromedriver', chrome_options = chop)
-    update_crawler = Crawler(driver, crawler_output_path + 'updates', base_updates_url, update_stop)
+    update_crawler = Crawler(crawler_output_path + 'updates', base_updates_url, update_stop)
     update_crawler.crawl()
     print update_crawler
     try:

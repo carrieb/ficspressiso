@@ -2,11 +2,17 @@ import os, time, json
 import util
 import ffnet
 
+from selenium import webdriver
+
 MAX_FILE_SIZE = 1024 * 1024 * 4
 
 class Crawler:
-    def __init__(self, driver, output_dir, base_url, stop_func, initial_file=0, initial_page=1, backwards=False):
+    def __init__(self, output_dir, base_url, stop_func, initial_file=0, initial_page=1, backwards=False):
+        chop = webdriver.ChromeOptions()
+        chop.add_extension('/Users/carolyn/projects/ficspressiso/tools/adblockpluschrome-1.8.3.crx')
+        driver = webdriver.Chrome('/usr/local/bin/chromedriver', chrome_options = chop)
         self.driver = driver
+
         self.output_dir = output_dir
         self.base_url = base_url
         self.stop_func = stop_func

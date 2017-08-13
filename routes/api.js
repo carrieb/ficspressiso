@@ -9,7 +9,7 @@ const DAO = require('../src/dao');
 
 router.get('/reindex', function(req, res) {
   const url = req.query.url;
-  console.log(url);
+  //console.log(url);
   ffnet.retrieveFic(url, (data) => {
     console.log('data', data);
     if (data && data != null) {
@@ -53,7 +53,7 @@ function getRandomArbitrary(min = MIN, max=MAX) {
 }
 
 router.get('/top/data', (req, res) => {
-  console.log(req.query);
+  //console.log(req.query);
   const characters = req.query.characters;
   const rating = req.query.rating;
   const start = req.query.start || '1990-09-27'; // default day i was born
@@ -71,14 +71,14 @@ router.get('/top/data', (req, res) => {
   } catch (e) {
     console.error(e)
   }
-})
+});
 
 
 router.get('/chart/data', function(req, res) {
-  console.log('hi', req.query);
+  //console.log('hi', req.query);
   const qstart = req.query.start || '2016-07-01'; // yyyy/mm/dd
   const qend = req.query.end || '2016-12-31';
-  console.log(qstart, qend);
+  //console.log(qstart, qend);
   const delta = req.query.delta || 'month';
   const characters = req.query.characters || [
     'Harry P.', 'Hermione G.', 'Tom R. Jr.', 'Ron W.', 'Draco M.'
@@ -107,7 +107,7 @@ router.get('/chart/data', function(req, res) {
   // LOAD INTO DB (write script to consume JSON)
 
   // FOR NOW: mock data
-  console.log(start, end);
+  //console.log(start, end);
   while (start < end) {
     labels.push(start.format(labelFormat));
     characters.forEach((character, idx) => {
@@ -123,7 +123,7 @@ router.get('/chart/data', function(req, res) {
       //res.json({ labels, datasets });
     //});
     DAO.aggregateNumFics(characters, qstart, qend, delta, (labels, datasets) => {
-      console.log(labels, datasets);
+      //console.log(labels, datasets);
       res.json({ labels, datasets });
     });
   } catch (e) {

@@ -17,7 +17,7 @@ const Catalog = function(config){
 
       if (buf.endsWith(FINISH_SIGNAL)) {
         db.close();
-        console.log("Done processing " + this.count + " items."):
+        console.log("Done processing " + this.count + " items.");
       }
     },
 

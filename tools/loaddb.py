@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import sys, copy, json, os
-from pymongo import MongoClient
+from pymongo import MongoClient, UpdateOne
 from datetime import datetime
 import pprint as pp
 import util
@@ -10,31 +10,35 @@ mongodb_url = 'mongodb://localhost:27017/fanfic'
 db_name = 'fanfic'
 collection_name = 'documents'
 
-json_dir = '/Users/carolyn/projects/ficspressiso/tools/output/'
-archive_dir = '/Users/carolyn/projects/ficspressiso/tools/archive/'
+json_dir = '/home/carrie/Desktop/projects/ficspressiso/tools/output/'
+archive_dir = '/home/carrie/Desktop/projects/ficspressiso/tools/archive/'
 
 curr_blob = 0
 skipped = 0
+
+bulk_ops = []
 
 # TODO: read new json files -> insert into DB -> dedub on author / title
 def main(argv):
     client = MongoClient(mongodb_url)
     db = client[db_name]
     coll = db[collection_name]
-    bulk = coll.initialize_ordered_bulk_op()
+    global bulk_ops
 
     for folder, subfolders, files in os.walk(json_dir, topdown=False):
         for subfolder in subfolders:
-            process_all_json_blobs_in_dir(os.path.join(folder, subfolder), bulk, False)
+            process_all_json_blobs_in_dir(os.path.join(folder, subfolder), coll, False)
     try:
-        res = bulk.execute()
-        print "Complete. Modified %d and upserted %s" % (res.nModified, res.nUpserted)
+        if len(bulk_ops) > 0:
+            coll.bulk_write(bulk_ops)
+        print "Complete. Modified %d and upserted %s" % (res["nModified"], res["nUpserted"])
         print "Skipped %d" % skipped
     except:
         raise
 
-def process_all_json_blobs_in_dir(path, bulk, archive):
+def process_all_json_blobs_in_dir(path, coll, archive):
     global curr_blob
+    global bulk_ops
     curr_file = 0
     curr_file_name = current_json_file(path, curr_file)
     try:
@@ -42,9 +46,13 @@ def process_all_json_blobs_in_dir(path, bulk, archive):
             print "Opening %s" % curr_file_name
             with open(curr_file_name, 'r') as f:
                 for line in f:
-                    load_json_blob(line, bulk)
-                    if curr_blob % 100 == 0:
-                        print "Processed %d stories... (%s)" % (curr_blob, curr_file_name)
+                    load_json_blob(line)
+                    if curr_blob % 1000 == 0:
+                        print "Processed %d stories..." % (curr_blob)
+                    if len(bulk_ops) == 20000:
+                        print "Pushing to mongo..."
+                        result = coll.bulk_write(bulk_ops)
+                        bulk_ops = []
                     curr_blob += 1
             if archive:
                 # make file & path
@@ -74,7 +82,7 @@ def current_json_file(path, curr_file):
 def archive_file(dir_path, curr_file):
     return archive_dir + dir_path + "/" + str(curr_file) + ".json"
 
-def load_json_blob(json_str, bulk):
+def load_json_blob(json_str):
     global skipped
     blob = json.loads(json_str)
 
@@ -100,10 +108,13 @@ def load_json_blob(json_str, bulk):
         skipped += 1
         return
 
-    bulk.find({
-        'author': blob['author'],
-        'title': blob['title']
-    }).upsert().replace_one(blob)
+    global bulk_ops
+    bulk_ops.append(
+        UpdateOne({
+            'author': blob['author'],
+            'title': blob['title']
+        }, {'$set': blob }, upsert=True)
+    )
 
 if __name__ == "__main__":
    main(sys.argv[1:])

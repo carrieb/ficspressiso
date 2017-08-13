@@ -48,7 +48,7 @@ const DAO = {
       const coll = db.collection('documents')
       sort = {}
       sort[field] = -1
-      console.log(sort)
+      //console.log(sort)
       // TODO: put in character to find query
       query = {
         deleted: {'$exists': false},
@@ -69,7 +69,7 @@ const DAO = {
           query.word_cnt['$lt'] = maxWords;
         }
       }
-      console.log(query)
+      //console.log(query)
       coll.find(query, { sort, limit, skip }).toArray((err, docs) => {
         assert.equal(null, err)
         callback(docs)
@@ -93,7 +93,7 @@ const DAO = {
       return obj;
     }, raw_datasets);
 
-    console.log(raw_datasets);
+    //console.log(raw_datasets);
     // TODO: move out chart specific things
 
     MongoClient.connect(url, function(err, db) {
@@ -169,7 +169,7 @@ const DAO = {
           const datasets = characters.map((character) => {
             return raw_datasets[character];
           });
-          console.log(raw_datasets, labels, datasets);
+          //console.log(raw_datasets, labels, datasets);
           callback( labels, datasets );
         }
       });

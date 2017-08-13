@@ -29,6 +29,16 @@ pip install ??
 $ /tools> ./metadata_crawler.py
 ```
 
+###### db
+```
+sudo service mongod start
+```
+```
+$> mongo
+mongo> use fanfic
+mongo> db.documents.createIndex({ author: 1, title: 1 })
+```
+
 ### credits
 
 * express

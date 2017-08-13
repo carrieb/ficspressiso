@@ -12,8 +12,8 @@ const ApiFicsPerCharacterChart = React.createClass({
   getInitialState() {
     return {
       characters: ['Hermione G.', 'Harry P.', 'Ginny W.', 'Ron W.'],
-      start: '2016-01-01',
-      end: '2016-12-31',
+      start: '2001-01-01',
+      end: '2017-12-31',
       data: {},
       loaded: false
     }

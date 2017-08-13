@@ -45,3 +45,6 @@ semantic
 # temp fanfiction download dir
 tools/fanfiction
 tools/output
+
+# intellij
+.idea

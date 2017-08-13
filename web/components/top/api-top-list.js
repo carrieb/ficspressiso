@@ -15,8 +15,8 @@ class ApiTopList extends React.Component {
 
     this.state = {
       characters: [],
-      start: '2016-01-01',
-      end: '2016-12-31',
+      start: '2001-01-01',
+      end: '2017-12-31',
       limit: 10,
       sort: 'fav_cnt',
       minWords: 0,
