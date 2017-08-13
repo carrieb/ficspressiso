@@ -2,10 +2,9 @@ import React from 'react';
 
 import ApiUtils from '../../api/util';
 
-import ApiMultipleCharacterDropdown from '../forms/ApiMultipleCharacterDropdown';
-import RatingDropdown from '../forms/rating-dropdown';
 import Paginator from '../common/paginator';
 import TopList from './top-list';
+import FicQueryForm from 'components/common/fic-query-form.react';
 
 import moment from 'moment';
 
@@ -22,6 +21,14 @@ class ApiTopList extends React.Component {
       minWords: 0,
       maxWords: 10000000, // ten million
       rating: [],
+      query: {
+          characters: [],
+          start: '2001-01-01',
+          end: '2017-12-31',
+          minWords: 0,
+          maxWords: 10000000, // ten million
+          rating: []
+      },
       fics: [],
       page: 1,
       loading: false
@@ -33,45 +40,6 @@ class ApiTopList extends React.Component {
   }
 
   componentDidMount() {
-    $('#startDate').calendar({
-      type: 'date',
-      startMode: 'year',
-      today: true,
-      formatter: {
-        date: (date, settings) => {
-          const d = moment(date);
-          return d.format('YYYY-MM-DD');
-        }
-      },
-      onChange: (date, text, mode) => {
-        //console.log(date, text, mode);
-        this.setState({ start: text });
-      },
-      popupOptions: {
-        position: 'bottom center'
-      }
-    });
-    // value={this.state.start} onChange={(ev) => { const start = ev.target.value; this.setState({ start }); }
-    $('#endDate').calendar({
-      type: 'date',
-      startMode: 'year',
-      today: true,
-      formatter: {
-        date: (date, settings) => {
-          const d = moment(date);
-          return d.format('YYYY-MM-DD');
-        }
-      },
-      onChange: (date, text, mode) => {
-        //console.log(date, text, mode);
-        this.setState({ end: text });
-      },
-      popupOptions: {
-        position: 'bottom center'
-      }
-    });
-    // value={this.state.end} onChange={(ev) => { const end = ev.target.value; this.setState({ end }); }}
-
     $(window).keydown(this.handleKeypress);
   }
 
@@ -103,13 +71,7 @@ class ApiTopList extends React.Component {
       loading: true
     });
     ApiUtils.getTopData(
-      this.state.characters,
-      this.state.start,
-      this.state.end,
-      this.state.limit,
-      this.state.minWords,
-      this.state.maxWords,
-      this.state.rating,
+      this.state.query,
       this.state.sort,
       page || this.state.page
     ).done((fics) => {
@@ -129,48 +91,11 @@ class ApiTopList extends React.Component {
       </div>
     ) : null;
 
+    const form = <FicQueryForm query={this.state.query} updateQuery={(query) => this.setState({ query })}/>;
+
     const options = (
       <div style={{ textAlign: 'center' }}>
-        <form className="top-list ui form">
-          <div className="field">
-              <label>Characters</label>
-              <ApiMultipleCharacterDropdown
-                updateCharacters={(characters) => { this.setState({ characters }); }}
-                characters={this.state.characters} />
-          </div>
-          <div className="field">
-            <label>Rating</label>
-            <RatingDropdown
-              updateRating={(rating) => { this.setState({ rating }); }}
-              rating={this.state.rating}/>
-          </div>
-          <div className="field">
-            <div className="two fields">
-              <div className="ui calendar field" id="startDate">
-                <label>Start</label>
-                <input type="text" name="start" defaultValue={this.state.start} />
-              </div>
-              <div className="ui calendar field" id="endDate">
-                <label>End</label>
-                <input type="text" name="end" defaultValue={this.state.end} />
-              </div>
-            </div>
-          </div>
-          <div className="field">
-            <div className="two fields">
-              <div className="ui field">
-                <label>Min Words</label>
-                <input type="number" name="minWords" value={this.state.minWords}
-                       onChange={(ev) => this.setState({ minWords : ev.target.value })}/>
-              </div>
-              <div className="ui field">
-                <label>Max Words</label>
-                <input type="number" name="maxWords" value={this.state.maxWords}
-                       onChange={(ev) => this.setState({ maxWords : ev.target.value })}/>
-              </div>
-            </div>
-          </div>
-        </form>
+        { form }
         <div className="center aligned">
           <button className="ui button purple" onClick={(ev) => this.updateData(1)}>reload</button>
         </div>
