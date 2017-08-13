@@ -6,14 +6,18 @@ import ApiUtils from '../../api/util.js'
 
 import ColorMapper from '../../state/ColorMapper.js';
 
-import ApiMultipleCharacterDropdown from '../forms/ApiMultipleCharacterDropdown';
+import ApiMultipleCharacterDropdown from 'components/forms/ApiMultipleCharacterDropdown';
+import FicQueryForm from 'components/common/fic-query-form.react';
 
 const ApiFicsPerCharacterChart = React.createClass({
   getInitialState() {
     return {
-      characters: ['Hermione G.', 'Harry P.', 'Ginny W.', 'Ron W.'],
-      start: '2001-01-01',
-      end: '2017-12-31',
+      query: {
+          characters: ['Hermione G.', 'Harry P.', 'Ginny W.', 'Ron W.'],
+          start: '2001-01-01',
+          end: '2017-12-31',
+          rating: []
+      },
       data: {},
       loaded: false
     }
@@ -24,15 +28,10 @@ const ApiFicsPerCharacterChart = React.createClass({
   },
 
   updateData() {
-    const characters = this.state.characters;
-    const start = this.state.start;
-    const end = this.state.end;
     this.setState({
       loaded: false
     });
-    ApiUtils.getChartData({
-      characters, start, end
-    })
+    ApiUtils.getChartData(this.state.query)
     .done(({ datasets, labels }) => {
       datasets.forEach((dataset, idx) => {
         const color = ColorMapper.getColorForCharacter(dataset.label);
@@ -62,25 +61,8 @@ const ApiFicsPerCharacterChart = React.createClass({
           <NewChart data={this.state.data}/>
         </div>
         <div>
-          <form className="ui form">
-            <div className="field">
-                <label>Characters</label>
-                <ApiMultipleCharacterDropdown updateCharacters={(characters) => { this.setState({ characters }); }}
-                                              characters={this.state.characters} />
-            </div>
-            <div className="field">
-              <div className="two fields">
-                <div className="field">
-                  <label>Start</label>
-                  <input type="text" name="start" value={this.state.start} onChange={(ev) => { const start = ev.target.value; this.setState({ start }); }}/>
-                </div>
-                <div className="field">
-                  <label>End</label>
-                  <input type="text" name="end" value={this.state.end} onChange={(ev) => { const end = ev.target.value; this.setState({ end }); }}/>
-                </div>
-              </div>
-            </div>
-          </form>
+          <FicQueryForm query={this.state.query}
+                        updateQuery={(query) => this.setState({ query })}/>
           <div className="center aligned">
             <button className="ui button purple" onClick={this.updateData}>reload</button>
           </div>
