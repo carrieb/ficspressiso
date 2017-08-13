@@ -6,6 +6,28 @@ const MongoClient = require('mongodb').MongoClient;
 
 const assert = require('assert');
 
+const findForQuery = (query) => {
+    const start = moment(query.start);
+    const end = moment(query.end);
+    const minWords = parseInt(query.minWords);
+    const maxWords = parseInt(query.maxWords);
+    return {
+        "characters": {
+            "$in": query.characters
+        },
+        "publish_ts": {
+            "$gt": start.unix()
+        },
+        "update_ts": {
+          "$lt": end.unix() + 1
+        },
+        "word_cnt": {
+            "$gt": minWords,
+            "$lt": maxWords
+        }
+    };
+};
+
 const DAO = {
   replaceFicData(ficUrl, data, callback) {
     MongoClient.connect(url, (err, db) => {
@@ -77,66 +99,51 @@ const DAO = {
     });
   },
 
-  aggregateNumFics(characters, startDate, endDate, delta = 'month', callback) {
-    const start = moment(startDate);
-    const end = moment(endDate);
+  aggregateNumFics(query, delta = 'month', callback) {
+    const start = moment(query.start);
+    const end = moment(query.end);
     const numDelta = end.diff(start, delta + 's') + 1;
     console.log(numDelta);
 
     const labels = [];
-    const raw_datasets = {};
-    characters.reduce((obj, character, idx) => {
-      obj[character] = {
-        label: character,
-        data: []
-      };
-      return obj;
-    }, raw_datasets);
-
-    //console.log(raw_datasets);
-    // TODO: move out chart specific things
+    const raw_dataset = {};
+    query.characters.forEach((character) => {
+        raw_dataset[character] = {
+            label: character,
+            data: []
+        }
+    });
 
     MongoClient.connect(url, function(err, db) {
       assert.equal(null, err);
       const coll = db.collection('documents');
 
-      console.log(characters);
+      const match = {
+          "$match" : findForQuery(query)
+      };
+      console.log(query, match);
 
+      const unwind = {
+          "$unwind": "$characters"
+      };
+
+      const publish_date = {
+          "$add": [
+              new Date(0),
+              { "$multiply": [1000, "$publish_ts"] }
+          ]
+      };
       const project = {
         "$project":{
           "_id": 0,
           "publish_year": {
-            "$year": {
-              "$add": [
-                new Date(0),
-                { "$multiply": [1000, "$publish_ts"] }
-              ]
-            }
+            "$year": publish_date
           },
           "publish_month": {
-            "$month": {
-              "$add": [
-                new Date(0),
-                { "$multiply": [1000, "$publish_ts"] }
-              ]
-            }
+            "$month": publish_date
           },
           "character": "$characters",
           "words": "$word_cnt"
-        }
-      };
-      const unwind = {
-        "$unwind": "$characters"
-      };
-      const match = {
-        "$match" : {
-          "characters": {
-            "$in": characters
-          },
-          "publish_ts": {
-            "$gt": start.unix(),
-            "$lt": end.unix()
-          }
         }
       };
       const group = {
@@ -156,18 +163,18 @@ const DAO = {
         if (doc) {
           const { _id, count, totalWords } = doc;
           const { month, year, character } = _id;
-          const dataset = raw_datasets[character];
+          const dataset = raw_dataset[character];
           const temp = moment([ year, month - 1 ]);
 
           const num_delta = temp.diff(start, delta + 's');
-          raw_datasets[character].data[num_delta] = count;
+          raw_dataset[character].data[num_delta] = count;
         } else {
           while (start < end) {
             labels.push(start.format('MMM YY'));
             start.add(1, delta);
           }
-          const datasets = characters.map((character) => {
-            return raw_datasets[character];
+          const datasets = query.characters.map((character) => {
+            return raw_dataset[character];
           });
           //console.log(raw_datasets, labels, datasets);
           callback( labels, datasets );
@@ -175,7 +182,6 @@ const DAO = {
       });
     });
   }
-
-}
+};
 
 module.exports = DAO;

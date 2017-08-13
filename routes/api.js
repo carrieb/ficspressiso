@@ -75,54 +75,8 @@ router.get('/top/data', (req, res) => {
 
 
 router.get('/chart/data', function(req, res) {
-  //console.log('hi', req.query);
-  const qstart = req.query.start || '2016-07-01'; // yyyy/mm/dd
-  const qend = req.query.end || '2016-12-31';
-  //console.log(qstart, qend);
-  const delta = req.query.delta || 'month';
-  const characters = req.query.characters || [
-    'Harry P.', 'Hermione G.', 'Tom R. Jr.', 'Ron W.', 'Draco M.'
-  ];
-
-  const start = moment(qstart);
-  const end = moment(qend);
-
-  const labels = [];
-  const labelFormat = deltaToLabelFormat[delta];
-
-  const datasets = characters.map((character) => {
-    return {
-      label: character,
-      data: []
-    };
-  });
-  // QUERY DB
-  // -> FICS ADDED TO DB VIA SCRIPT CONSUMING json
-  // -> JSON PRODUCED BY RUNNING CRAWLING SCRIPT
-
-  // TODO: FIX CRAWLING SCRIPT TO BE FASTER
-  // MUST PARSE OUT ID (objectId from (site + id))?
-  // FIX CRAWLING SCRIPT TO BE INTELLIGENT ABOUT TIMESTAMPS (optionally take start/end times?);
-  // RUN FOR JULY 1 -> DEC 31 2016
-  // LOAD INTO DB (write script to consume JSON)
-
-  // FOR NOW: mock data
-  //console.log(start, end);
-  while (start < end) {
-    labels.push(start.format(labelFormat));
-    characters.forEach((character, idx) => {
-      const random = getRandomArbitrary() // get # of fics for char from start to end
-      datasets[idx].data.push(/* db.query(...char..date..delta) */random);
-    });
-
-    start.add(1, delta);
-  }
-
   try {
-    //DAO.queryNumFics(characters, qstart, qend, delta, (labels, datasets) => {
-      //res.json({ labels, datasets });
-    //});
-    DAO.aggregateNumFics(characters, qstart, qend, delta, (labels, datasets) => {
+    DAO.aggregateNumFics(req.query, 'month', (labels, datasets) => {
       //console.log(labels, datasets);
       res.json({ labels, datasets });
     });

@@ -30,16 +30,8 @@ const ApiUtils = {
     });
   },
 
-  getChartData({
-    characters = [],
-    start = null,
-    end = null
-  } = {}) {
-    return get('/api/chart/data', {
-      characters,
-      start,
-      end
-    });
+  getChartData(query) {
+    return get('/api/chart/data', query);
   },
 
   // TODO: pass params

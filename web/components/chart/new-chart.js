@@ -16,7 +16,9 @@ const ApiFicsPerCharacterChart = React.createClass({
           characters: ['Hermione G.', 'Harry P.', 'Ginny W.', 'Ron W.'],
           start: '2001-01-01',
           end: '2017-12-31',
-          rating: []
+          rating: [],
+          minWords: 0,
+          maxWords: 100000000
       },
       data: {},
       loaded: false
@@ -40,8 +42,9 @@ const ApiFicsPerCharacterChart = React.createClass({
         dataset.fill = false;
         dataset.borderJoinStyle = 'miter';
         dataset.lineTension = 0.25;
-        dataset.backgroundColor = "rgba(" + colorArr.join(',') + ",0.4)";
-        dataset.borderColor = "rgba(" + colorArr.join(',') + ",1)";
+        dataset.backgroundColor = "rgba(" + colorArr.join(',') + ",1)";
+        dataset.borderColor = "rgba(" + colorArr.join(',') + ",0.4)";
+        dataset.pointRadius = 0.5;
       });
 
       console.log(datasets, labels);
@@ -114,7 +117,7 @@ const NewChart = React.createClass({
         xAxes: [{
           scaleLabel: {
             display: true,
-            labelString: 'month of 2016'
+            labelString: 'month'
           }
         }]
       },
