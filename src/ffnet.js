@@ -203,13 +203,19 @@ const parseStoryBlurb = (html) => {
 const parseReviewHtml = function(i, elem) {
   const review = {};
 
+  if ($(this).html() === 'No Reviews found.') {
+    return null;
+  }
+
   const dateEl = $(this).find('span[data-xutime]').first();
+  const authorEl = $(this).find('a[href^="/u"]').first();
   const ts = parseInt(dateEl.attr('data-xutime'));
+  const author = authorEl.text();
   review.ts = ts;
   review.date = dateEl.text();
-  review.sentiment = 'todo';
-  review.author = 'todo';
-
+  review.sentiment = '//todo';
+  review.author = author;
+  
   return review;
 };
 
@@ -250,7 +256,10 @@ const FFNet = {
     util.download(url, (data) => {
       if (data) {
         $ = cheerio.load(data);
-        const reviews = $('td').map(parseReviewHtml).get();
+        const reviews = $('td[valign!="middle"]')
+          .map(parseReviewHtml)
+          .get()
+          .filter((review) => review !== null);
         callback(reviews);
       }
     });

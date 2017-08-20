@@ -19,7 +19,7 @@ class ApiTimelineChart extends React.Component {
   }
 
   componentWillMount() {
-    ApiUtil.getTimeline(this.props.id)
+    ApiUtil.getTimeline(this.props.fic.id)
       .done((timeline) => {
         this.setState({ timeline });
       });
@@ -29,28 +29,15 @@ class ApiTimelineChart extends React.Component {
     return (
       <div className="api-timeline-chart">
         <TimelineChart values={
-          _uniqBy(this.state.timeline
-            .filter((obj) => obj.earliestReview !== null)
-            .map((obj) => {
-              return {
-                chapter: obj.chapter,
-                ts: obj.earliestReview,
-                date: new Date(obj.earliestReview * 1000),
-                display: moment.unix(obj.earliestReview).format('ll'),
-                count: 1
-              }
-            })
-            .sort((a, b) => {
-              return b.ts - a.ts;
-            }), 'display')
-        }/>
+          this.state.timeline
+        } publishDate={this.props.fic.publish_ts}/>
       </div>
     )
   }
 }
 
 ApiTimelineChart.propTypes = {
-  id: PropTypes.number.isRequired
+  fic: PropTypes.object.isRequired
 };
 
 export default ApiTimelineChart;

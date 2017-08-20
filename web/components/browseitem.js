@@ -26,7 +26,7 @@ class BrowseItem extends React.Component {
     });
     const collapsedContent = (
       <div className="collapsed-content">
-        <ApiTimelineChart id={fic.id}/>
+        <ApiTimelineChart fic={fic}/>
       </div>
     );
     const collapseLink = (
