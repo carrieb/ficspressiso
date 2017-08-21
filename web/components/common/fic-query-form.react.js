@@ -28,7 +28,7 @@ class FicQueryForm extends React.Component {
 
     render() {
         const form = (
-            <form className="top-list ui form">
+            <form className="ui form">
                 <div className="field">
                     <label>Characters</label>
                     <ApiMultipleCharacterDropdown

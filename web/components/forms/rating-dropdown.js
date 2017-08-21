@@ -24,7 +24,7 @@ class RatingDropdown extends React.Component {
       <div className="ui fluid multiple selection dropdown"
            ref={(ref) => this.dropdownRef = ref}>
         <input type="hidden" name="rating" value={this.props.rating.join(',')}/>
-        <i className="dropdown icon"></i>
+        <i className="dropdown icon"/>
         <div className="default text">Rating...</div>
         <div className="menu">
           <div className="item" data-value="M" data-text="M">M</div>

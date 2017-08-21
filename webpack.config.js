@@ -12,6 +12,10 @@ module.exports = [{
   module: {
     rules: [
       {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader']
+      },
+      {
         test: /\.js$/,
         exclude: [/node_modules/],
         use: [{
@@ -28,7 +32,10 @@ module.exports = [{
    alias: {
      src: path.join(__dirname, "src"),
      components: path.join(__dirname, "web", "components"),
-     api: path.join(__dirname, "web", "api")
+     api: path.join(__dirname, "web", "api"),
+     state: path.join(__dirname, "web", "state"),
+     utils: path.join(__dirname, "web", "util"),
+     styles: path.join(__dirname, "public", "stylesheets")
    }
  }
 }];

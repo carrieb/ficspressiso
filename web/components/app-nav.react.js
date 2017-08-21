@@ -8,7 +8,6 @@ class App extends React.Component {
       <div className="ui container">
         <div className="ui teal large secondary pointing menu">
           <NavLink to="/library" activeClassName="active" className="ui item">Library</NavLink>
-          <NavLink to="/new-library" activeClassName="active" className="ui item">New Library</NavLink>
           <NavLink to="/browse" activeClassName="active" className="ui item">Browse</NavLink>
           <NavLink to="/chart" activeClassName="active" className="ui item">Chart</NavLink>
           <NavLink to="/top" activeClassName="active" className="ui item">Top</NavLink>

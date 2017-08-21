@@ -1,5 +1,8 @@
 const ffnet = require('../src/ffnet');
 
+const apicache = require('apicache');
+let cache = apicache.middleware;
+
 var express = require('express');
 var router = express.Router();
 
@@ -26,7 +29,7 @@ router.get('/reindex', function(req, res) {
   });
 });
 
-router.get('/browse', function(req, res) {
+router.get('/browse', cache('1 hour'), function(req, res) {
   const page = req.query.page;
   const fandom = req.query.fandom || 'Harry Potter';
   const characters = req.query.characters || [];
@@ -36,7 +39,7 @@ router.get('/browse', function(req, res) {
   });
 });
 
-router.get('/characters', function(req, res) {
+router.get('/characters', cache('1 week'), function(req, res) {
   const fandom = req.query.fandom || 'Harry Potter';
   ffnet.retrieveCharacters(fandom, (data) => {
     res.json(data);
@@ -65,7 +68,7 @@ router.get('/top/data', (req, res) => {
 });
 
 
-router.get('/chart/data', function(req, res) {
+router.get('/chart/data', cache('1 day'), function(req, res) {
   try {
     DAO.aggregateNumFics(req.query, 'month', (labels, datasets) => {
       //console.log(labels, datasets);
@@ -76,7 +79,7 @@ router.get('/chart/data', function(req, res) {
   }
 });
 
-router.get('/fic/timeline', function(req, res) {
+router.get('/fic/timeline', cache('1 day'), function(req, res) {
   try {
     Timeline.inferTimeline(Sources.FFNET, req.query.id, (timeline) => {
       // TODO: save timeline to fic in db

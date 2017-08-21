@@ -6,9 +6,8 @@ import createHistory from 'history/createBrowserHistory';
 const history = createHistory();
 
 import AppNav from './components/app-nav.react';
-import Library from './components/library';
 import Browse from './components/browse';
-import NewChart from './components/chart/new-chart';
+import Chart from './components/chart.react';
 import NewLibrary from './components/library/new-library';
 import ApiTopList from './components/top/api-top-list';
 
@@ -20,9 +19,9 @@ if (typeof window !== "undefined") {
         <div>
           <AppNav/>
           <Route exact path="/" render={() => <Redirect to="/new-library"/>}/>
-          <Route path="/new-library" component={NewLibrary}/>
+          <Route path="/library" component={NewLibrary}/>
           <Route path="/browse" component={Browse}/>
-          <Route path="/chart" component={NewChart}/>
+          <Route path="/chart" component={Chart}/>
           <Route path="/top" component={ApiTopList}/>
         </div>
       </Router>,

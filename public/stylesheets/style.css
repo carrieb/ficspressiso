@@ -130,10 +130,6 @@ a {
   text-align: justify
 }
 
-.chart-page {
-  text-align: center;
-}
-
 .library-container .item + .item {
   padding-top: 28px;
   border-top: darkgrey 1px solid;
@@ -243,14 +239,6 @@ a {
   cursor: pointer;
 }
 
-.chart-page form.ui.form {
-  margin-top: 25px;
-}
-
-.chart-page button.ui.button {
-  margin-top: 25px;
-}
-
 .top-list {
   margin-bottom: 30px;
 }
@@ -274,6 +262,11 @@ a {
   min-width: 10%;
   float: right;
   margin-left: 10px;
+}
+
+.fic-query-form {
+  max-width: 500px;
+  margin: auto;
 }
 
 .api-top-list .options-section.right.rail {

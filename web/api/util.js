@@ -1,12 +1,12 @@
-const get = function(url, data) {
+const get = function(url, data, log=true) {
   return $.ajax(url, {
     type: 'GET',
     data
   }).then((res) => {
-    console.log(url, res);
+    if (log) console.log(url, res);
     return res;
   });
-}
+};
 
 const ApiUtils = {
   browseFics: function({
@@ -27,7 +27,7 @@ const ApiUtils = {
   } = {}) {
     return get('/api/characters', {
       fandom
-    });
+    }, false);
   },
 
   getChartData(query) {

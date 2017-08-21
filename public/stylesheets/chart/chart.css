@@ -1,0 +1,11 @@
+
+.chart-wrapper button.reload-button {
+    margin: auto;
+}
+
+.chart-wrapper .fic-query-form form {
+    background-color: whitesmoke;
+    padding: 20px;
+    border: solid 1px lightgray;
+    margin-bottom: 20px;
+}

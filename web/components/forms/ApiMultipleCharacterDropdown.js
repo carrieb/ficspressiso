@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import ApiUtils from '../../api/util.js'
 
@@ -6,17 +7,34 @@ import ColorMapper from '../../state/ColorMapper.js';
 
 import _isEmpty from 'lodash/isEmpty';
 
-const ApiMultipleCharacterDropdown = React.createClass({
-  propTypes: {
-    characters: React.PropTypes.array.isRequired,
-    updateCharacters: React.PropTypes.func.isRequired
-  },
+class ApiMultipleCharacterDropdown extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      loaded: false,
+      characterOptions: []
+    };
+  }
+
+  componentWillMount() {
+    this.loadCharacterOptions();
+  }
 
   componentDidMount() {
     $(this.dropdown).dropdown({
       onChange: this.onChange
     });
-  },
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.loaded && !prevState.loaded) {
+      $(this.dropdown).dropdown({
+        onChange: (valueString) => this.onChange(valueString),
+        onLabelCreate: (value, text) => this.onLabelCreate(value, text)
+      });
+    }
+  }
 
   onChange(valueString) {
     if (!_isEmpty(valueString)) {
@@ -24,60 +42,44 @@ const ApiMultipleCharacterDropdown = React.createClass({
     } else {
       this.props.updateCharacters([])
     }
-  },
+  }
 
   onLabelCreate(value, text) {
     const character = value;
     const colorArr = ColorMapper.getRgbArrayForCharacter(character);
     const rgba = "rgba(" + colorArr.join(',') + ",0.4)";
     return $(`<a class="ui label" data-value="${character}" style="background-color: ${rgba};">${character}<i class="delete icon"></i></a>`);
-  },
-
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.loaded && !prevState.loaded) {
-      $(this.dropdown).dropdown({
-        onChange: this.onChange,
-        onLabelCreate: this.onLabelCreate
-      });
-    }
-  },
-
-  getInitialState() {
-    return {
-      loaded: false,
-      characterOptions: []
-    };
-  },
-
-  componentWillMount() {
-    this.loadCharacterOptions();
-  },
+  }
 
   loadCharacterOptions() {
     this.setState({ loaded: false });
     ApiUtils.getCharacters()
-    .done((characterOptions) => {
-      this.setState({
-        loaded: true,
-        characterOptions
-      })
-    });
-  },
+      .done((characterOptions) => {
+        this.setState({
+          loaded: true,
+          characterOptions
+        });
+      });
+  }
 
   render() {
-    const options = this.state.characterOptions.map((character, idx) => {
-      return (
-        <div className="item" key={idx} data-value={character} data-text={character}>
-          {character}
-        </div>
-      );
-    });
+    const options = this.state.characterOptions
+      .map((character, idx) => {
+        return (
+          <div className="item"
+               key={idx}
+               data-value={character}
+               data-text={character}>
+            {character}
+          </div>
+        );
+      });
 
     return (
-      <div className={`ui ${this.state.loaded ? '' : 'loading '}fluid multiple search selection dropdown`}
+      <div className={`ui ${!this.state.loaded && 'loading '}fluid multiple search selection dropdown`}
            ref={(dropdown) => { this.dropdown = dropdown; }}>
         <input type="hidden" name="characters" value={this.props.characters.join(',')}/>
-        <i className="dropdown icon"></i>
+        <i className="dropdown icon"/>
         <div className="default text">Characters...</div>
         <div className="menu">
           { options }
@@ -85,6 +87,11 @@ const ApiMultipleCharacterDropdown = React.createClass({
       </div>
     );
   }
-});
+}
+
+ApiMultipleCharacterDropdown.propTypes = {
+  characters: PropTypes.array.isRequired,
+  updateCharacters: PropTypes.func.isRequired
+};
 
 export default ApiMultipleCharacterDropdown;
