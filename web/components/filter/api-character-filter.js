@@ -31,7 +31,7 @@ const ApiCharacterFilter = React.createClass({
   requestCharacters(fandom = this.props.currentQuery.fandom) {
     ApiUtils.getCharacters({fandom})
       .done((characters) => {
-        console.log(characters);
+        //console.log(characters);
         this.setState({
           characters,
           loaded: true

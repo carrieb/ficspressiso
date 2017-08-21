@@ -9,3 +9,8 @@
     border: solid 1px lightgray;
     margin-bottom: 20px;
 }
+
+.chart-wrapper .fic-query-form {
+    max-width: 500px;
+    margin: auto;
+}

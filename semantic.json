@@ -1,5 +1,5 @@
 {
-  "base": "dist/semantic/",
+  "base": "semantic/",
   "paths": {
     "source": {
       "config": "src/theme.config",
@@ -69,5 +69,5 @@
     "state",
     "visibility"
   ],
-  "version": "2.2.11"
+  "version": "2.2.13"
 }

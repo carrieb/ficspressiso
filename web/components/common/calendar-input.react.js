@@ -42,4 +42,8 @@ CalendarInput.propTypes = {
     onChange: PropTypes.func.isRequired
 };
 
+CalendarInput.defaultProps = {
+    defaultValue: '2000-01-01'
+};
+
 export default CalendarInput;

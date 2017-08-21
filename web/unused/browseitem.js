@@ -1,6 +1,6 @@
 import React from 'react';
 
-import CharacterLabel from './library/character-label';
+import CharacterLabel from '../components/library/character-label';
 
 import uniqueId from 'lodash/uniqueId';
 

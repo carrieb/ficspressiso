@@ -26,9 +26,9 @@ class ApiFicList extends React.Component {
       <div className="api-fic-list">
         { ficEls }
       </div>
-    )
+    );
   }
-
+  
 }
 
 ApiFicList.propTypes = {

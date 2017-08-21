@@ -6,7 +6,7 @@ import createHistory from 'history/createBrowserHistory';
 const history = createHistory();
 
 import AppNav from './components/app-nav.react';
-import Browse from './components/browse';
+import Browse from './components/browse.react';
 import Chart from './components/chart.react';
 import NewLibrary from './components/library/new-library';
 import ApiTopList from './components/top/api-top-list';

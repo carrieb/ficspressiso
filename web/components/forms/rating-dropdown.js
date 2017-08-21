@@ -38,6 +38,10 @@ class RatingDropdown extends React.Component {
 RatingDropdown.propTypes = {
   updateRating: React.PropTypes.func,
   rating: React.PropTypes.array
-}
+};
+
+RatingDropdown.defaultProps = {
+  rating: []
+};
 
 export default RatingDropdown;

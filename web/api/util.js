@@ -3,7 +3,7 @@ const get = function(url, data, log=true) {
     type: 'GET',
     data
   }).then((res) => {
-    if (log) console.log(url, res);
+    if (log) console.log(url, data, res);
     return res;
   });
 };
@@ -14,7 +14,6 @@ const ApiUtils = {
     characters = [],
     fandom = "Harry Potter"
   } = {}) {
-    console.log('api call', page, characters);
     return get('/api/browse', {
       page,
       characters,

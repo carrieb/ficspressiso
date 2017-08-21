@@ -211,7 +211,6 @@ a {
 
 .browse-navbar {
   background: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(255,255,255,.75) 90%,rgba(125,185,232,0) 100%);
-  padding: 20px 0 10px 0;
 }
 
 .browse-container .item .header {
@@ -262,11 +261,6 @@ a {
   min-width: 10%;
   float: right;
   margin-left: 10px;
-}
-
-.fic-query-form {
-  max-width: 500px;
-  margin: auto;
 }
 
 .api-top-list .options-section.right.rail {

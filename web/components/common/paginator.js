@@ -1,26 +1,21 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const Paginator = React.createClass({
-  propTypes: {
-    page: React.PropTypes.number.isRequired,
-    goToPage: React.PropTypes.func.isRequired,
-    maxPage: React.PropTypes.number
-  },
-
+class Paginator extends React.Component {
   goToNextPage() {
     if (this.props.page !== this.props.maxPage)
       this.props.goToPage(this.props.page + 1)
-  },
+  }
 
   goToPreviousPage() {
     if (this.props.page !== 1) this.props.goToPage(this.props.page - 1)
-  },
+  }
 
   render() {
-      const previous = (<a onClick={this.goToPreviousPage}>
+      const previous = (<a onClick={() => this.goToPreviousPage()}>
         <i className={`teal large arrow left icon ${this.props.page === 1 ? 'disabled' : ''}`}/>
       </a>);
-      const next = (<a onClick={this.goToNextPage}>
+      const next = (<a onClick={() => this.goToNextPage()}>
         <i className={`teal large arrow right icon ${this.props.maxPage === this.props.page ? 'disabled' : ''}`}/>
       </a>);
       return (
@@ -31,6 +26,17 @@ const Paginator = React.createClass({
         </div>
       )
   }
-});
+}
+
+Paginator.propTypes = {
+  page: React.PropTypes.number,
+  goToPage: React.PropTypes.func,
+  maxPage: React.PropTypes.number
+};
+
+Paginator.defaultProps = {
+  page: 1,
+  maxPage: 1
+};
 
 export default Paginator;

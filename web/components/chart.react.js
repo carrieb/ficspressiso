@@ -37,7 +37,7 @@ class ChartDisplay extends React.Component {
 
   render() {
     return (
-      <div className="chart-wrapper">
+      <div className="ui container chart-wrapper">
         <div className="ui basic segment api-fics-per-character-chart-container">
           { !this.state.loaded && <div className="ui active large text loader">Loading..</div> }
           <Chart data={this.state.data}/>
