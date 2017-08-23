@@ -16,44 +16,55 @@ class FicListItem extends React.Component {
     return (
       <div className="item fic-list-item">
         <div className="middle aligned content">
-          <a className="header"
-             target="_blank"
-             href={ fic.url }>{ fic.title }</a>
-          <div className="meta"><span>{ fic.author }</span></div>
-          <div className="description"><p>{ fic.summary }</p></div>
-          <div>
-            <div className="statistics">
-              <div className="right floated">
-                <div className="ui basic blue label">
-                  <i className="thumbs up icon"/>
-                  {fic.fav_cnt.toLocaleString()}
-                </div>
-                <div className="ui basic red label">
-                  <i className="heart icon"/>
-                  {fic.follow_cnt.toLocaleString()}
-                </div>
-                <div className="ui basic olive label">
-                  <i className="comment icon"/>
-                  {fic.review_cnt.toLocaleString()}
-                </div>
-              </div>
-              <div>
-                <div className="ui basic violet label">
-                  <i className="tasks icon"/>
-                  {fic.word_cnt.toLocaleString()}
-                </div>
-                <div className="ui basic teal label">
-                  <i className="book icon"/>
-                  {fic.chapter_cnt.toLocaleString()}
-                </div>
-              </div>
+
+          <div className="header">
+            <a className="title"
+               target="_blank"
+               href={ fic.url }>{ fic.title }</a>
+            <span className="right">
+              <a target="_blank" href={fic.author_url}>{ fic.author }</a>
+            </span>
+            <div className="icons">
+              <i className="erase icon"/>
+              <i className="download icon"/>
             </div>
-            <div className="right floated right aligned"
-                 style={{ fontSize: '.75rem' }}>
+
+          </div>
+
+          <div className="five mini ui basic buttons">
+            <div className="ui button">
+              <i className="feed icon"/>
+              {fic.follow_cnt.toLocaleString()}
+            </div>
+            <div className="ui button">
+              <i className="heart icon"/>
+              {fic.fav_cnt.toLocaleString()}
+            </div>
+            <div className="ui button">
+              <i className="comment icon"/>
+              {fic.review_cnt.toLocaleString()}
+            </div>
+            <div className="ui button">
+              <i className="paragraph icon"/>
+              {fic.word_cnt.toLocaleString()}
+            </div>
+            <div className="ui button">
+              <i className="file text outline icon"/>
+              {fic.chapter_cnt.toLocaleString()}
+            </div>
+          </div>
+
+          <div className="description">
+            { fic.summary }
+          </div>
+          <div className="footer">
+            <div className="right">
               Updated: {fic.update_date}<br/>
               Published: {fic.publish_date}
             </div>
-            <div>{characterLabels}</div>
+            <div className="characters">
+              { characterLabels }
+            </div>
           </div>
         </div>
       </div>

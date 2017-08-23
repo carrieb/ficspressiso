@@ -11,6 +11,8 @@
     <script type="text/javascript" src="/javascripts/dist/calendar.min.js"></script>
     <link rel="stylesheet" href="/javascripts/dist/calendar.min.css" />
     <link rel='stylesheet' href='/stylesheets/style.css' />
+
+    <link href="https://fonts.googleapis.com/css?family=Montserrat|Merriweather" rel="stylesheet">
   </head>
   <body>
     <div id="content">

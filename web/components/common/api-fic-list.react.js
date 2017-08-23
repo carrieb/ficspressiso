@@ -8,9 +8,14 @@ class ApiFicList extends React.Component {
   }
 
   componentWillMount() {
+    this.loadFics();
+  }
+
+  loadFics() {
     this.setState({ loaded: false });
-    this.props.requestFics()
+    return this.props.requestFics()
       .done((fics) => {
+        console.log(fics);
         this.setState({ fics, loaded: true });
       });
   }

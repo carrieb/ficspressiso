@@ -4,6 +4,7 @@ import ApiFicList from 'components/common/api-fic-list.react';
 import FicListItem from 'components/common/fic-list-item.react';
 import FicQueryForm from 'components/common/fic-query-form.react';
 import Paginator from 'components/common/paginator';
+import DismissableMessage from 'components/common/dismissable-message.react';
 
 import ApiUtils from 'api/util';
 
@@ -21,7 +22,8 @@ class BrowseDisplay extends React.Component {
 
   componentDidMount() {
     $(this.popupButton).popup({
-      on: 'click', position: 'bottom right'
+      position: 'bottom right',
+      on: 'click'
     });
   }
 
@@ -39,33 +41,50 @@ class BrowseDisplay extends React.Component {
   }
 
   requestFics() {
+    console.log(this.state.query);
     return ApiUtils.browseFics(this.state.query);
+  }
+
+  goToPage(page) {
+    const q = this.state.query;
+    q.page = page;
+    this.setState({ query: q });
   }
 
   render() {
     return (
       <div className="browse-container ui container">
-        <div className="ui warning icon message">
-          <i className="close icon"/>
-          <div className="content">
-            <div className="header">Query options limited.</div>
-            <p>We're querying directly from fanfiction.net, so search is limited to their querying ability.</p>
-          </div>
-        </div>
+        <div className="browse-header">
+          <DismissableMessage>
+            <div className="content">
+              <div className="header">Query options limited.</div>
+              <p>We're querying directly from fanfiction.net, so search is limited to their querying ability.</p>
+            </div>
+          </DismissableMessage>
 
-        <button className="ui right floated blue icon button"
-             ref={(ref) => this.popupButton = ref}>
-          <i className="filter icon"/>
-        </button>
-        <div className="ui flowing popup top left transition hidden">
-          <FicQueryForm query={this.state.query}
-                        updateQuery={(q) => console.log(q)}
+          <button className="ui left floated blue icon button"
+                  ref={(ref) => this.popupButton = ref}>
+            <i className="filter icon"/>
+          </button>
+          <div ref={(ref) => this.popup = ref}
+               className="ui flowing popup top left transition hidden">
+            <FicQueryForm query={this.state.query}
+                          updateQuery={(query) => this.setState({ query })}
+            />
+          </div>
+          <button className="ui right floated green icon button"
+                  onClick={() => this.list.loadFics()}>
+            <i className="refresh icon"/>
+          </button>
+
+          <Paginator maxPage={25000}
+                     page={this.state.query.page}
+                     goToPage={(page) => this.goToPage(page)}
           />
         </div>
-
-        <Paginator/>
-
-        <ApiFicList ficComponent={FicListItem}
+        
+        <ApiFicList ref={(ref) => this.list = ref}
+                    ficComponent={FicListItem}
                     requestFics={() => this.requestFics()}
                     query={this.state.query}/>
       </div>

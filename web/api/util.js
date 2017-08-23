@@ -9,16 +9,9 @@ const get = function(url, data, log=true) {
 };
 
 const ApiUtils = {
-  browseFics: function({
-    page = 1,
-    characters = [],
-    fandom = "Harry Potter"
-  } = {}) {
-    return get('/api/browse', {
-      page,
-      characters,
-      fandom
-    });
+  browseFics: function(query) {
+    console.log(query);
+    return get('/api/browse', query);
   },
 
   getCharacters({

@@ -18,7 +18,7 @@ if (typeof window !== "undefined") {
       <Router history={history}>
         <div>
           <AppNav/>
-          <Route exact path="/" render={() => <Redirect to="/new-library"/>}/>
+          <Route exact path="/" render={() => <Redirect to="/library"/>}/>
           <Route path="/library" component={NewLibrary}/>
           <Route path="/browse" component={Browse}/>
           <Route path="/chart" component={Chart}/>
