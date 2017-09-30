@@ -48,18 +48,22 @@ class Library extends React.Component {
 
   render() {
     console.log('libary state', this.state);
+
     const storyEls = this.storiesForQuery().map((story, idx) => {
       // TODO: change story url to link to reader route
       const charLabels = story.chars.map((char) => {
         return (
-          <CharacterLabel character={char} key={uniqueId()} onClick={() => {this.setState({query: {characters: char}})}}/>
+          <CharacterLabel character={char}
+                          key={uniqueId()}/>
         );
       });
+
       // TODO: trigger hover content
       const hoverConent = [
           <div className="sub-header"> by <a href={story.author_url} target="_blank">{story.author}</a></div>,
           <div className="meta">{story.fandoms.join('-')}</div>
       ];
+
       return (
         <div className="item" key={idx}>
           <div className="content">
@@ -69,6 +73,7 @@ class Library extends React.Component {
                 <div className="sub-header hover-target"> by <a href={story.author_url} target="_blank">{story.author}</a></div>
                 <div className="sub-header hover-target">{story.fandoms.join('-')}</div>
               </div>
+
               <div className="ten wide right aligned column stats-container">
                 <div className="ui basic violet label"><i className="tasks icon"></i>{story.word_cnt}</div>
                 <div className="ui basic teal label"><i className="book icon"></i>{story.chapter_cnt}</div>
@@ -77,6 +82,7 @@ class Library extends React.Component {
                 <div className="ui basic olive label"><i className="comment icon"></i>{story.review_cnt}</div>
               </div>
             </div>
+
             <div className="summary">{story.summary}</div>
             <div className="extra">
               <div>{ charLabels }</div>
@@ -88,13 +94,15 @@ class Library extends React.Component {
 
     return (
       <div className="library-container ui container">
-        <Filter updateFilterQuery={(query) => { this.setState({query}); }}
-                options={{fandoms, characters}}
-                currentQuery={this.state.query}
-        />
-        <Sort updateSort={(sort) => { this.setState({sort}); }}
-              currentSort={this.state.sort}
-        />
+        <div className="center">
+          <Filter updateFilterQuery={(query) => { this.setState({query}); }}
+                  options={{fandoms, characters}}
+                  currentQuery={this.state.query}
+          />
+          <Sort updateSort={(sort) => { this.setState({sort}); }}
+                currentSort={this.state.sort}
+          />
+        </div>
         <div className="ui items">
           {storyEls}
         </div>

@@ -62,6 +62,9 @@ class Filter extends React.Component {
 
     const flattenedSections = [].concat.apply([], optionSections);
 
+    // TODO: change filter to be search bar
+
+    console.log(this.props.labelText);
     return (
       <div className="ui labeled icon top center pointing scrolling dropdown button"
         ref={ (dropdown) => this.dropdown = dropdown }>
