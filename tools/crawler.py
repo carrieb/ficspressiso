@@ -10,6 +10,8 @@ class Crawler:
     def __init__(self, output_dir, base_url, stop_func, initial_file=0, initial_page=1, backwards=False):
         chop = webdriver.ChromeOptions()
         chop.add_extension('/Users/carolyn/projects/ficspressiso/tools/adblockpluschrome-1.8.3.crx')
+        prefs = { "profile.managed_default_content_settings.images": 2 }
+        chop.add_experimental_option("prefs", prefs)
         driver = webdriver.Chrome('/usr/local/bin/chromedriver', chrome_options = chop)
         self.driver = driver
 

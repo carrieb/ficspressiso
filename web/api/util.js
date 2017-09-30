@@ -1,6 +1,7 @@
 const get = function(url, data, log=true) {
   return $.ajax(url, {
     type: 'GET',
+    timeout: 3000,
     data
   }).then((res) => {
     if (log) console.log(url, data, res);

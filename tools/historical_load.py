@@ -13,13 +13,7 @@ def stop(metas, page):
     return False
 
 def main(argv):
-    chop = webdriver.ChromeOptions()
-    chop.add_extension('/Users/carolyn/projects/ficspressiso/tools/adblockpluschrome-1.8.3.crx')
-    prefs = { "profile.managed_default_content_settings.images": 2 }
-    chop.add_experimental_option("prefs", prefs)
-    driver = webdriver.Chrome('/usr/local/bin/chromedriver', chrome_options = chop)
-    crawler = Crawler(driver, output, base_publish_url, stop, initial_file=0, initial_page=970, backwards=True)
-    print crawler
+    crawler = Crawler(output, base_publish_url, stop, initial_file=4, initial_page=1600, backwards=True)
     crawler.crawl()
 
 if __name__ == "__main__":

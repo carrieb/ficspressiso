@@ -59,6 +59,9 @@ class ApiMultipleCharacterDropdown extends React.Component {
           loaded: true,
           characterOptions
         });
+      })
+      .fail(() => {
+        this.setState({ loaded: true });
       });
   }
 
