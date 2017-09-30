@@ -1,18 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import uniqueId from 'lodash/uniqueId';
 
-const CharacterLabel = React.createClass({
-  propTypes: {
-    character: React.PropTypes.string.isRequired,
-    onClick: React.PropTypes.func
-  },
+class CharacterLabel extends React.Component {
+  constructor(props) {
+    super(props);
 
-  getInitialState() {
-    return {
+    this.state = {
       hover: false
-    }
-  },
+    };
+  }
 
   componentDidMount() {
       $(this.label).hover(() => {
@@ -20,13 +18,13 @@ const CharacterLabel = React.createClass({
       }, () => {
         this.setState({ hover: false });
       });
-  },
+  }
 
   handleClick(character) {
     if (this.props.onClick) {
       this.props.onClick(character);
     }
-  },
+  }
 
   render() {
     const char = this.props.character;
@@ -35,10 +33,15 @@ const CharacterLabel = React.createClass({
            ref={(label) => {this.label = label;}}
            onClick={() => this.handleClick(character)}>
         <img src={`/images/characters/${char}.jpg`}/>
-        { this.state.hover && (<span key={uniqueId()}>{char}</span>) }
+        { this.state.hover && <span key={uniqueId()}>{char}</span> }
       </div>
     );
   }
-});
+}
+
+CharacterLabel.propTypes = {
+  character: PropTypes.string.isRequired,
+  onClick: PropTypes.func
+}
 
 export default CharacterLabel;

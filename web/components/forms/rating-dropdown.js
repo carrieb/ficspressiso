@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import _isEmpty from 'lodash/isEmpty';
 
@@ -36,8 +37,8 @@ class RatingDropdown extends React.Component {
 }
 
 RatingDropdown.propTypes = {
-  updateRating: React.PropTypes.func,
-  rating: React.PropTypes.array
+  updateRating: PropTypes.func,
+  rating: PropTypes.array
 };
 
 RatingDropdown.defaultProps = {

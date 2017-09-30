@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import util from 'src/util';
 
@@ -6,24 +7,17 @@ import ColorMapper from '../../state/ColorMapper';
 
 import uniqueId from 'lodash/uniqueId';
 
-const NewFilter = React.createClass({
-  propTypes: {
-    updateFilterQuery: React.PropTypes.func.isRequired,
-    options: React.PropTypes.object.isRequired /* e.g. { fandoms: [a, b, c], characters: [x, y, z] } */,
-    currentQuery: React.PropTypes.object.isRequired,
-    searchPlaceholder: React.PropTypes.string,
-    labelText: React.PropTypes.string
-  },
-
+class NewFilter extends React.Component {
   componentDidMount() {
     $(this.dropdown).dropdown({
       showOnFocus: false,
-      onChange: this.handleChange
+      onChange: (value, text, choice) => this.handleChange(value, text, choice)
     });
+
     if (this.props.currentQuery.fandoms) {
       $(this.dropdown).dropdown('set selected', `fandoms_${this.props.currentQuery.fandoms}`);
     }
-  },
+  }
 
   componentDidUpdate(prevProps) {
     const currentChar = this.props.currentQuery.characters;
@@ -32,7 +26,7 @@ const NewFilter = React.createClass({
     if (currentChar && prevProps.currentQuery.characters !== currentChar) {
       $(this.dropdown).dropdown('set selected', `characters_${currentChar}`);
     }
-  },
+  }
 
   handleChange(value, text, choice) {
     var item = choice[0];
@@ -43,7 +37,7 @@ const NewFilter = React.createClass({
     }
 
     this.props.updateFilterQuery(query);
-  },
+  }
 
   render() {
     const optionSections = Object.keys(this.props.options).map((category) => {
@@ -67,8 +61,10 @@ const NewFilter = React.createClass({
     });
 
     const flattenedSections = [].concat.apply([], optionSections);
+
     return (
-      <div className="ui labeled icon top center pointing scrolling dropdown button" ref={(dropdown) => {this.dropdown = dropdown}}>
+      <div className="ui labeled icon top center pointing scrolling dropdown button"
+        ref={ (dropdown) => this.dropdown = dropdown }>
         <i className="filter icon"></i>
         <span className="text">{this.props.labelText || 'Filter'}</span>
         <div className="menu">
@@ -85,6 +81,14 @@ const NewFilter = React.createClass({
       </div>
     )
   }
-});
+}
+
+NewFilter.propTypes = {
+  updateFilterQuery: PropTypes.func.isRequired,
+  options: PropTypes.object.isRequired /* e.g. { fandoms: [a, b, c], characters: [x, y, z] } */,
+  currentQuery: PropTypes.object.isRequired,
+  searchPlaceholder: PropTypes.string,
+  labelText: PropTypes.string
+}
 
 export default NewFilter;

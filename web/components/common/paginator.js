@@ -29,9 +29,9 @@ class Paginator extends React.Component {
 }
 
 Paginator.propTypes = {
-  page: React.PropTypes.number,
-  goToPage: React.PropTypes.func,
-  maxPage: React.PropTypes.number
+  page: PropTypes.number,
+  goToPage: PropTypes.func,
+  maxPage: PropTypes.number
 };
 
 Paginator.defaultProps = {

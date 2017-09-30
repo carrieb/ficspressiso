@@ -1,8 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import NewFilter from '../filter/new-filter';
 import Sort from '../sort/sort';
-import CharacterLabel from './character-label';
+import CharacterLabel from 'components/common/character-label.react';
 
 import ColorMapper from '../../state/ColorMapper';
 
@@ -14,16 +15,18 @@ const stories = initJson.stories;
 const characters = initJson.characters;
 const fandoms = initJson.fandoms;
 
-const NewLibrary = React.createClass({
-  getInitialState() {
-    return {
+class NewLibrary extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
       query: {},
       sort: {
         by: 'title',
         order: 'ascending'
       }
     };
-  },
+  }
 
   storiesForQuery() {
     const query = this.state.query;
@@ -39,7 +42,7 @@ const NewLibrary = React.createClass({
     });
     const sorted = sortBy(filtered, [this.state.sort.by]);
     return (this.state.sort.order === 'ascending') ? sorted : sorted.reverse();
-  },
+  }
 
   render() {
     console.log(this.state.query, this.state.sort);
@@ -80,6 +83,7 @@ const NewLibrary = React.createClass({
         </div>
       );
     });
+
     return (
       <div className="library-container">
         <NewFilter updateFilterQuery={(query) => { this.setState({query}); }}
@@ -95,6 +99,6 @@ const NewLibrary = React.createClass({
       </div>
     );
   }
-});
+}
 
 export default NewLibrary;

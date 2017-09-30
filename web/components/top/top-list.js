@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import CharacterLabel from 'components/common/character-label';
+import CharacterLabel from 'components/common/character-label.react';
 import FicSettingsButton from 'components/common/fic-settings-button';
 import FicBlob from 'components/common/fic-blob.react';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import CharacterLabel from 'components/library/character-label';
+import CharacterLabel from 'components/common/character-label.react';
 
 
 class FicListItem extends React.Component {
