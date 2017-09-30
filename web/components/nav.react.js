@@ -2,7 +2,7 @@ import React from 'react';
 
 import { NavLink } from 'react-router-dom';
 
-class App extends React.Component {
+class Nav extends React.Component {
   render() {
     return (
       <div className="ui container">
@@ -20,4 +20,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default Nav;

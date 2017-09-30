@@ -46,7 +46,7 @@ router.get('/characters', cache('1 week'), function(req, res) {
   });
 });
 
-router.get('/top/data', (req, res) => {
+router.get('/top/data', cache('1 day'), (req, res) => {
   //console.log(req.query);
   const characters = req.query.characters;
   const rating = req.query.rating;

@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import NewFilter from '../filter/new-filter';
-import Sort from '../sort/sort';
+import Filter from 'components/library/filter.react';
+import Sort from 'components/sort/sort';
 import CharacterLabel from 'components/common/character-label.react';
 
 import ColorMapper from '../../state/ColorMapper';
@@ -15,7 +15,9 @@ const stories = initJson.stories;
 const characters = initJson.characters;
 const fandoms = initJson.fandoms;
 
-class NewLibrary extends React.Component {
+import 'styles/library/library.css';
+
+class Library extends React.Component {
   constructor(props) {
     super(props);
 
@@ -45,7 +47,7 @@ class NewLibrary extends React.Component {
   }
 
   render() {
-    console.log(this.state.query, this.state.sort);
+    console.log('libary state', this.state);
     const storyEls = this.storiesForQuery().map((story, idx) => {
       // TODO: change story url to link to reader route
       const charLabels = story.chars.map((char) => {
@@ -85,10 +87,10 @@ class NewLibrary extends React.Component {
     });
 
     return (
-      <div className="library-container">
-        <NewFilter updateFilterQuery={(query) => { this.setState({query}); }}
-                   options={{fandoms, characters}}
-                   currentQuery={this.state.query}
+      <div className="library-container ui container">
+        <Filter updateFilterQuery={(query) => { this.setState({query}); }}
+                options={{fandoms, characters}}
+                currentQuery={this.state.query}
         />
         <Sort updateSort={(sort) => { this.setState({sort}); }}
               currentSort={this.state.sort}
@@ -101,4 +103,4 @@ class NewLibrary extends React.Component {
   }
 }
 
-export default NewLibrary;
+export default Library;

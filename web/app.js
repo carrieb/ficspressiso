@@ -5,27 +5,28 @@ import createHistory from 'history/createBrowserHistory';
 
 const history = createHistory();
 
-import AppNav from './components/app-nav.react';
-import Browse from './components/browse.react';
-import Chart from './components/chart.react';
-import NewLibrary from './components/library/new-library';
-import ApiTopList from './components/top/api-top-list';
+import Nav from 'components/nav.react';
+import Browse from 'components/browse.react';
+import Chart from 'components/chart.react';
+import Library from 'components/library/library.react';
+import ApiTopList from 'components/top/api-top-list';
 
-if (typeof window !== "undefined") {
+if (typeof window !== 'undefined') {
   window.onload = function() {
     console.log('initJson', window.initJson);
-    render(
+    const router = (
       <Router history={history}>
         <div>
-          <AppNav/>
+          <Nav/>
           <Route exact path="/" render={() => <Redirect to="/library"/>}/>
-          <Route path="/library" component={NewLibrary}/>
+          <Route path="/library" component={Library}/>
           <Route path="/browse" component={Browse}/>
           <Route path="/chart" component={Chart}/>
           <Route path="/top" component={ApiTopList}/>
         </div>
-      </Router>,
-      document.getElementById("content")
+      </Router>
     );
+
+    render(router, document.getElementById("content"));
   };
 }

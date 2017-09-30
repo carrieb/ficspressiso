@@ -7,7 +7,7 @@ import ColorMapper from '../../state/ColorMapper';
 
 import uniqueId from 'lodash/uniqueId';
 
-class NewFilter extends React.Component {
+class Filter extends React.Component {
   componentDidMount() {
     $(this.dropdown).dropdown({
       showOnFocus: false,
@@ -83,7 +83,7 @@ class NewFilter extends React.Component {
   }
 }
 
-NewFilter.propTypes = {
+Filter.propTypes = {
   updateFilterQuery: PropTypes.func.isRequired,
   options: PropTypes.object.isRequired /* e.g. { fandoms: [a, b, c], characters: [x, y, z] } */,
   currentQuery: PropTypes.object.isRequired,
@@ -91,4 +91,4 @@ NewFilter.propTypes = {
   labelText: PropTypes.string
 }
 
-export default NewFilter;
+export default Filter;
