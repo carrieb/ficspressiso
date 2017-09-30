@@ -57,14 +57,6 @@ router.get('/ajax/ff_content', function(req, res) {
   }
 });
 
-router.get('/ajax/chart_data', function(req, res) {
-  var character = req.query.character;
-  processLatestFics(req.query.page, null, null, function(item) {}, function() {
-    fillChartData();
-    res.json(chart_data);
-  })
-});
-
 router.get('/ajax/browse_filter', function(req, res) {
   var query = req.query.q;
   var results = []
