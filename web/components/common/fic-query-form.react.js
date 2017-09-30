@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import ApiMultipleCharacterDropdown from 'components/forms/ApiMultipleCharacterDropdown';
-import RatingDropdown from 'components/forms/rating-dropdown';
+import ApiMultipleCharacterDropdown from 'components/forms/api-multi-char-dropdown.react';
+import RatingDropdown from 'components/forms/rating-dropdown.react';
 import CalendarInput from 'components/common/calendar-input.react';
 
 import _clone from 'lodash/clone';
