@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import ApiUtils from '../../api/util.js'
+import ApiUtils from 'utils/api-util'
 
-import ColorMapper from '../../state/ColorMapper.js';
+import ColorMapper from '../../state/color-mapper.js';
 
 import _isEmpty from 'lodash/isEmpty';
 

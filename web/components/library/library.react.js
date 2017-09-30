@@ -5,7 +5,7 @@ import Filter from 'components/library/filter.react';
 import Sort from 'components/sort/sort';
 import CharacterLabel from 'components/common/character-label.react';
 
-import ColorMapper from '../../state/ColorMapper';
+import ColorMapper from '../../state/color-mapper';
 
 import sortBy from 'lodash/sortBy';
 import uniqueId from 'lodash/uniqueId';

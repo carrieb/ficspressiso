@@ -1,9 +1,10 @@
 import React from 'react';
 
-import ApiUtils from '../../api/util';
+import ApiUtils from 'utils/api-util';
+import QueryUtil from 'utils/query-util.js';
 
-import Paginator from '../common/paginator';
-import TopList from './top-list';
+import Paginator from 'components/common/paginator.react';
+import TopList from './top-list.react';
 import FicQueryForm from 'components/common/fic-query-form.react';
 
 import moment from 'moment';
@@ -13,22 +14,8 @@ class ApiTopList extends React.Component {
     super(props);
 
     this.state = {
-      characters: [],
-      start: '2001-01-01',
-      end: '2017-12-31',
-      limit: 10,
       sort: 'fav_cnt',
-      minWords: 0,
-      maxWords: 10000000, // ten million
-      rating: [],
-      query: {
-          characters: [],
-          start: '2001-01-01',
-          end: '2017-12-31',
-          minWords: 0,
-          maxWords: 10000000, // ten million
-          rating: []
-      },
+      query: QueryUtil.DEFAULT_TOP_QUERY,
       fics: [],
       page: 1,
       loading: false
@@ -70,12 +57,12 @@ class ApiTopList extends React.Component {
     this.setState({
       loading: true
     });
+
     ApiUtils.getTopData(
       this.state.query,
       this.state.sort,
       page || this.state.page
     ).done((fics) => {
-        //console.log(fics);
         this.setState({ fics, loading: false });
         //console.log(callback);
         if (callback) {

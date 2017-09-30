@@ -27,7 +27,6 @@ const ApiUtils = {
     return get('/api/chart/data', query);
   },
 
-  // TODO: pass params
   getTopData(query, sort, page) {
     console.log(query, sort, page);
     const data = query;

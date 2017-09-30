@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import CharacterLabel from 'components/common/character-label.react';
-import FicSettingsButton from 'components/common/fic-settings-button';
+import FicSettingsButton from 'components/common/fic-settings-button.react';
 import FicBlob from 'components/common/fic-blob.react';
 
-import ApiUtil from 'api/util';
+import ApiUtil from 'utils/api-util';
 
 import _bind from 'lodash/bind';
 import _isEqual from 'lodash/isEqual';

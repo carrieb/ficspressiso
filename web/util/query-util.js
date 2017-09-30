@@ -9,13 +9,22 @@ const QueryUtil = {
     end: '2017-12-31',
     rating: [],
     minWords: 0,
-    maxWords: 100000000
+    maxWords: 100000000 // ten million
   },
 
   DEFAULT_BROWSE_QUERY: {
     page: 1,
     characters: [],
     fandom: 'Harry Potter'
+  },
+
+  DEFAULT_TOP_QUERY: {
+      characters: [],
+      start: '2001-01-01',
+      end: '2017-12-31',
+      minWords: 0,
+      maxWords: 10000000, // ten million
+      rating: []
   },
 
   browseQueryFromLocation(location) {

@@ -1,4 +1,4 @@
-import ColorMapper from 'state/ColorMapper';
+import ColorMapper from 'state/color-mapper';
 
 const ChartUtil = {
   CHART_OPTIONS: {

@@ -3,10 +3,10 @@ import React from 'react';
 import ApiFicList from 'components/common/api-fic-list.react';
 import FicListItem from 'components/common/fic-list-item.react';
 import FicQueryForm from 'components/common/fic-query-form.react';
-import Paginator from 'components/common/paginator';
+import Paginator from 'components/common/paginator.react';
 import DismissableMessage from 'components/common/dismissable-message.react';
 
-import ApiUtils from 'api/util';
+import ApiUtils from 'utils/api-util';
 
 import QueryUtil from 'utils/query-util';
 
@@ -82,7 +82,7 @@ class BrowseDisplay extends React.Component {
                      goToPage={(page) => this.goToPage(page)}
           />
         </div>
-        
+
         <ApiFicList ref={(ref) => this.list = ref}
                     ficComponent={FicListItem}
                     requestFics={() => this.requestFics()}

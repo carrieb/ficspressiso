@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import util from 'src/util';
 
-import ColorMapper from '../../state/ColorMapper';
+import ColorMapper from '../../state/color-mapper';
 
 import uniqueId from 'lodash/uniqueId';
 

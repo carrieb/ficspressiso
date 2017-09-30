@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ApiUtils from 'api/util.js'
+import ApiUtils from 'utils/api-util'
 
 import FicQueryForm from 'components/common/fic-query-form.react';
 import Chart from 'components/common/chart.react';

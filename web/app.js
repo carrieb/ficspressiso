@@ -9,7 +9,7 @@ import Nav from 'components/nav.react';
 import Browse from 'components/browse.react';
 import Chart from 'components/chart.react';
 import Library from 'components/library/library.react';
-import ApiTopList from 'components/top/api-top-list';
+import Top from 'components/top/api-top-list.react';
 
 if (typeof window !== 'undefined') {
   window.onload = function() {
@@ -22,7 +22,7 @@ if (typeof window !== 'undefined') {
           <Route path="/library" component={Library}/>
           <Route path="/browse" component={Browse}/>
           <Route path="/chart" component={Chart}/>
-          <Route path="/top" component={ApiTopList}/>
+          <Route path="/top" component={Top}/>
         </div>
       </Router>
     );

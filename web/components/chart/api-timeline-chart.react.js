@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import ApiUtil from '../../api/util';
+import ApiUtil from 'utils/api-util';
 
 import moment from 'moment';
 

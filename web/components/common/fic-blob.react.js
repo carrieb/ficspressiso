@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import CharacterLabel from 'components/common/character-label.react';
-import FicSettingsButton from 'components/common/fic-settings-button';
+import FicSettingsButton from 'components/common/fic-settings-button.react';
 
 class FicBlob extends React.Component {
   render() {
