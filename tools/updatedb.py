@@ -8,7 +8,7 @@ import copy
 
 mongodb_url = 'mongodb://localhost:27017/fanfic'
 db_name = 'fanfic'
-collection_name = 'documents'
+collection_name = 'docs'
 
 def main(argv):
     client = MongoClient(mongodb_url)

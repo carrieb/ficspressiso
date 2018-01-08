@@ -1,0 +1,27 @@
+{
+  "name" : "BrowsingData API: Basics",
+  "version" : "1.1",
+  "description" : "A trivial usage example.",
+  "permissions": [
+    "history",
+    "tabs",
+    "https://archiveofourown.org/*",
+    "http://localhost:3000/api*"
+  ],
+  "browser_action": {
+     "default_icon": "icon.png",
+     "default_popup": "popup.html"
+  },
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://archiveofourown.org/*"],
+      "css": ["ao3/ao3.css"],
+      "js": ["dist/ao3-bundle.js"]
+      }
+  ],
+  "manifest_version": 2
+}

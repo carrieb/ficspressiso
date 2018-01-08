@@ -23,7 +23,7 @@ const Catalog = function(config){
 
     insertDoc(fic, callback) {
       // Get the documents collection
-      var collection = this.db.collection('documents');
+      var collection = this.db.collection('docs');
       // Insert some documents
       collection.insertOne(fic, function(err, result) {
         assert.equal(err, null);

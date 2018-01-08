@@ -1,4 +1,5 @@
-const url = 'mongodb://localhost:27017/fanfic';
+// TODO: pass this in via a configuration file
+const url = 'mongodb://192.168.0.14:27017/fanfic';
 
 const moment = require('moment');
 
@@ -29,11 +30,34 @@ const findForQuery = (query) => {
 };
 
 const DAO = {
+  rateAndSave(fic, userFeedback, callback) {
+    MongoClient.connect(url, (err, db) => {
+      assert.equal(null, err);
+      const docs = db.collection('docs');
+      const feedback = db.collection('feedback');
+      if (fic._id) {
+        // TODO: if fic has _id set, then update
+      } else {
+        // insert new fic
+        const now = moment().unix();
+        fic.date_created = now;
+        docs.insertOne(fic, (err, res) => {
+          assert.equal(null, err);
+          console.log(res);
+          callback();
+          //userFeedback.
+          //feedback.insertOne()
+        });
+
+      }
+    });
+  },
+
   saveFics(fics) {
       MongoClient.connect(url, (err, db) => {
         console.log('update list of fics');
         assert.equal(null, err);
-        const coll = db.collection('documents');
+        const coll = db.collection('docs');
         fics.forEach((fic) => {
           coll.updateOne(
             {
@@ -54,7 +78,7 @@ const DAO = {
     MongoClient.connect(url, (err, db) => {
       console.log('find and replace');
       assert.equal(null, err);
-      const coll = db.collection('documents');
+      const coll = db.collection('docs');
       console.log(url);
       coll.findOneAndReplace({ "url": ficUrl }, data, (err, res) => {
         if (err) {
@@ -69,7 +93,7 @@ const DAO = {
   markAsDeleted(ficUrl, callback) {
     MongoClient.connect(url, (err, db) => {
       assert.equal(null, err);
-      const coll = db.collection('documents');
+      const coll = db.collection('docs');
       console.log(ficUrl);
       coll.update({ "url": ficUrl }, {"$set" : { "deleted" : true }}, (err, res) => {
         if (err) {
@@ -88,7 +112,7 @@ const DAO = {
 
     MongoClient.connect(url, (err, db) => {
       assert.equal(null, err);
-      const coll = db.collection('documents')
+      const coll = db.collection('docs')
       sort = {}
       sort[field] = -1
       //console.log(sort)
@@ -137,7 +161,7 @@ const DAO = {
 
     MongoClient.connect(url, function(err, db) {
       assert.equal(null, err);
-      const coll = db.collection('documents');
+      const coll = db.collection('docs');
 
       const match = {
           "$match" : findForQuery(query)

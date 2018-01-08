@@ -1,3 +1,4 @@
+// NOTE: have to use relative paths in node files
 const ffnet = require('../src/ffnet');
 
 const apicache = require('apicache');
@@ -11,6 +12,9 @@ const moment = require('moment');
 const DAO = require('../src/dao');
 const Timeline = require('../src/timeline');
 const Sources = require('../src/constants/sources');
+
+const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
 
 router.get('/reindex', function(req, res) {
   const url = req.query.url;
@@ -85,6 +89,18 @@ router.get('/fic/timeline', cache('1 day'), function(req, res) {
       // TODO: save timeline to fic in db
         res.json(timeline);
     });
+  } catch (e) {
+    console.error(e);
+  }
+});
+
+router.post('/fic/feedback', jsonParser, function(req, res) {
+  try {
+    const fic = req.body.fic;
+    const feedback = req.body.feedback;
+    console.log(fic, feedback);
+    res.send('OK');
+    //DAO.rateAndSave(fic, feedback, () => res.send('OK'));
   } catch (e) {
     console.error(e);
   }

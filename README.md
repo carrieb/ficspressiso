@@ -51,4 +51,8 @@ mongo> db.documents.createIndex({ author: 1, title: 1 })
 * semantic-ui
 * lodash
 * chart.js
-* randomcolor  
+* randomcolor
+
+### notes
+
+something weird it up right now with semantic-ui installation.   

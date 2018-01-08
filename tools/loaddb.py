@@ -8,7 +8,7 @@ import util
 
 mongodb_url = 'mongodb://localhost:27017/fanfic'
 db_name = 'fanfic'
-collection_name = 'documents'
+collection_name = 'docs'
 
 json_dir = '/home/carrie/Desktop/projects/ficspressiso/tools/output/'
 archive_dir = '/home/carrie/Desktop/projects/ficspressiso/tools/archive/'
