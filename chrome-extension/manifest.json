@@ -1,5 +1,5 @@
 {
-  "name" : "BrowsingData API: Basics",
+  "name" : "ficspressiso add-on",
   "version" : "1.1",
   "description" : "A trivial usage example.",
   "permissions": [
@@ -18,10 +18,15 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://archiveofourown.org/*"],
+      "matches": ["https://archiveofourown.org/works/*/chapters/*"],
       "css": ["ao3/ao3.css"],
       "js": ["dist/ao3-bundle.js"]
-      }
+    },
+    {
+      "matches": ["https://archiveofourown.org/tags/*/works*", "https://archiveofourown.org/works*"],
+      "css": ["ao3/ao3.css"],
+      "js": ["dist/jquery-3.1.1.min.js", "ao3/ao3-crawler.js"]
+    }
   ],
   "manifest_version": 2
 }

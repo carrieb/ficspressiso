@@ -6,17 +6,36 @@ from datetime import datetime
 import pprint as pp
 import util
 
-mongodb_url = 'mongodb://localhost:27017/fanfic'
+# TODO: so there's a bug right now with the version of mongo i have installed on the raspberry pi
+# it's the highest the device supports
+# but it has a bug that reports its version of mongo as 0, which pymongo rejects
+# installing the fixed mongo (>3.4) requires at 64-bit build of the raspberry pi
+# which involves reinstalling its OS
+# TLDR: T_T
+# mongodb_url = 'mongodb://192.168.0.14:27017/fanfic';
+
+
+mongodb_url = 'mongodb://localhost:27017/fanfic';
 db_name = 'fanfic'
 collection_name = 'docs'
 
-json_dir = '/home/carrie/Desktop/projects/ficspressiso/tools/output/'
-archive_dir = '/home/carrie/Desktop/projects/ficspressiso/tools/archive/'
+# TODO: pass in via args
+json_dir = '/Users/carolyn/Desktop/projects/ficspressiso/tools/output/backfill/'
+archive_dir = '/Users/carolyn/Desktop/projects/ficspressiso/tools/archive/'
 
 curr_blob = 0
 skipped = 0
 
 bulk_ops = []
+
+archive = False
+
+def validateFicJSON(json):
+    # TODO: validate the fields we need are there
+    return True
+
+def handle_walk_err(er):
+    raise er
 
 # TODO: read new json files -> insert into DB -> dedub on author / title
 def main(argv):
@@ -25,25 +44,35 @@ def main(argv):
     coll = db[collection_name]
     global bulk_ops
 
-    for folder, subfolders, files in os.walk(json_dir, topdown=False):
-        for subfolder in subfolders:
-            process_all_json_blobs_in_dir(os.path.join(folder, subfolder), coll, False)
+    print "Parent JSON dir: %s" % json_dir
+    if archive:
+        print "Archiving to dir: %s" % archive_dir
+
     try:
+        for folder, subfolders, files in os.walk(json_dir, topdown=False, onerror=handle_walk_err):
+            for subfolder in subfolders:
+                path = os.path.join(folder, subfolder)
+                print "Processing all JSON in %s" % subfolder
+                process_all_json_blobs_in_dir(path, coll)
         if len(bulk_ops) > 0:
-            coll.bulk_write(bulk_ops)
-        print "Complete. Modified %d and upserted %s" % (res["nModified"], res["nUpserted"])
-        print "Skipped %d" % skipped
+            #coll.bulk_write(bulk_ops)
+            #print "Complete. Modified %d and upserted %s" % (res["nModified"], res["nUpserted"])
+            print "Skipped %d" % skipped
+        else:
+            print "No db operations being done."
     except:
         raise
 
-def process_all_json_blobs_in_dir(path, coll, archive):
+def process_all_json_blobs_in_dir(path, coll, archive=False):
     global curr_blob
     global bulk_ops
+
     curr_file = 0
     curr_file_name = current_json_file(path, curr_file)
+
     try:
         while os.path.exists(curr_file_name):
-            print "Opening %s" % curr_file_name
+            print "\t Processing file: %s" % curr_file_name
             with open(curr_file_name, 'r') as f:
                 for line in f:
                     load_json_blob(line)
@@ -52,20 +81,17 @@ def process_all_json_blobs_in_dir(path, coll, archive):
                     if len(bulk_ops) == 20000:
                         print "Pushing to mongo..."
                         result = coll.bulk_write(bulk_ops)
+                        print result.matched_count, result.inserted_count, result.modified_count, result.upserted_count
                         bulk_ops = []
                     curr_blob += 1
             if archive:
-                # make file & path
-                archive_file_name = curr_file_name.replace('/output/', '/archive/')
-                if os.path.exists(archive_file_name):
-                    pass # TODO: multiple passes of the same day
-                else:
-                    util.make_path_if_not_exists(archive_file_name)
-                    os.rename(curr_file_name, archive_file_name)
+                # ARCHIVE: make file & path
+                archive_file(file_name);
 
             curr_file += 1
             curr_file_name = current_json_file(path, curr_file)
-        # remove dir
+
+        # ARCHIVE: remove dir
         if archive:
             try:
                 os.rmdir(path)
@@ -75,6 +101,16 @@ def process_all_json_blobs_in_dir(path, coll, archive):
     except:
         print "[Error] on %s" % curr_file_name
         raise
+
+def archive_file(file_name):
+    # TODO:
+    # archive_file_name = curr_file_name.replace('/output/', '/archive/')
+    # if os.path.exists(archive_file_name):
+    #     pass # TODO: multiple passes of the same day
+    # else:
+    #     util.make_path_if_not_exists(archive_file_name)
+    #     os.rename(curr_file_name, archive_file_name)
+    return ""
 
 def current_json_file(path, curr_file):
     return os.path.join(path, str(curr_file) + ".json")

@@ -6,11 +6,13 @@
       window.initJson = {{{ initJson }}};
     </script>
     <script src="/javascripts/jquery-3.1.1.min.js"></script>
+
     <script src="/semantic/semantic.min.js"></script>
     <link rel="stylesheet" href="/semantic/semantic.min.css">
 
-    <!-- <script type="text/javascript" src="/javascripts/dist/calendar.min.js"></script> -->
-    <!-- <link rel="stylesheet" href="/javascripts/dist/calendar.min.css" /> -->
+    <script type="text/javascript" src="/semantic/calendar.min.js"></script>
+    <link rel="stylesheet" href="/semantic/calendar.min.css" />
+
     <link rel='stylesheet' href='/stylesheets/style.css' />
 
     <link href="https://fonts.googleapis.com/css?family=Montserrat|Merriweather" rel="stylesheet">

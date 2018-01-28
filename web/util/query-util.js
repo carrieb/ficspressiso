@@ -9,13 +9,15 @@ const QueryUtil = {
     end: '2017-12-31',
     rating: [],
     minWords: 0,
-    maxWords: 100000000 // ten million
+    maxWords: 100000000, // ten million
+    sites: ['fanfiction.net']
   },
 
   DEFAULT_BROWSE_QUERY: {
     page: 1,
     characters: [],
-    fandom: 'Harry Potter'
+    fandom: 'Harry Potter',
+    sites: ['fanfiction.net']
   },
 
   DEFAULT_TOP_QUERY: {
@@ -24,7 +26,8 @@ const QueryUtil = {
       end: '2017-12-31',
       minWords: 0,
       maxWords: 10000000, // ten million
-      rating: []
+      rating: [],
+      sites: ['fanfiction.net']
   },
 
   browseQueryFromLocation(location) {

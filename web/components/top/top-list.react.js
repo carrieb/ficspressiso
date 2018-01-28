@@ -4,16 +4,20 @@ import PropTypes from 'prop-types';
 import CharacterLabel from 'components/common/character-label.react';
 import FicSettingsButton from 'components/common/fic-settings-button.react';
 import FicBlob from 'components/common/fic-blob.react';
+import FicListItem from 'components/common/fic-list-item.react';
 
 import ApiUtil from 'utils/api-util';
 
 import _bind from 'lodash/bind';
 import _isEqual from 'lodash/isEqual';
 
+import 'styles/top/top-list.css'
+
 class TopList extends React.Component {
   constructor(props) {
     super(props);
 
+    this.handleKeypress = this.handleKeypress.bind(this);
     this.state =  {
       openIndex: -1
     }
@@ -33,6 +37,7 @@ class TopList extends React.Component {
         this.setState({
           openIndex: this.state.openIndex + 1
         });
+
         $('.ui.accordion').accordion('open', this.state.openIndex)
         e.preventDefault();
       }
@@ -43,6 +48,7 @@ class TopList extends React.Component {
         this.setState({
           openIndex: this.state.openIndex - 1
         });
+
         $('.ui.accordion').accordion('open', this.state.openIndex)
         e.preventDefault()
       }
@@ -62,6 +68,7 @@ class TopList extends React.Component {
         component.onAccordionOpen(openIndex);
       };
     })(this);
+
     $('.ui.accordion').accordion({
       onChange
     });
@@ -90,7 +97,7 @@ class TopList extends React.Component {
 
       accordionContent.push(
         <div className="content" key={`${fic._id}_content`} data-index={i}>
-            <FicBlob fic={fic} reindex={reindex}/>
+            <FicListItem fic={fic} showHeader={false}/>
         </div>
       );
     });

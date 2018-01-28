@@ -82,8 +82,8 @@ module.exports = [{
    alias: {
      components: path.join(__dirname, 'chrome-extension', 'react')
    }
- },
- plugins: [
-    new UglifyJsPlugin()
-  ]
+ }
+ // plugins: [
+ //    new UglifyJsPlugin()
+ //  ]
 }];

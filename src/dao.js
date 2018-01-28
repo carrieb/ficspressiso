@@ -1,5 +1,5 @@
 // TODO: pass this in via a configuration file
-const url = 'mongodb://192.168.0.14:27017/fanfic';
+const url = 'mongodb://localhost:27017/fanfic';
 
 const moment = require('moment');
 
@@ -30,6 +30,38 @@ const findForQuery = (query) => {
 };
 
 const DAO = {
+  saveFic(db, fic, callback) {
+    const docs = db.collection('docs');
+    docs.insertOne(fic, (err, res) => {
+      assert.equal(null, err);
+      callback(fic);
+    });
+  },
+
+  findFicLike(query, callback) {
+    MongoClient.connect(url, (err, db) => {
+      assert.equal(null, err);
+      const docs = db.collection('docs');
+      docs.findOne(query, (err, fic) => {
+        assert.equal(null, err);
+        if (fic) {
+          // TODO: merge in feedback
+          const feedback = db.collection('feedback');
+          feedback.find({
+            fic_id: fic._id
+          }, (err, feedback) => {
+            assert.equal(null, err);
+            console.log(feedback);
+
+            callback(fic);
+          });
+        } else {
+          callback(fic);
+        }
+      });
+    });
+  },
+
   rateAndSave(fic, userFeedback, callback) {
     MongoClient.connect(url, (err, db) => {
       assert.equal(null, err);
@@ -37,18 +69,18 @@ const DAO = {
       const feedback = db.collection('feedback');
       if (fic._id) {
         // TODO: if fic has _id set, then update
+
       } else {
         // insert new fic
-        const now = moment().unix();
-        fic.date_created = now;
-        docs.insertOne(fic, (err, res) => {
-          assert.equal(null, err);
-          console.log(res);
-          callback();
-          //userFeedback.
-          //feedback.insertOne()
-        });
-
+        // const now = moment().unix();
+        // fic.date_created = now;
+        // docs.insertOne(fic, (err, res) => {
+        //   assert.equal(null, err);
+        //   console.log(res);
+        //   callback();
+        //   //userFeedback.
+        //   //feedback.insertOne()
+        // });
       }
     });
   },
@@ -178,6 +210,7 @@ const DAO = {
               { "$multiply": [1000, "$publish_ts"] }
           ]
       };
+
       const project = {
         "$project":{
           "_id": 0,
@@ -191,6 +224,7 @@ const DAO = {
           "words": "$word_cnt"
         }
       };
+      //console.log(project);
       const group = {
         "$group": {
           "_id": {
@@ -205,6 +239,8 @@ const DAO = {
       const cursor = coll.aggregate([ match, unwind, match, project, group ]);
 
       cursor.each((err, doc) => {
+        //console.log(err);
+        //console.log(doc);
         if (doc) {
           const { _id, count, totalWords } = doc;
           const { month, year, character } = _id;

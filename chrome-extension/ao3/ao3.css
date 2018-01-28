@@ -19,6 +19,25 @@
 
 }
 
+.rater {
+  margin-bottom: 10px;
+}
+
+textarea {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+button {
+  display: inherit !important;
+  width: 50% !important;
+  margin: auto !important;
+}
+
+textarea:focus {
+  background-color: white !important;
+}
+
 .star {
   transition: .25s ease;
 }
@@ -29,4 +48,18 @@
 
 .rating-footer label {
   cursor: default;
+}
+
+.ficspressiso-work-summary {
+  margin: 20px 0;
+  border: 1px solid #ccc;
+  padding: 20px;
+}
+
+.ficspressiso-work-summary .content {
+  margin: auto;
+}
+
+.crawl-div {
+  
 }

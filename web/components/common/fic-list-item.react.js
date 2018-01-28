@@ -15,9 +15,9 @@ class FicListItem extends React.Component {
     });
     return (
       <div className="item fic-list-item">
-        <div className="middle aligned content">
+        <div>
 
-          <div className="header">
+          { this.props.showHeader && <div className="header">
             <a className="title"
                target="_blank"
                href={ fic.url }>{ fic.title }</a>
@@ -29,7 +29,7 @@ class FicListItem extends React.Component {
               <i className="download icon"/>
             </div>
 
-          </div>
+          </div> }
 
           <div className="five mini ui basic buttons">
             <div className="ui button">
@@ -73,7 +73,12 @@ class FicListItem extends React.Component {
 }
 
 FicListItem.propTypes = {
-  fic: PropTypes.object.isRequired
+  fic: PropTypes.object.isRequired,
+  showHeader: PropTypes.bool
 };
+
+FicListItem.defaultProps = {
+  showHeader: true
+}
 
 export default FicListItem;

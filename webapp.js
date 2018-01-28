@@ -22,12 +22,17 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hjs');
 
 app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
+
 app.use(logger('dev'));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
 app.use(cookieParser());
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/semantic', express.static(path.join(__dirname, 'semantic', 'dist')));
+app.use('/semantic', express.static(path.join(__dirname, 'node_modules', 'semantic-ui-calendar', 'dist')))
 
 app.use('/', routes);
 app.use('/users', users);
@@ -64,8 +69,13 @@ app.use(function(err, req, res, next) {
     });
 });
 
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!')
+const MongoClient = require('mongodb').MongoClient;
+const url = 'mongodb://localhost:27017/fanfic';
+MongoClient.connect(url, (err, db) => {
+  app.locals.db = db;
+  app.listen(3000, () => {
+    console.log(`Node.js app is listening at http://localhost:${3000}`);
+  });
 });
 
 module.exports = app;

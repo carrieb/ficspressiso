@@ -72,11 +72,14 @@ router.get('/top/data', cache('1 day'), (req, res) => {
 });
 
 
-router.get('/chart/data', cache('1 day'), function(req, res) {
+router.get('/chart/data', function(req, res) {
   try {
     DAO.aggregateNumFics(req.query, 'month', (labels, datasets) => {
-      //console.log(labels, datasets);
-      res.json({ labels, datasets });
+      try {
+        res.json({ labels, datasets });
+      } catch (e) {
+        console.log(e);
+      }
     });
   } catch (e) {
     console.error(e);
@@ -94,13 +97,45 @@ router.get('/fic/timeline', cache('1 day'), function(req, res) {
   }
 });
 
+router.put('/fic', jsonParser, function(req, res) {
+  try {
+    const fics = req.body.fics;
+    // DAO.saveFics(fics, (saved) => {
+    //   res.send(saved);
+    // });
+    const saved = [];
+    fics.forEach((fic) => {
+      DAO.saveFic(req.app.locals.db, fic, (fic) => {
+        saved.push(fic);
+        if (saved.length === fics.length) {
+          res.send(saved);
+        }
+      });
+    });
+  } catch (e) {
+    console.error(e);
+  }
+});
+
+router.post('/find/fic', jsonParser, function(req, res) {
+  try {
+    console.log(req.body);
+    const q = req.body.q;
+    DAO.findFicLike(q, (fic) => {
+      console.log(fic);
+      res.send(fic);
+    });
+  } catch (e) {
+    console.error(e);
+  }
+});
+
 router.post('/fic/feedback', jsonParser, function(req, res) {
   try {
     const fic = req.body.fic;
     const feedback = req.body.feedback;
     console.log(fic, feedback);
-    res.send('OK');
-    //DAO.rateAndSave(fic, feedback, () => res.send('OK'));
+    DAO.rateAndSave(fic, feedback, () => res.send('OK'));
   } catch (e) {
     console.error(e);
   }
