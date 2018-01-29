@@ -1,9 +1,7 @@
 const fs = require('fs');
 const config = require('../config');
 
-const stories = [];
-const characters = new Set();
-const fandoms = new Set();
+const fics = [];
 
 fs.readdir(config.libraryDir, (err, files) => {
   if (err) throw err;
@@ -14,23 +12,18 @@ fs.readdir(config.libraryDir, (err, files) => {
       } else {
         const metadataPath = config.libraryDir + f + '/metadata.json';
         fs.readFile(metadataPath, 'utf8', (err, data) => {
-          if (err) throw err;
+          if (err) {
+              console.error(err);
+              return;
+          }
 
           const metadata = JSON.parse(data);
-          metadata.characters.map((character) => {
-            characters.add(character);
-          });
-
-          metadata.fandoms.map((fandom) => {
-            fandoms.add(fandom);
-          });
-
-          stories.push(metadata);
+          fics.push(metadata);
         });
       }
   });
 });
 
-const Library = { stories, characters, fandoms };
+const Library = { fics };
 
 module.exports = Library;

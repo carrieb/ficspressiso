@@ -32,46 +32,59 @@ class FicQueryForm extends React.Component {
     }
 
     siteButton = (site) => {
-      let classes = ['ui button'];
-      if (this.state.query.sites.indexOf(site) > -1) {
-        classes.push('blue');
-      } else {
-        classes.push('basic blue');
-      }
-
-      const onClick = (site) => {
-        return (ev) => {
-          let sites = this.state.query.sites;
-          const idx = sites.indexOf(site);
-          if (idx > -1) {
-            sites.splice(idx, 1);
-            ev.preventDefault();
-            this.updateQuery('sites', sites);
-          } else {
-            sites.push(site);
-            ev.preventDefault();
-            this.updateQuery('sites', sites);
-          }
-
+        let classes = ['ui button'];
+        if (this.state.query.sites.indexOf(site) > -1) {
+            classes.push('blue');
+        } else {
+            classes.push('basic blue');
         }
-      };
 
-      return <button key={site}
-                     className={classes.join(' ')}
-                     onClick={onClick(site)}>
-                     { site }
-             </button>;
+        const onClick = (site) => {
+            return (ev) => {
+                let sites = this.state.query.sites;
+                const idx = sites.indexOf(site);
+                const currentlySelected = idx > -1;
+
+                if (this.props.allowMultipleSites) {
+                    if (currentlySelected) {
+                        sites.splice(idx, 1); // remove site
+                        ev.preventDefault();
+                        this.updateQuery('sites', sites);
+                    } else {
+                        sites.push(site); // add site
+                        ev.preventDefault();
+                        this.updateQuery('sites', sites);
+                    }
+                } else {
+                    if (currentlySelected) {
+                        // do nothing
+                        ev.preventDefault();
+                    } else {
+                        this.updateQuery('sites', [ site ]);
+                        ev.preventDefault();
+                    }
+                }
+
+
+            }
+        };
+
+        return <button key={site}
+                       className={classes.join(' ')}
+                       onClick={onClick(site)}>
+            { site }
+        </button>;
     };
 
     render() {
         const form = (
             <form className="ui form">
                 <div className="field">
-                  <label>Sites</label>
-                  <div className="ui two fluid buttons">
-                    { this.siteButton('fanfiction.net') }
-                    { this.siteButton('ao3.org') }
-                  </div>
+                    <label>Sites</label>
+                    <div className="ui two fluid buttons">
+                        { this.siteButton('fanfiction.net') }
+                        { this.siteButton('ao3.org') }
+                    </div>
                 </div>
 
                 <div className="field">
@@ -133,11 +146,13 @@ class FicQueryForm extends React.Component {
 
 FicQueryForm.propTypes = {
     updateQuery: PropTypes.func,
-    query: PropTypes.object
+    query: PropTypes.object,
+    allowMultipleSites: PropTypes.bool
 };
 
 FicQueryForm.defaultProps = {
-    query: QueryUtil.DEFAULT_EMPTY_QUERY
+    query: QueryUtil.DEFAULT_EMPTY_QUERY,
+    allowMultipleSites: false
 }
 
 export default FicQueryForm;

@@ -12,7 +12,6 @@ const users = require('./routes/users');
 const api = require('./routes/api');
 
 const config = require('./config');
-//const library = require('./src/library');
 
 const routes = require('./routes/index');
 

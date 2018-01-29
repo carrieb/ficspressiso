@@ -1,60 +1,79 @@
 const get = function(url, data = {}, log=true) {
+    return $.ajax(url, {
+        type: 'GET',
+        data,
+        dataType: 'json',
+        contentType: 'application/json;charset=UTF-8'
+    })
+        .then((res) => {
+            if (log) {
+                console.log(url, data, res);
+            }
+            return res;
+        });
+};
+
+const post = function(url, data = {}, log=true) {
+  console.log(data);
   return $.ajax(url, {
-    type: 'GET',
-    data,
-    dataType: 'json',
-    contentType: 'application/json;charset=UTF-8'
-  })
-  .then((res) => {
-    if (log) {
-        console.log(url, data, res);
-    }
-    return res;
-  });
+      type: 'POST',
+      data: JSON.stringify(data),
+      dataType: 'json',
+      contentType: 'application/json;charset=UTF-8'
+    })
+      .then((res) => {
+        if (log) {
+          console.log(url, data, res);
+        }
+        return res;
+      });
 };
 
 const ApiUtils = {
-  browseFics: function(query) {
-    console.log(query);
-    return get('/api/browse', query);
-  },
+    browseFics(query) {
+        return post('/api/browse', query);
+    },
 
-  getFandoms() {
-    return get('/api/fandoms');
-  },
+    getFandoms() {
+        return get('/api/fandoms');
+    },
 
-  getCharacters({
-    fandom = "Harry Potter"
-  } = {}) {
-    return get('/api/characters', {
-        fandom
-    });;
-  },
+    getCharacters({
+                      fandom = "Harry Potter"
+                  } = {}) {
+        return get('/api/characters', {
+            fandom
+        });;
+    },
 
-  getChartData(query) {
-    return get('/api/chart/data', query);
-  },
+    getLibrary() {
+      return get('/api/library');
+    },
 
-  getTopData(query, sort, page) {
-    console.log(query, sort, page);
-    const data = query;
-    data.sort = sort;
-    data.page = page;
-    data.limit = 10;
-    return get('/api/top/data', data);
-  },
+    getChartData(query) {
+        return get('/api/chart/data', query);
+    },
 
-  reindex(url) {
-    return get('/api/reindex', {
-      url: url
-    });
-  },
+    getTopData(query, sort, page) {
+        console.log(query, sort, page);
+        const data = query;
+        data.sort = sort;
+        data.page = page;
+        data.limit = 10;
+        return get('/api/top/data', data);
+    },
 
-  getTimeline(id) {
-    return get('/api/fic/timeline', {
-      id
-    });
-  }
+    reindex(url) {
+        return get('/api/reindex', {
+            url: url
+        });
+    },
+
+    getTimeline(id) {
+        return get('/api/fic/timeline', {
+            id
+        });
+    }
 };
 
 export default ApiUtils;
