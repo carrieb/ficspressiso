@@ -1,10 +1,7 @@
 #!/usr/bin/env python
 
-import sys, copy, json, os
+import sys, json, os
 from pymongo import MongoClient, UpdateOne
-from datetime import datetime
-import pprint as pp
-import util
 
 # TODO: so there's a bug right now with the version of mongo i have installed on the raspberry pi
 # it's the highest the device supports
@@ -13,6 +10,7 @@ import util
 # which involves reinstalling its OS
 # TLDR: T_T
 # mongodb_url = 'mongodb://192.168.0.14:27017/fanfic';
+# If we did this all via a node script instead, we wouldn't have the issue.
 
 
 mongodb_url = 'mongodb://localhost:27017/fanfic';
@@ -20,7 +18,8 @@ db_name = 'fanfic'
 collection_name = 'docs'
 
 # TODO: pass in via args
-json_dir = '/Users/carolyn/Desktop/projects/ficspressiso/tools/output/backfill/'
+# json_dir = '/Users/carolyn/Desktop/projects/ficspressiso/tools/output/backfill/'
+json_dir = '/home/carrie/projects/ficspressiso/tools/backfill/'
 archive_dir = '/Users/carolyn/Desktop/projects/ficspressiso/tools/archive/'
 
 curr_blob = 0
@@ -30,12 +29,15 @@ bulk_ops = []
 
 archive = False
 
+
 def validateFicJSON(json):
     # TODO: validate the fields we need are there
     return True
 
+
 def handle_walk_err(er):
     raise er
+
 
 # TODO: read new json files -> insert into DB -> dedub on author / title
 def main(argv):
@@ -55,13 +57,14 @@ def main(argv):
                 print "Processing all JSON in %s" % subfolder
                 process_all_json_blobs_in_dir(path, coll)
         if len(bulk_ops) > 0:
-            #coll.bulk_write(bulk_ops)
-            #print "Complete. Modified %d and upserted %s" % (res["nModified"], res["nUpserted"])
+            # coll.bulk_write(bulk_ops)
+            # print "Complete. Modified %d and upserted %s" % (res["nModified"], res["nUpserted"])
             print "Skipped %d" % skipped
         else:
             print "No db operations being done."
     except:
         raise
+
 
 def process_all_json_blobs_in_dir(path, coll, archive=False):
     global curr_blob
@@ -80,13 +83,16 @@ def process_all_json_blobs_in_dir(path, coll, archive=False):
                         print "Processed %d stories..." % (curr_blob)
                     if len(bulk_ops) == 20000:
                         print "Pushing to mongo..."
-                        result = coll.bulk_write(bulk_ops)
-                        print result.matched_count, result.inserted_count, result.modified_count, result.upserted_count
-                        bulk_ops = []
+                        try:
+                            result = coll.bulk_write(bulk_ops)
+                            print result.matched_count, result.inserted_count, result.modified_count, result.upserted_count
+                            bulk_ops = []
+                        except:
+                            raise
                     curr_blob += 1
-            if archive:
-                # ARCHIVE: make file & path
-                archive_file(file_name);
+            # if archive:
+            # ARCHIVE: make file & path
+            # archive_file(file_name);
 
             curr_file += 1
             curr_file_name = current_json_file(path, curr_file)
@@ -97,10 +103,11 @@ def process_all_json_blobs_in_dir(path, coll, archive=False):
                 os.rmdir(path)
             except:
                 print "[Error] could not remove " + path
-                #ignore
+                # ignore
     except:
         print "[Error] on %s" % curr_file_name
         raise
+
 
 def archive_file(file_name):
     # TODO:
@@ -112,11 +119,14 @@ def archive_file(file_name):
     #     os.rename(curr_file_name, archive_file_name)
     return ""
 
+
 def current_json_file(path, curr_file):
     return os.path.join(path, str(curr_file) + ".json")
 
+
 def archive_file(dir_path, curr_file):
     return archive_dir + dir_path + "/" + str(curr_file) + ".json"
+
 
 def load_json_blob(json_str):
     global skipped
@@ -129,8 +139,9 @@ def load_json_blob(json_str):
     update_date = blob['update_date']
     update_ts = update_date
     blob['update_ts'] = update_ts
+    blob['site'] = "https://www.fanfiction.net/"
 
-    #pp.pprint(blob)
+    # pp.pprint(blob)
 
     if blob['title'] == "":
         print "Skipping, no title"
@@ -148,9 +159,11 @@ def load_json_blob(json_str):
     bulk_ops.append(
         UpdateOne({
             'author': blob['author'],
-            'title': blob['title']
-        }, {'$set': blob }, upsert=True)
+            'title': blob['title'],
+            'site': blob['site']
+        }, {'$set': blob}, upsert=True)
     )
 
+
 if __name__ == "__main__":
-   main(sys.argv[1:])
+    main(sys.argv[1:])

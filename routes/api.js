@@ -43,10 +43,19 @@ router.get('/browse', cache('1 hour'), function(req, res) {
   });
 });
 
-router.get('/characters', cache('1 week'), function(req, res) {
-  const fandom = req.query.fandom || 'Harry Potter';
-  ffnet.retrieveCharacters(fandom, (data) => {
-    res.json(data);
+router.get('/characters', cache('1 day'), function(req, res) {
+  // const fandom = req.query.fandoms || ['Harry Potter'];
+  // ffnet.retrieveCharacters(fandom, (data) => {
+  //   res.json(data);
+  // });
+  DAO.getCharacters(req.app.locals.db, (characters) => {
+    res.json(characters);
+  });
+});
+
+router.get('/fandoms', cache('1 day'), function(req, res) {
+  DAO.getFandoms(req.app.locals.db, (fandoms) => {
+    res.json(fandoms);
   });
 });
 
@@ -72,7 +81,7 @@ router.get('/top/data', cache('1 day'), (req, res) => {
 });
 
 
-router.get('/chart/data', function(req, res) {
+router.get('/chart/data', cache('1 day'), function(req, res) {
   try {
     DAO.aggregateNumFics(req.query, 'month', (labels, datasets) => {
       try {

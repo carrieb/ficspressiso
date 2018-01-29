@@ -10,10 +10,10 @@ import ColorMapper from '../../state/color-mapper';
 import sortBy from 'lodash/sortBy';
 import uniqueId from 'lodash/uniqueId';
 
-const initJson = window.initJson;
-const stories = initJson.stories;
-const characters = initJson.characters;
-const fandoms = initJson.fandoms;
+const initJson = window.initJson || {};
+const stories = initJson.stories || [];
+const characters = initJson.characters || [];
+const fandoms = initJson.fandoms || [];
 
 import 'styles/library/library.css';
 

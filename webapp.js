@@ -1,46 +1,51 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+const express = require('express');
 
-var users = require('./routes/users');
+const path = require('path');
+
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+
+const users = require('./routes/users');
 const api = require('./routes/api');
 
 const config = require('./config');
-const library = require('./src/library');
+//const library = require('./src/library');
 
-const  assert = require('assert');
+const routes = require('./routes/index');
 
-var routes = require('./routes/index');
-
-var app = express();
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hjs');
 
+// favicon
 app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 
+// logging
 app.use(logger('dev'));
 
+// request parsing
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use(cookieParser());
-
+// statics
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/semantic', express.static(path.join(__dirname, 'semantic', 'dist')));
 app.use('/semantic', express.static(path.join(__dirname, 'node_modules', 'semantic-ui-calendar', 'dist')))
 
+// routes
 app.use('/', routes);
 app.use('/users', users);
 app.use('/api', api);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-    var err = new Error('Not Found');
+    const err = new Error('Not Found');
     err.status = 404;
     next(err);
 });
@@ -70,8 +75,9 @@ app.use(function(err, req, res, next) {
 });
 
 const MongoClient = require('mongodb').MongoClient;
-const url = 'mongodb://localhost:27017/fanfic';
-MongoClient.connect(url, (err, db) => {
+MongoClient.connect(config.dbUrl, (err, db) => {
+  console.log(`Initiatilized mongo connection to ${config.dbUrl}`);
+
   app.locals.db = db;
   app.listen(3000, () => {
     console.log(`Node.js app is listening at http://localhost:${3000}`);

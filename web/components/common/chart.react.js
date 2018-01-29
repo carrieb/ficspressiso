@@ -3,6 +3,28 @@ import PropTypes from 'prop-types';
 
 import { Chart as ChartJs } from 'chart.js';
 
+ChartJs.plugins.register({
+   beforeDatasetsDraw: function(chart) {
+       if (chart.tooltip._active && chart.tooltip._active.length) {
+           var activePoint = chart.tooltip._active[0],
+               ctx = chart.ctx,
+               y_axis = chart.scales['y-axis-0'],
+               x = activePoint.tooltipPosition().x,
+               topY = y_axis.top,
+               bottomY = y_axis.bottom;
+           // draw line
+           ctx.save();
+           ctx.beginPath();
+           ctx.moveTo(x, topY);
+           ctx.lineTo(x, bottomY);
+           ctx.lineWidth = 2;
+           ctx.strokeStyle = 'rgba(0,0,0,.2)';
+           ctx.stroke();
+           ctx.restore();
+       }
+   }
+});
+
 import ChartUtil from 'utils/chart-util';
 
 class Chart extends React.Component {

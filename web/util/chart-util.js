@@ -5,7 +5,12 @@ const ChartUtil = {
     responsive: true,
     maintainAspectRatio: false,
     tooltips: {
-      mode: 'x'
+      mode: 'x',
+      intersect: false,
+      itemSort: function(a, b) {
+        return parseInt(b.yLabel) - parseInt(a.yLabel);
+      },
+      backgroundColor: 'rgba(0,0,0,.2)'
     },
     animation: {
       duration: 1000
@@ -19,6 +24,9 @@ const ChartUtil = {
           display: true,
           labelString: 'number of new fics',
           fontColor: '#6699ff'
+        },
+        gridLines: {
+          color: ['rgba(0,0,0,.1)', 'rgba(0,0,0,0.1)', 'rgba(0,0,0,0)','rgba(0,0,0,0.1)', 'rgba(0,0,0,0)','rgba(0,0,0,0.1)', 'rgba(0,0,0,0)']
         }
       }],
       xAxes: [{
@@ -26,11 +34,11 @@ const ChartUtil = {
           display: true,
           labelString: 'month',
           fontColor: '#6699ff'
+        },
+        gridLines: {
+          drawOnChartArea: false
         }
       }]
-    },
-    animation: {
-      duration: 2000
     }
   },
 
@@ -39,12 +47,23 @@ const ChartUtil = {
       const color = ColorMapper.getColorForCharacter(dataset.label);
       const colorArr = ColorMapper.getRgbArrayForCharacter(dataset.label);
 
+      let pointHitRadius = 0.5;
+      if (dataset.data.length < 20) {
+        pointHitRadius = 20;
+      } else if (dataset.data.length < 50) {
+        pointHitRadius = 5;
+      } else if (dataset.data.length < 100) {
+        pointHitRadius = 2;
+      }
+      console.log(dataset.data.length, pointHitRadius);
+
       dataset.fill = false;
       dataset.borderJoinStyle = 'miter';
       dataset.lineTension = 0.25;
       dataset.backgroundColor = "rgba(" + colorArr.join(',') + ",1)";
       dataset.borderColor = "rgba(" + colorArr.join(',') + ",0.4)";
-      dataset.pointRadius = 0.5;
+      dataset.pointRadius = 1;
+      dataset.pointHitRadius = pointHitRadius;
     });
   }
 };

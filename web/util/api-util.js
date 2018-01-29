@@ -1,10 +1,14 @@
-const get = function(url, data, log=true) {
+const get = function(url, data = {}, log=true) {
   return $.ajax(url, {
     type: 'GET',
-    timeout: 7000,
-    data
-  }).then((res) => {
-    if (log) console.log(url, data, res);
+    data,
+    dataType: 'json',
+    contentType: 'application/json;charset=UTF-8'
+  })
+  .then((res) => {
+    if (log) {
+        console.log(url, data, res);
+    }
     return res;
   });
 };
@@ -15,12 +19,16 @@ const ApiUtils = {
     return get('/api/browse', query);
   },
 
+  getFandoms() {
+    return get('/api/fandoms');
+  },
+
   getCharacters({
     fandom = "Harry Potter"
   } = {}) {
     return get('/api/characters', {
-      fandom
-    }, false);
+        fandom
+    });;
   },
 
   getChartData(query) {

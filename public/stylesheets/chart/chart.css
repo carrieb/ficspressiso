@@ -1,16 +1,30 @@
+.chart-wrapper {
+    margin-bottom: 50px;
+}
 
-.chart-wrapper button.reload-button {
-    margin: auto;
+.chart-wrapper .api-fics-per-character-chart-container {
+    padding: 1rem 0;
 }
 
 .chart-wrapper .fic-query-form form {
     background-color: whitesmoke;
     padding: 20px;
     border: solid 1px lightgray;
-    margin-bottom: 20px;
 }
 
 .chart-wrapper .fic-query-form {
     max-width: 500px;
     margin: auto;
+    text-align: left;
+}
+
+.chart-wrapper .options-wrapper {
+    text-align: center;
+}
+
+.chart-wrapper .options-wrapper button {
+    max-width: 500px;
+    width: 100%;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
 }

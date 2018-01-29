@@ -21,22 +21,16 @@ class ApiMultipleCharacterDropdown extends React.Component {
     this.loadCharacterOptions();
   }
 
-  componentDidMount() {
-    $(this.dropdown).dropdown({
-      onChange: this.onChange
-    });
-  }
-
   componentDidUpdate(prevProps, prevState) {
     if (this.state.loaded && !prevState.loaded) {
       $(this.dropdown).dropdown({
-        onChange: (valueString) => this.onChange(valueString),
-        onLabelCreate: (value, text) => this.onLabelCreate(value, text)
+        onChange: this.onChange,
+        onLabelCreate: this.onLabelCreate
       });
     }
   }
 
-  onChange(valueString) {
+  onChange = (valueString) => {
     if (!_isEmpty(valueString)) {
       this.props.updateCharacters(valueString.split(','));
     } else {
@@ -44,25 +38,25 @@ class ApiMultipleCharacterDropdown extends React.Component {
     }
   }
 
-  onLabelCreate(value, text) {
+  onLabelCreate = (value, text) => {
     const character = value;
     const colorArr = ColorMapper.getRgbArrayForCharacter(character);
     const rgba = "rgba(" + colorArr.join(',') + ",0.4)";
     return $(`<a class="ui label" data-value="${character}" style="background-color: ${rgba};">${character}<i class="delete icon"></i></a>`);
-  }
+  };
 
   loadCharacterOptions() {
     this.setState({ loaded: false });
+
     ApiUtils.getCharacters()
       .done((characterOptions) => {
         this.setState({
-          loaded: true,
           characterOptions
         });
       })
-      .fail(() => {
-        this.setState({ loaded: true });
-      });
+      .always(() => {
+        this.setState({ loaded: true })
+      })
   }
 
   render() {
@@ -71,9 +65,11 @@ class ApiMultipleCharacterDropdown extends React.Component {
         return (
           <div className="item"
                key={idx}
-               data-value={character}
-               data-text={character}>
-            {character}
+               data-value={character.name}
+               data-text={character.name}
+               style={{ lineHeight: '24px' }}>
+              <div className="ui right floated small teal label">{character.count}</div>
+            {character.name}
           </div>
         );
       });

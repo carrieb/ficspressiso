@@ -42,13 +42,11 @@ class ChartDisplay extends React.Component {
           { !this.state.loaded && <div className="ui active large text loader">Loading..</div> }
           <Chart data={this.state.data}/>
         </div>
-        <div>
+        <div className="options-wrapper">
           <FicQueryForm query={this.state.query}
                         updateQuery={(query) => this.setState({ query })}/>
-          <div className="text-center">
-            <button className="ui button purple reload-button"
-                    onClick={() => this.updateData()}>reload</button>
-          </div>
+          <button className="ui button purple reload-button"
+                  onClick={() => this.updateData()}>Reload Chart</button>
         </div>
       </div>
     )

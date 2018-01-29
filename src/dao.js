@@ -5,6 +5,8 @@ const moment = require('moment');
 
 const MongoClient = require('mongodb').MongoClient;
 
+const AggregationUtil = require('./util/aggregation-util');
+
 const assert = require('assert');
 
 const findForQuery = (query) => {
@@ -30,6 +32,46 @@ const findForQuery = (query) => {
 };
 
 const DAO = {
+  getFandoms(db, callback) {
+    const docs = db.collection('docs');
+
+    let fandoms = [];
+    const cursor = docs.aggregate(AggregationUtil.FANDOM_PIPELINE);
+
+    cursor.each((err, doc) => {
+        if (err) {
+          console.log(err);
+        } else if (doc) {
+          const fandom = {};
+          fandom.name = doc._id.fandom;
+          fandom.count = doc.count;
+          fandoms.push(fandom);
+        } else {
+          callback(fandoms);
+        }
+    });
+  },
+
+  getCharacters(db, callback) {
+      const docs = db.collection('docs');
+
+      let characters = [];
+      const cursor = docs.aggregate(AggregationUtil.CHARACTER_PIPELINE);
+
+      cursor.each((err, doc) => {
+          if (err) {
+              console.log(err);
+          } else if (doc) {
+              const character = {};
+              character.name = doc._id.character;
+              character.count = doc.count;
+              characters.push(character);
+          } else {
+              callback(characters);
+          }
+      });
+  },
+
   saveFic(db, fic, callback) {
     const docs = db.collection('docs');
     docs.insertOne(fic, (err, res) => {

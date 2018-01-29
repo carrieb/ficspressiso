@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 
 import ApiMultipleCharacterDropdown from 'components/forms/api-multi-char-dropdown.react';
 import RatingDropdown from 'components/forms/rating-dropdown.react';
-import CalendarInput from 'components/common/calendar-input.react';
+import ApiFandomDropdown from 'components/forms/api-fandom-dropdown.react';
+import CalendarInput from 'components/common/calendar-input.react'
+
+import QueryUtil from 'util/query-util';
 
 import _clone from 'lodash/clone';
 
@@ -51,14 +54,14 @@ class FicQueryForm extends React.Component {
           }
 
         }
-      }
+      };
 
       return <button key={site}
                      className={classes.join(' ')}
                      onClick={onClick(site)}>
                      { site }
              </button>;
-    }
+    };
 
     render() {
         const form = (
@@ -69,6 +72,12 @@ class FicQueryForm extends React.Component {
                     { this.siteButton('fanfiction.net') }
                     { this.siteButton('ao3.org') }
                   </div>
+                </div>
+
+                <div className="field">
+                    <label>Fandoms</label>
+                    <ApiFandomDropdown fandoms={this.state.query.fandoms}
+                                       updateFandoms={(fandoms) => { this.updateQuery('fandoms', fandoms); }}/>
                 </div>
 
                 <div className="field">
@@ -97,13 +106,17 @@ class FicQueryForm extends React.Component {
                     <div className="two fields">
                         <div className="ui field">
                             <label>Min Words</label>
-                            <input type="number" name="minWords" value={this.state.query.minWords}
+                            <input type="number"
+                                   name="minWords"
+                                   value={this.state.query.minWords}
                                    onChange={(ev) => this.updateQuery('minWords', ev.target.value)}/>
                         </div>
                         <div className="ui field">
                             <label>Max Words</label>
-                            <input type="number" name="maxWords" value={this.state.query.maxWords}
-                                   onChange={(ev) => this.setState('maxWords', ev.target.value )}/>
+                            <input type="number"
+                                   name="maxWords"
+                                   value={this.state.query.maxWords}
+                                   onChange={(ev) => this.updateQuery('maxWords', ev.target.value )}/>
                         </div>
                     </div>
                 </div>
@@ -122,5 +135,9 @@ FicQueryForm.propTypes = {
     updateQuery: PropTypes.func,
     query: PropTypes.object
 };
+
+FicQueryForm.defaultProps = {
+    query: QueryUtil.DEFAULT_EMPTY_QUERY
+}
 
 export default FicQueryForm;
