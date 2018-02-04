@@ -9,9 +9,9 @@ OUTPUT_DIR = 'fanfiction/'
 def main(argv):
    ff_id = None
    site = None
-   #driver = webdriver.Chrome('/usr/local/bin/chromedriver')
    options = ["--load-images=false"]
-   driver = webdriver.PhantomJS(service_args=options)
+   driver = webdriver.Chrome('/home/carrie/projects/ficspressiso/tools/chromedriver')
+   #driver = webdriver.PhantomJS(service_args=options)
    try:
        opts, args = getopt.getopt(argv,"h",["ffnet=","ao3=","update"])
    except getopt.GetoptError:
@@ -36,7 +36,8 @@ def main(argv):
        try:
    	       download_fic(driver, ff_id, site)
        finally:
-   	       driver.quit()
+           print "Quitting.."
+   	       #driver.quit()
    else:
         print 'downloadff --ffnet <ffnet_id> | --ao3 <ao3_id>'
         sys.exit()
@@ -50,7 +51,9 @@ def make_path_if_not_exists(filename):
                 raise
 
 def write_chapter_file(title, chapter, text):
+    print title
     filename = OUTPUT_DIR + title + '/' + chapter + ".txt"
+    print filename
     make_path_if_not_exists(filename)
     doublespaced = text.replace('\n', '\n\n')
     with codecs.open(filename, "w", "utf-8") as f:
@@ -104,7 +107,7 @@ def download_fic(driver, ff_id, site):
             #print json.dumps(metadata, sort_keys=True, indent=4)
             write_metadata_file(metadata)
 
-        chapter_data, chapter_text = site.get_chapter_data(driver, metadata)
+        chapter_data, chapter_text = site.get_chapter_data(driver)
         write_chapter_file(metadata['title'], chapter_data['title'], chapter_text)
         metadata['chapters'].append(chapter_data)
 

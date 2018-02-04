@@ -6,35 +6,17 @@ import $ from 'jquery';
 import StarSelector from 'components/common/star-rater.react.js';
 
 class AO3Footer extends React.Component {
-
-
-  submitFeedback = () => {
-    console.log('submit');
-
-    const fic = {}; // TODO: parse fic from dom
-    const feedback = {}; // TODO: based on my current state
-
-    // TODO: send message to extension to save feedback
-    chrome.runtime.sendMessage({ messageType: 'SUBMIT_FEEDBACK', fic, feedback }, (response) => {
-      console.log(response.result || response.error);
-    });
-  }
-
   render() {
-    console.log('rendering');
     return <div className="rating-footer">
       <div className="inner">
         <div className="content">
-          <div className="rater">
-            <label>Rating:</label>
-            <StarSelector value={3}/>
-          </div>
-          <button onClick={this.submitFeedback}>Submit</button>
+          <button onClick={this.submitFeedback}>Backup to Ficspressiso</button>
         </div>
       </div>
     </div>;
   }
 }
+
 
 class WorkSummary extends React.Component {
   constructor(props) {
@@ -60,13 +42,25 @@ class WorkSummary extends React.Component {
     });
   }
 
+  submitFeedback = () => {
+      console.log('submit');
+
+      const fic = {}; // TODO: parse fic from dom
+      const feedback = {}; // TODO: based on my current state
+
+      // TODO: send message to extension to save feedback
+      chrome.runtime.sendMessage({ messageType: 'SUBMIT_FEEDBACK', fic, feedback }, (response) => {
+          console.log(response.result || response.error);
+      });
+  };
+
   extractID = () => {
     const url = window.location.href;
     const idRegex = new RegExp('https:\/\/archiveofourown\.org\/works\/(\\d+)\/chapters\/.*', 'g');
     const m = idRegex.exec(url);
     const id = parseInt(m[1]);
     return id;
-  }
+  };
 
   extractFicFromPage = () => {
     console.log('extracting...');
@@ -86,7 +80,7 @@ class WorkSummary extends React.Component {
         fic: response.result
       });
     });
-  }
+  };
 
   render() {
     return <div className="ficspressiso-work-summary wrapper">
@@ -113,6 +107,11 @@ const workMeta = document.querySelectorAll('.work.meta')[0];
 const summaryDiv = document.createElement('div');
 render(<WorkSummary/>, summaryDiv);
 workMeta.parentNode.parentNode.insertBefore(summaryDiv, workMeta.parentNode.nextSibling);
+
+const footerDiv = document.createElement('div');
+footerDiv.classList.add('ficspressiso-footer');
+render(<AO3Footer/>, footerDiv);
+document.body.appendChild(footerDiv);
 
 $('.share').hide();
 $('.chapter.entire').hide();

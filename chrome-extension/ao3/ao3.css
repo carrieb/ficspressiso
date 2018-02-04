@@ -1,17 +1,26 @@
-.rating-footer {
+#outer {
+  margin-bottom: 50px;
+}
+
+.ficspressiso-footer {
   position: fixed;
   bottom: 0;
   width: 100%;
-  height: 100px;
+  height: 75px;
+  margin-left: -5px;
+}
+
+.rating-footer {
+  height: 100%;
 }
 
 .inner {
-  width: 80%;
+  width: 100%;
   height: 100%;
   margin: auto;
   background-color: white;
-  border: solid 1px grey;
-  border-radius: 10px;
+  box-shadow: 1px 1px 5px #aaa;
+  border: 1px solid rgb(204, 204, 204);
   padding: 15px;
 }
 

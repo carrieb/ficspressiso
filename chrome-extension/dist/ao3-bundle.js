@@ -10358,33 +10358,14 @@ var AO3Footer = function (_React$Component) {
   _inherits(AO3Footer, _React$Component);
 
   function AO3Footer() {
-    var _ref;
-
-    var _temp, _this, _ret;
-
     _classCallCheck(this, AO3Footer);
 
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = AO3Footer.__proto__ || Object.getPrototypeOf(AO3Footer)).call.apply(_ref, [this].concat(args))), _this), _this.submitFeedback = function () {
-      console.log('submit');
-
-      var fic = {}; // TODO: parse fic from dom
-      var feedback = {}; // TODO: based on my current state
-
-      // TODO: send message to extension to save feedback
-      chrome.runtime.sendMessage({ messageType: 'SUBMIT_FEEDBACK', fic: fic, feedback: feedback }, function (response) {
-        console.log(response.result || response.error);
-      });
-    }, _temp), _possibleConstructorReturn(_this, _ret);
+    return _possibleConstructorReturn(this, (AO3Footer.__proto__ || Object.getPrototypeOf(AO3Footer)).apply(this, arguments));
   }
 
   _createClass(AO3Footer, [{
     key: 'render',
     value: function render() {
-      console.log('rendering');
       return _react2.default.createElement(
         'div',
         { className: 'rating-footer' },
@@ -10395,19 +10376,9 @@ var AO3Footer = function (_React$Component) {
             'div',
             { className: 'content' },
             _react2.default.createElement(
-              'div',
-              { className: 'rater' },
-              _react2.default.createElement(
-                'label',
-                null,
-                'Rating:'
-              ),
-              _react2.default.createElement(_starRaterReact2.default, { value: 3 })
-            ),
-            _react2.default.createElement(
               'button',
               { onClick: this.submitFeedback },
-              'Submit'
+              'Backup to Ficspressiso'
             )
           )
         )
@@ -10425,6 +10396,18 @@ var WorkSummary = function (_React$Component2) {
     _classCallCheck(this, WorkSummary);
 
     var _this2 = _possibleConstructorReturn(this, (WorkSummary.__proto__ || Object.getPrototypeOf(WorkSummary)).call(this, props));
+
+    _this2.submitFeedback = function () {
+      console.log('submit');
+
+      var fic = {}; // TODO: parse fic from dom
+      var feedback = {}; // TODO: based on my current state
+
+      // TODO: send message to extension to save feedback
+      chrome.runtime.sendMessage({ messageType: 'SUBMIT_FEEDBACK', fic: fic, feedback: feedback }, function (response) {
+        console.log(response.result || response.error);
+      });
+    };
 
     _this2.extractID = function () {
       var url = window.location.href;
@@ -10524,6 +10507,11 @@ var workMeta = document.querySelectorAll('.work.meta')[0];
 var summaryDiv = document.createElement('div');
 (0, _reactDom.render)(_react2.default.createElement(WorkSummary, null), summaryDiv);
 workMeta.parentNode.parentNode.insertBefore(summaryDiv, workMeta.parentNode.nextSibling);
+
+var footerDiv = document.createElement('div');
+footerDiv.classList.add('ficspressiso-footer');
+(0, _reactDom.render)(_react2.default.createElement(AO3Footer, null), footerDiv);
+document.body.appendChild(footerDiv);
 
 (0, _jquery2.default)('.share').hide();
 (0, _jquery2.default)('.chapter.entire').hide();

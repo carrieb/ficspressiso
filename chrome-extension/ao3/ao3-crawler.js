@@ -98,6 +98,12 @@ console.log(fics);
 chrome.runtime.sendMessage({ messageType: 'UPLOAD_AO3_CRAWL', fics }, (response) => {
   console.log(response.result);
   const res = response.result;
+
+  if (response.error) {
+    console.error(response.error);
+    return;
+  }
+
   if (res.isCrawling) {
     setTimeout(() => {
       window.location.href = window.location.origin + window.location.pathname + `?page=${res.crawlPage+1}`;

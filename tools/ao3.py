@@ -1,3 +1,4 @@
+import selenium.common.exceptions as ex;
 
 def get_story_url(ff_id):
     return "http://archiveofourown.org/works/"+ff_id
@@ -7,6 +8,12 @@ def paginate(driver):
     next_btn.click()
 
 def get_basic_metadata(driver, ff_id, metadata = {}):
+    try:
+        proceed_button = driver.find_element_by_css_selector('a[href*="view_adult"]')
+        proceed_button.click();
+    except ex.NoSuchElementException:
+        pass
+
     metadata['site'] = "ao3"
     metadata['id'] = int(ff_id)
     metadata['fandoms'] = get_fandoms(driver)
@@ -40,7 +47,8 @@ def get_updated(driver):
 def get_chapters(driver):
     chapters_el = driver.find_element_by_css_selector("dd.chapters")
     current, total = chapters_el.text.split("/")
-    return int(current) if total is "?" else int(total)
+    # TODO: process total
+    return int(current)
 
 def get_words(driver):
     words_el = driver.find_element_by_css_selector("dd.words")
@@ -67,7 +75,7 @@ def get_summary(driver):
     return summary_el.text
 
 def get_chapter_data(driver, data = {}):
-    chapter_el = driver.find_element_by_css_selector("div.chapter a")
+    chapter_el = driver.find_element_by_css_selector(".chapter .title")
     data['title'] = chapter_el.text
 
     chapter_text_el = driver.find_element_by_css_selector("div.userstuff")
