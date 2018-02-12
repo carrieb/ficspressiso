@@ -52,6 +52,7 @@ def main(argv):
         finally:
             driver.quit()
     else:
+        print argv
         print 'downloadff --ffnet <ffnet_id> | --ao3 <ao3_id>'
         sys.exit()
 
@@ -67,7 +68,8 @@ def make_path_if_not_exists(filename):
 
 def write_chapter_file(title, chapter, text):
     filename = OUTPUT_DIR + title + '/' + chapter + ".txt"
-    print "Writing out to %s" % filename
+    print "Writing out to %s" % filename.encode('utf-8')
+    sys.stdout.flush()
     make_path_if_not_exists(filename)
 
     doublespaced = text.replace('\n', '\n\n')
@@ -122,6 +124,7 @@ def download_fic(driver, ff_id, site):
 
     while True:
         print "Retrieved chapter " + str(chp_num) + " ..."
+        sys.stdout.flush()
         write_html_record(ff_id, chp_num, driver)
 
         if not metadata:

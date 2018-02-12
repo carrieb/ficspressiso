@@ -6,11 +6,11 @@
   position: fixed;
   bottom: 0;
   width: 100%;
-  height: 75px;
+  height: 125px;
   margin-left: -5px;
 }
 
-.rating-footer {
+.ao3-work-footer {
   height: 100%;
 }
 

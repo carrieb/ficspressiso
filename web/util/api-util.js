@@ -46,6 +46,21 @@ const ApiUtils = {
         });;
     },
 
+    downloadFic({
+        site = 'ao3',
+        id = '29873247'
+    }) {
+       return  $.ajax('/api/download', {
+           data: JSON.stringify({ site, id }),
+           type: 'GET',
+           xhrFields: {
+               onprogress: (e) => {
+                   console.log(e.currentTarget.response);
+               }
+           }
+       })
+    },
+
     getLibrary() {
       return get('/api/library');
     },

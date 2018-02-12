@@ -58,7 +58,7 @@ function submitFics(request, sender, sendResponse) {
         fics,
         isCrawling,
         crawlPage
-      }
+      };
       sendResponse({ result });
     } else if (this.status !== 200) {
       sendResponse({ error: xhr.responseText });
@@ -99,11 +99,45 @@ function lookupFic(request, sender, sendResponse) {
   );
 }
 
+function downloadFic(request, sender, sendResponse) {
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', 'http://localhost:3000/api/download', true);
+  xhr.setRequestHeader('x-no-compression', 'true');
+  xhr.seenBytes = 0;
+
+  xhr.onreadystatechange = function() {
+    if (this.readyState === 3) {
+      const newData = xhr.response.substr(xhr.seenBytes);
+
+      chrome.tabs.sendMessage(sender.tab.id, newData);
+
+      xhr.seenBytes = xhr.responseText.length;
+    }
+
+    if (this.readyState === 4 && this.status === 200) {
+
+
+      console.log(xhr.responseText);
+      // TODO: sendResponse we're done
+
+    } else if (this.status !== 200) {
+      sendResponse({ error: xhr.responseText });
+    }
+  }
+
+  xhr.send(
+    JSON.stringify({
+      site: request.site,
+      id: request.id
+    })
+  );
+}
+
 chrome.runtime.onMessage.addListener(
   (request, sender, sendResponse) => {
-    console.log(sender.tab ?
-                "from a content script:" + sender.tab.url :
-                "from the extension", request);
+    //console.log(sender.tab ?
+    //            "from a content script:" + sender.tab.url :
+    //            "from the extension", request);
 
     switch(request.messageType) {
       case 'SUBMIT_FEEDBACK':
@@ -120,6 +154,9 @@ chrome.runtime.onMessage.addListener(
           crawlPage += 1
         }
         submitFics(request, sender, sendResponse);
+        break;
+      case 'DOWNLOAD':
+        downloadFic(request, sender, sendResponse);
         break;
       case 'AOE_CRAWL_START':
         // TODO: store the crawl somehow

@@ -20,7 +20,7 @@
     {
       "matches": ["https://archiveofourown.org/works/*/chapters/*"],
       "css": ["ao3/ao3.css"],
-      "js": ["dist/ao3-bundle.js"]
+      "js": ["dist/jquery-3.1.1.min.js", "dist/semantic.min.js", "dist/ao3-bundle.js"]
     },
     {
       "matches": [

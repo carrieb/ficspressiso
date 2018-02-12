@@ -15,6 +15,8 @@ const config = require('./config');
 
 const routes = require('./routes/index');
 
+const compression = require('compression');
+
 const app = express();
 
 // view engine setup
@@ -26,6 +28,19 @@ app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 
 // logging
 app.use(logger('dev'));
+
+function shouldCompress(req, res) {
+  console.log(req.headers);
+  if (req.headers['x-no-compression']) {
+    console.log('not compressing');
+    return false;
+  }
+
+  return compression.filter(req, res);
+}
+
+// compression
+app.use(compression({ filter: shouldCompress }));
 
 // request parsing
 app.use(cookieParser());

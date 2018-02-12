@@ -1,16 +1,86 @@
 import React from 'react';
 import { render } from 'react-dom';
 
-import $ from 'jquery';
-
 import StarSelector from 'components/common/star-rater.react.js';
 
+const extractID = function() {
+  const url = window.location.href;
+  const idRegex = new RegExp('https:\/\/archiveofourown\.org\/works\/(\\d+)\/chapters\/.*', 'g');
+  const m = idRegex.exec(url);
+  const id = parseInt(m[1]);
+  return id;
+};
+
 class AO3Footer extends React.Component {
+  constructor(props) {
+    super(props);
+
+    const chaptersStr = $('dd.chapters').text();
+    const split = chaptersStr.split('/').map((str) => str.trim());
+    const current = parseInt(split[0].trim());
+
+    this.state = {
+      downloading: false,
+      progress: 0,
+      total: current
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log(prevState, this.state);
+    if (this.state.downloading && !prevState.downloading) {
+      console.log('initializing progress');
+      $('.progress').progress({
+        total: this.state.total,
+        value: this.state.progress,
+        text: {
+          active: '{value} of {total} Chapters Downloaded'
+        }
+      });
+    } else if (this.state.downloading) {
+      $('.progress').progress('set progress', this.state.progress);
+    }
+  }
+
+  download = () => {
+    this.setState({ downloading: true });
+
+    chrome.runtime.onMessage.addListener(
+      (request, sender, sendResponse) => {
+        console.log(request);
+        const progress = parseInt(request);
+        this.setState({
+          progress
+        });
+      });
+
+    chrome.runtime.sendMessage({
+      messageType: 'DOWNLOAD',
+      site: 'ao3',
+      id: extractID()
+    }, (response) => {
+      console.log(response);
+    });
+  };
+
   render() {
-    return <div className="rating-footer">
+    let progress;
+    if (this.state.downloading) {
+      progress = (
+        <div className="ui indicating progress" data-value={this.state.progress} data-total={this.state.total}>
+          <div className="bar">
+            <div className="progress"></div>
+          </div>
+          <div className="label">Downloading</div>
+        </div>
+      );
+    }
+
+    return <div className="ao3-work-footer">
       <div className="inner">
         <div className="content">
-          <button onClick={this.submitFeedback}>Backup to Ficspressiso</button>
+          <button onClick={this.download}>Backup to Ficspressiso</button>
+          { progress }
         </div>
       </div>
     </div>;
@@ -28,9 +98,9 @@ class WorkSummary extends React.Component {
   }
 
   componentWillMount() {
-    console.log('mounting');
-    const id = this.extractID();
+    const id = extractID();
     chrome.runtime.sendMessage({ messageType: 'LOOKUP_FIC', id }, (response) => {
+
       console.log(response.result);
       if (response.result) {
         this.setState({
@@ -42,43 +112,28 @@ class WorkSummary extends React.Component {
     });
   }
 
-  submitFeedback = () => {
-      console.log('submit');
-
-      const fic = {}; // TODO: parse fic from dom
-      const feedback = {}; // TODO: based on my current state
-
-      // TODO: send message to extension to save feedback
-      chrome.runtime.sendMessage({ messageType: 'SUBMIT_FEEDBACK', fic, feedback }, (response) => {
-          console.log(response.result || response.error);
-      });
-  };
-
-  extractID = () => {
-    const url = window.location.href;
-    const idRegex = new RegExp('https:\/\/archiveofourown\.org\/works\/(\\d+)\/chapters\/.*', 'g');
-    const m = idRegex.exec(url);
-    const id = parseInt(m[1]);
-    return id;
-  };
-
   extractFicFromPage = () => {
     console.log('extracting...');
-    const id = this.extractID();
+    const id = extractID();
     const title = $('.work h2.title').text().trim();
     const url = `https://archiveofourown.org/works/${id}`;
     const author = $('.work a[rel="author"]').text();
     const authorUrl = `https://archiveofourown.org${$('.work a[rel="author"]').attr('href')}`;
     const fandoms = $('.work .fandom.tags a').text();
 
+    const chaptersStr = $('dd.chapters').text();
+    const split = chaptersStr.split('/').map((str) => str.trim())
+    const current = parseInt(split[0].trim());
+    const forecastTotal = split[1] === '?' ? null : parseInt(split[1]);
+
     //const summary = $('.work .summary blockquote').text();
 
     const fic = { ao3_id: id, title, url, author, author_url: authorUrl, fandoms };
     chrome.runtime.sendMessage({ messageType: 'SUBMIT_FIC', fic }, (response) => {
       console.log(response.result);
-      this.setState({
-        fic: response.result
-      });
+      // this.setState({
+      //   fic: response.result
+      // });
     });
   };
 
@@ -102,6 +157,8 @@ class WorkSummary extends React.Component {
 // const div = document.createElement('div');
 // render(<AO3Footer/>, div)
 // document.body.appendChild(div);
+
+console.log('ficspressiso running');
 
 const workMeta = document.querySelectorAll('.work.meta')[0];
 const summaryDiv = document.createElement('div');
