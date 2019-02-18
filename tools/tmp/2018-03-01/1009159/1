@@ -1,0 +1,716 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" class="wf-verdana-n4-active wf-active"><head>
+        <meta charset="utf-8" />
+        <meta name="ROBOTS" content="NOARCHIVE" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="viewport" content="width=device-width" /><meta name="google-translate-customization" content="6babbc5ad0624c76-e1cef323edf23c09-g0466c4b8ae39c7a2-12" /><meta name="globalsign-domain-verification" content="V_ap2Hj4zuISXAQ6qNyUYksJGoICMNiU4PXW452KI8" /><link rel="canonical" href="//www.fanfiction.net/s/1009159/1/From-the-Shadows" />
+<link href="//plus.google.com/+fanfiction" rel="publisher" />
+<title>From the Shadows Chapter 1: Prologue, a x-men: evolution fanfic | FanFiction</title>
+
+        <link rel="shortcut icon" href="/static/images/favicon_2010_site.ico" />
+        <link rel="icon" type="image/png" href="/static/images/favicon_2010_site.png" />
+        <link rel="apple-touch-icon" href="/static/images/favicon_2010_iphone.png" />
+       
+
+        <link rel="stylesheet" href="/static/styles/xss25.css" />
+        <script src="https://pagead2.googlesyndication.com/pub-config/r20160913/ca-pub-8698054525611092.js"></script><script src="https://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js" type="text/javascript" async=""></script><script src="/static/scripts/combo3.js"></script>
+        <!--[if lt IE 8]>
+        <link rel="stylesheet" href="/cors/fontello-f1bf7dee/css/fontello-ie7.css">
+        <script src='/static/scripts/json2.min.js'></script>
+        <![endif]-->
+
+        
+        <script>
+        xcookie_read();
+        xfont_auto_loader();
+        if(XCOOKIE.gui_font != 'Open Sans') {
+            document.write('&lt;style&gt;body{font-family:"'+XCOOKIE.gui_font+'",Verdana, Arial;}&lt;/style&gt;');
+        }
+        </script><style>body{font-family:"Verdana",Verdana, Arial;}</style>
+        <!-- startz --><script async="" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script><!-- endz -->
+        <style>
+        .dropdown-menu &gt; li &gt; a { padding: 3px 50px 3px 30px; }
+body { min-width:750px; height:100%; }
+.maxwidth { min-width:730px;margin-left:auto;margin-right:auto;}
+            
+
+
+        </style>
+        <script>
+        if(isAndroid &amp;&amp; !isChrome) {
+            document.write('&lt;style&gt; body {font-size:1em;}&lt;/style&gt;');
+        }
+        </script>
+        <script>
+
+                        xauto_width_init();
+                        xauto_fontsize();
+
+                        if(!isIphone &amp;&amp; !isIpad) {
+                            $(function() {
+                                $(window).resize(xauto_width);
+                            });
+                        }
+
+                    </script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Verdana" media="all" /><style> .maxwidth {width:auto;margin-left:auto;margin-right:auto;}</style><link rel="preload" href="https://adservice.google.com/adsid/integrator.js?domain=www.fanfiction.net" as="script" /><script type="text/javascript" src="https://adservice.google.com/adsid/integrator.js?domain=www.fanfiction.net"></script></head><body style="background-color:#E4E3D5;margin-top:0px;" class="yes-fontsmoothing"><script>xfont_fix_smooth();</script><canvas width="35" height="35" style="display: none;"></canvas>
+
+
+<div id="top" style="width:100%;background-color: #333399; ">
+<div class="menulink maxwidth" style="padding:0.5em 10px 0.5em 10px; vertical-align:middle;">
+
+        <script>
+//init jquery
+if (!window.jQuery) {
+  var jq = document.createElement('script'); jq.type = 'text/javascript';
+  jq.src = '//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js';
+  document.getElementsByTagName('head')[0].appendChild(jq);
+  console.log('loading preq: jquery');
+}
+
+
+ var _fp = {
+    logout : function() {
+            $.get('/logout.php', function() {
+            console.log('starting logout');
+                     var m = $('#_fp_modal_logged_out');
+                    if(!m.length) {
+                        $('body').append("&lt;div id='_fp_modal_logged_out' data-backdrop='static' class='modal fade hide'&gt;&lt;div class='modal-body'&gt;&lt;div align=cener&gt;You have successfully logged out. &lt;span onClick='' type=button class='btn icon-edit-1'&gt;Login&lt;/span&gt; &lt;span onClick='' type=button class='btn icon-edit-1'&gt;Stay on this Page&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;");
+                        m = $('#_fp_modal_logged_out');
+                    }
+
+                    m.modal();
+
+                     console.log('modal finished');
+                    //xtoast('You have been logged out.');
+                    if(_fp.cb_loggedout) _fp.cb_loggedout();
+                     console.log('callback complete');
+            })
+          .fail(function() {
+            //m.modal('hide');
+            xtoast('An error has ocurred. Please try again later.');
+          });
+            //
+    }
+};
+
+//real function
+
+
+        </script>
+        
+<script>
+function render_login(uname) {
+     var s = "&lt;a href='/login.php' style='color:orange;'&gt;"+uname+"&lt;/a&gt; | &lt;span id='' xonClick='_fp.logout();' onclick=\"location = '/logout.php';\" style='color:white;cursor: pointer;'&gt;Logout&lt;/span&gt;";
+     return s;
+}
+
+</script>
+<span id="name_login" class="pull-right">
+<script>
+if(XUNAME) {
+    document.write(render_login(XUNAME));
+}
+else {
+    document.write("&lt;a href='/login.php' style='color:white;'&gt;&lt;span class='icon-lock' style='font-size:15px;position:relative;top:1px'&gt;&lt;/span&gt; Login&lt;/a&gt; | &lt;a href='/signup.php' style='color:white;'&gt;Sign Up&lt;/a&gt;");
+}
+</script><a href="/login.php" style="color:white;"><span class="icon-lock" style="font-size:15px;position:relative;top:1px"></span> Login</a> | <a href="/signup.php" style="color:white;">Sign Up</a></span><a href="/" style="font-size:1.1em;border:none;">FanFiction</a>  <small>|</small>  unleash your imagination <span class="icon-kub-mobile" style="font-size:14px;margin-left:10px;" title="Mobile Edition" onclick="location = '//m.fanfiction.net/m/yes_mobile.php'"></span><span title="Fontastic Panel: UI Settings" class="icon-tl-text" style="font-size:14px;margin-left:10px;" onclick="_fontastic_init('ui'); $('#_fontastic_ui').modal('show');"></span></div>
+</div>
+<script>if(!isMobile){document.write("&lt;div class='zmenu' style='text-align:center;padding-top:5px;background-color: #f6f7ee;'&gt;");}</script><div class="zmenu" style="text-align:center;padding-top:5px;background-color: #f6f7ee;">
+            <!-- startz -->
+            <ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-8698054525611092" data-ad-slot="5792940767" data-adsbygoogle-status="done"><ins id="aswift_0_expand" style="display:inline-table;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:728px;background-color:transparent;"><ins id="aswift_0_anchor" style="display:block;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:728px;background-color:transparent;"><iframe width="728" height="90" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_0" name="aswift_0" style="left:0;position:absolute;top:0;width:728px;height:90px;"></iframe></ins></ins></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            <!-- endz --><script>if(!isMobile){document.write("&lt;/div&gt;");}</script></div>
+<div style="width:100%;" class="zmenu">
+    <div id="zmenu" class="maxwidth" style="vertical-align:middle;padding:5px;">
+<span class="zui">
+
+<!-- new stuff -->
+<table class="maxwidth"><tbody><tr><td valign="middle">
+
+
+            <div class="dropdown xmenu_item">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Browse <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+
+            <li class="disabled" style="text-align:center"><a href="#">Stories</a></li>
+
+            <li><a href="/anime/">Anime</a></li>
+            <li><a href="/book/">Books</a></li>
+            <li><a href="/cartoon/">Cartoons</a></li>
+            <li><a href="/comic/">Comics</a></li>
+            <li><a href="/game/">Games</a></li>
+            <li><a href="/misc/">Misc</a></li>
+            <li><a href="/play/">Plays</a></li>
+            <li><a href="/movie/">Movies</a></li>
+            <li><a href="/tv/">TV</a></li>
+            <li class="disabled" style="text-align:center"><a href="#">Crossovers</a></li>
+
+            <li><a href="/crossovers/anime/">Anime</a></li>
+            <li><a href="/crossovers/book/">Books</a></li>
+            <li><a href="/crossovers/cartoon/">Cartoons</a></li>
+            <li><a href="/crossovers/comic/">Comics</a></li>
+            <li><a href="/crossovers/game/">Games</a></li>
+            <li><a href="/crossovers/misc/">Misc</a></li>
+            <li><a href="/crossovers/play/">Plays</a></li>
+            <li><a href="/crossovers/movie/">Movies</a></li>
+            <li><a href="/crossovers/tv/">TV</a></li>
+
+               
+
+                    </ul>
+                </div>
+                <div class="dropdown xmenu_item">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Just In <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+            <li><a href="/j/0/0/0/">All</a></li>
+
+            <li><a href="/j/0/1/0/">Stories: New</a></li><li>
+            </li><li><a href="/j/0/2/0/">Stories: Updated</a></li>
+
+            <li class="divider"></li>
+            <li><a href="/j/0/3/0/">Crossovers: New</a></li><li>
+            </li><li><a href="/j/0/4/0/">Crossovers: Updated</a></li><li>
+
+                    </li></ul>
+                </div>
+                <div class="dropdown xmenu_item">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Community <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+            <li><a href="/communities/general/0/">General</a></li>
+            <li><a href="/communities/anime/">Anime</a></li>
+            <li><a href="/communities/book/">Books</a></li>
+            <li><a href="/communities/cartoon/">Cartoons</a></li>
+            <li><a href="/communities/comic/">Comics</a></li>
+            <li><a href="/communities/game/">Games</a></li>
+            <li><a href="/communities/misc/">Misc</a></li>
+            <li><a href="/communities/movie/">Movies</a></li>
+            <li><a href="/communities/play/">Plays</a></li>
+            <li><a href="/communities/tv/">TV</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown xmenu_item">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Forum <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+            <li><a href="/forums/general/0/">General</a></li>
+            <li><a href="/forums/anime/">Anime</a></li>
+            <li><a href="/forums/book/">Books</a></li>
+            <li><a href="/forums/cartoon/">Cartoons</a></li>
+            <li><a href="/forums/comic/">Comics</a></li>
+            <li><a href="/forums/game/">Games</a></li>
+            <li><a href="/forums/misc/">Misc</a></li>
+            <li><a href="/forums/movie/">Movies</a></li>
+            <li><a href="/forums/play/">Plays</a></li>
+            <li><a href="/forums/tv/">TV</a></li>           </ul>
+                </div>
+
+                 <div class="dropdown xmenu_item">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Betas <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+
+            <li class="disabled" style="text-align:center"><a href="#">All</a></li>
+
+            <li><a href="/betareaders/all/anime/">Anime</a></li>
+            <li><a href="/betareaders/all/book/">Books</a></li>
+            <li><a href="/betareaders/all/cartoon/">Cartoons</a></li>
+            <li><a href="/betareaders/all/comic/">Comics</a></li>
+            <li><a href="/betareaders/all/game/">Games</a></li>
+            <li><a href="/betareaders/all/misc/">Misc</a></li>
+            <li><a href="/betareaders/all/play/">Plays</a></li>
+            <li><a href="/betareaders/all/movie/">Movies</a></li>
+            <li><a href="/betareaders/all/tv/">TV</a></li>
+            <li class="disabled" style="text-align:center"><a href="#">Specific</a></li>
+
+            <li><a href="/betareaders/anime/">Anime</a></li>
+            <li><a href="/betareaders/book/">Books</a></li>
+            <li><a href="/betareaders/cartoon/">Cartoons</a></li>
+            <li><a href="/betareaders/comic/">Comics</a></li>
+            <li><a href="/betareaders/game/">Games</a></li>
+            <li><a href="/betareaders/misc/">Misc</a></li>
+            <li><a href="/betareaders/play/">Plays</a></li>
+            <li><a href="/betareaders/movie/">Movies</a></li>
+            <li><a href="/betareaders/tv/">TV</a></li>
+
+               
+
+                    </ul>
+                </div>
+        </td>
+        <td valign="middle">
+
+            <script>
+                $(document).ready(function() {
+                    $('.xdrop_search').click(function() {
+                        var v = $(this).html();;
+
+                        $('#search_type').val(v.toLowerCase());
+                        $('#search_head').html(v);
+                    });
+
+                    $('#search_keywords').onEnterKey(function(){
+                        $('form#search_form').submit();
+                    });
+
+                });
+
+            </script>
+            <form method="get" id="search_form" action="/search/" class="pull-right">
+                <div class="input-prepend">
+                    <div class="btn-group">
+                        <button class="btn dropdown-toggle" data-toggle="dropdown">
+                            <span id="search_head">Story</span>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" class="xdrop_search">Story</a></li>
+                            <li><a href="#" class="xdrop_search">Writer</a></li>
+                            <li><a href="#" class="xdrop_search">Forum</a></li>
+                            <!-- <li class='divider'></li> -->
+                            <li><a href="#" class="xdrop_search">Community</a></li>
+                        </ul>
+                    </div>
+                    <input class="span2" name="keywords" id="search_keywords" type="text" placeholder="Search" title="Search" />
+                    <!--  input-append <button class='btn' type='submit'>Go</button> -->
+                </div>
+                <!-- <input class=searchfield type=text name='keywords' placeholder='Search' title='Search' style='width:100px'> -->
+                <input type="hidden" name="ready" value="1" />
+                <input type="hidden" name="type" id="search_type" value="story" />
+            </form>
+        </td>
+    </tr>
+</tbody></table>
+
+</span>
+</div>
+</div>
+<div style="width:100%;" class="xcontrast_outer" id="content_parent"><div class="xcontrast maxwidth" id="content_wrapper" style="background-color: white;"><div id="content_wrapper_inner" style="padding:0.5em;">
+<script>
+if(XCOOKIE.read_theme == 'dark') {
+     $(function(){
+        _fontastic_change_theme('dark');
+
+     });
+ }
+ else if(XCOOKIE.read_light_texture) {
+   _fontastic_change_texture(XCOOKIE.read_light_texture);
+ }
+
+ </script><div style="margin-bottom: 10px" class="lc-wrapper" id="pre_story_links"><span class="lc-left"><a class="xcontrast_txt" href="/cartoon/">Cartoons</a><span class="xcontrast_txt icon-chevron-right xicon-section-arrow"></span><a class="xcontrast_txt" href="/cartoon/X-Men-Evolution/">X-Men: Evolution</a>
+</span>
+</div>
+<script>
+//_fontastic_theme_css();
+
+function toggleTheme() {
+    if(XCOOKIE.read_theme == 'light') {
+        _fontastic_change_theme('dark');
+    }
+    else {
+        _fontastic_change_theme('light');
+    }
+}
+</script><div id="img_large" class="hide modal fade" style="color:black;"><div class="modal-body" align="center"><img class="lazy cimage " style="padding:2px;border:1px solid #ccc;-moz-border-radius:2px;-webkit-border-radius:2px;" src="/static/images/d_60_90.jpg" data-original="//ffcdn2012t-fictionpressllc.netdna-ssl.com/image/1815563/180/" width="180" height="240" /></div></div><div id="profile_top" style="min-height:112px;"><span style="cursor:pointer;" title="Click for Larger Image" onclick="var t = $('#img_large img');t.prop('src',t.attr('data-original'));$('#img_large').modal();"><img class="cimage " style="clear:left;float:left;margin-right:3px;padding:2px;border:1px solid #ccc;-moz-border-radius:2px;-webkit-border-radius:2px;" src="//ffcdn2012t-fictionpressllc.netdna-ssl.com/image/1815563/75/" width="75" height="100" /></span><button class="btn pull-right icon-heart" type="button" onclick="$(&quot;#follow_area&quot;).modal();"> Follow/Fav</button><b class="xcontrast_txt">From the Shadows</b>
+<span class="xcontrast_txt"><div style="height:5px"></div>By:</span> <a class="xcontrast_txt" href="/u/62399/Black-Queen">Black Queen</a> <span class="icon-mail-1  xcontrast_txt"></span> <a class="xcontrast_txt" title="Send Private Message" href="https://www.fanfiction.net/pm2/post.php?uid=62399"></a>
+<div style="margin-top:2px" class="xcontrast_txt">Post DoR; Magneto's Acolytes rescue the captured mutants from Area 51, and lives are forever changed as hearts are forever intertwined</div>
+<span class="xgray xcontrast_txt">Rated: <a class="xcontrast_txt" href="https://www.fictionratings.com/" target="rating">Fiction  T</a> - English - Romance/Adventure -  Rogue/Anna Marie, Gambit/Remy L. - Chapters: 99   - Words: 289,654 - Reviews: <a href="/r/1009159/">4,084</a> - Favs: 1,077 - Follows: 507 - Updated: <span data-xutime="1295671130">Jan 21, 2011</span> - Published: <span data-xutime="1034354092">Oct 11, 2002</span> - id: 1009159 </span>
+</div>
+<div align="center" class="lc-wrapper" style="margin-top:2em" ;'=""><div class="lc">
+<span class="xcontrast_txt"><span class="icon-tl-text" style="font-size:14px;cursor:pointer;" title="+ Font Size" onclick="_fontastic_change_size('u');"></span>+</span>  <span class="xcontrast_txt"><span class="icon-tl-text" style="font-size:14px;cursor:pointer;" title="- Font Size" onclick="_fontastic_change_size('d');"></span>-</span>  <span style="font-size:14px;cursor:pointer;" class="icon-tl-text xcontrast_txt" onclick="_fontastic_init('reading');$('#_fontastic_reading').modal('show');" title="Fonts"></span>  
+
+<span class="icon-align-justify xcontrast_txt" onclick="$('#f_width').slideToggle();" style="font-size:14px" title="Story Width"></span> <span id="f_width" class="hide xcontrast_txt"><span onclick="_fontastic_change_width(100);">Full</span> <span onclick="_fontastic_change_width(75);">3/4</span> <span onclick="_fontastic_change_width(50);">1/2</span></span>    <span class="icon-tl-text-height xcontrast_txt" onclick="$('#f_size').slideToggle();" style="font-size:14px;cursor:pointer;" title="Line Spacing"></span> <span id="f_size" class="hide xcontrast_txt"> <span onclick="_fontastic_change_line_height(&quot;u&quot;);">Expand</span> <span onclick="_fontastic_change_line_height(&quot;d&quot;);">Tighten</span></span>  <span class="xcontrast_txt icon-tl-contrast" onclick="toggleTheme();" style="margin-left:2px;margin-right:2px;font-size:14px;" align="absmiddle" title="Story Contrast"></span></div></div>
+    <span style="float:right; "> <select id="chap_select" title="Chapter Navigation" name="chapter" onchange="self.location = '/s/1009159/'+ this.options[this.selectedIndex].value + '/From-the-Shadows';"><option value="1" selected="">1. Prologue</option><option value="2">2. Darkness</option><option value="3">3. Rescue</option><option value="4">4. Awakening</option><option value="5">5. Arrival</option><option value="6">6. Confrontation</option><option value="7">7. Shattered</option><option value="8">8. Solitude</option><option value="9">9. Weakness</option><option value="10">10. Changes</option><option value="11">11. Discovery</option><option value="12">12. Confusion</option><option value="13">13. Persecutions</option><option value="14">14. Atonement</option><option value="15">15. Complications</option><option value="16">16. Unexpected</option><option value="17">17. Vistor</option><option value="18">18. Reflections</option><option value="19">19. Trust</option><option value="20">20. Amends</option><option value="21">21. Gift</option><option value="22">22. Revelations</option><option value="23">23. Truth</option><option value="24">24. Comfort</option><option value="25">25. Acceptance</option><option value="26">26. Disturbance</option><option value="27">27. Escape</option><option value="28">28. Choices</option><option value="29">29. Solutions</option><option value="30">30. Arrival</option><option value="31">31. Return</option><option value="32">32. Interlude</option><option value="33">33. Home</option><option value="34">34. Meetings</option><option value="35">35. Secrets</option><option value="36">36. Freedom</option><option value="37">37. Surprises</option><option value="38">38. Strategy</option><option value="39">39. Rendezvous</option><option value="40">40. Proposals</option><option value="41">41. Planning</option><option value="42">42. Celebrations</option><option value="43">43. Business</option><option value="44">44. Support</option><option value="45">45. Preparations</option><option value="46">46. Goodbyes</option><option value="47">47. Union</option><option value="48">48. Devotion</option><option value="49">49. Rebirth</option><option value="50">50. Requiescence</option><option value="51">51. Presents</option><option value="52">52. Familiar</option><option value="53">53. Opposition</option><option value="54">54. Threat</option><option value="55">55. Assault</option><option value="56">56. Reminder</option><option value="57">57. Venture</option><option value="58">58. Appropriation</option><option value="59">59. Exposed</option><option value="60">60. Parting</option><option value="61">61. Retreat</option><option value="62">62. Dreams</option><option value="63">63. Encounters</option><option value="64">64. Aftershock</option><option value="65">65. Queries</option><option value="66">66. Reunion</option><option value="67">67. Mornings</option><option value="68">68. Unknown</option><option value="69">69. Journies</option><option value="70">70. Homecoming</option><option value="71">71. Disclosure</option><option value="72">72. Answers</option><option value="73">73. Company</option><option value="74">74. Amazed</option><option value="75">75. Briefings</option><option value="76">76. Family</option><option value="77">77. Belonging</option><option value="78">78. Balance</option><option value="79">79. Questions</option><option value="80">80. Reconnecting</option><option value="81">81. Growth</option><option value="82">82. Revival</option><option value="83">83. Bonds</option><option value="84">84. Nerves</option><option value="85">85. Salvation</option><option value="86">86. Trouble</option><option value="87">87. Conflict</option><option value="88">88. Concessions</option><option value="89">89. Turnabout</option><option value="90">90. Offers</option><option value="91">91. Beginnings</option><option value="92">92. Bloodlines</option><option value="93">93. Heartbeats</option><option value="94">94. Frustrations</option><option value="95">95. Quickening</option><option value="96">96. Delivery</option><option value="97">97. Friends</option><option value="98">98. Transitions</option><option value="99">99. Release</option></select> <button class="btn" type="BUTTON" onclick="self.location='/s/1009159/2/From-the-Shadows'">Next &gt;</button></span><div style="height:5px"></div><script>
+document.write('&lt;style&gt; .storytext { max-height: 999999px; width: '+XCOOKIE.read_width+'%; font-size:' + XCOOKIE.read_font_size + 'em; font-family: "'+XCOOKIE.read_font+'"; line-height: '+XCOOKIE.read_line_height+'; text-align: left;} &lt;/style&gt;');
+
+$(function() {
+    $.get('/eye/3/1/2216622/1009159/');
+});
+</script><style> .storytext { max-height: 999999px; width: 100%; font-size:1em; font-family: "Verdana"; line-height: 1.25; text-align: left;} </style>
+
+<div role="main" aria-label="story content" class="storytextp" id="storytextp" align="center" style="padding: 0px 0.5em; user-select: none;">
+<div class="storytext xcontrast_txt nocopy" id="storytext"><p><strong>Prologue:</strong></p><p><em>He doesn't know how long he has been there for. </em></p><p><em>He doesn't know why he is there. </em></p><p><em>They say it is because he is different, because he isn't normal. </em></p><p><em>He wants to ask them, who is? </em></p><p><em>But he doesn't. He has seen what defiance earns those who resist in this place of shadows, and while he knows little else, he knows he does not want to experience that. </em></p><p><em>His own experiences are bad enough. </em></p><p><em>The people who are in charge here call this place a 'containment facility' but he knows batter. It is a concentration camp. Those who are held prisoner here are tortured, tested, twisted until they are nothing but broken shells of the people they once were. </em></p><p><em>He remembers the pictures from history class, the dark numbers glaring like bruises on his great-grandfather's arm, and thinks, numbly, of the statistics… the millions of faceless names lost to unimaginable hatred. The world where a people could systematically try to prune the human race like one might a tree, casting off people for their race, for being born with a disability, for liking their own gender, for having beliefs… it had always seemed like a different world than the world he lived in. He'd never understood how someone could hate another person for their ethnicity, for their religion or culture. Anyone not like me isn't human and doesn't deserve to live? He'd never understood that kind of hate. </em></p><p><em>How can you hate someone for who they are?</em></p><p><em>He still doesn't understand, but he knows that hate now, because it's been etched into his skin with scalpels and drugs and wires, all of it meant to cut out the part of him that was found offensive.</em></p><p><em>But it's in his DNA, and you can't cut out DNA.</em></p><p><em>He is a mutant, or so he is told. He was born with a unique ability to manipulate the room around him. He could change the colors of the walls, the tiles of the floor. He can change the shape of the room, can change the texture of the floor. When he is upset, sometimes the floor disappears completely. </em></p><p><em>His parents kept it a secret as long as they could, they didn't want people to know their son was different. He knows they loved him, he'd seen it in their eyes whenever they looked at him, but he'd also seen their fear.</em></p><p><em>Running away had seemed like the only way to protect them, to keep them safe from the people who thought he was a freak, that he wasn't human.</em></p><p><em>But running hadn't done any good, because they'd found him just the same, and now he was going to die.</em></p><p><em>At least, he hoped he was. Death was preferable to the hell in which he has been living for the last...how long has it been now? Weeks? Months? Years? He doesn't know. There is no way to tell in the darkness that is now his home. </em></p><p><em>He is not alone in his suffering, though he is very much alone in his cell. The dark corridor is lined with other cells, holding other prisoners, all of them mutants. Their cells had been outfitted with some kind of generator that neutralized their powers. A smart move by their captors, or else he, and many others, would have escaped by now. </em></p><p><em>Suddenly there is a light in the distance, a harsh, foul blue light that streams into the corridor, invading their darkness, He scurries into the back of his cell, hears others doing the same, hiding in the shadows, their backs pressed against the walls as if remaining out of sight will delay their anguish. </em></p><p><em>The light is from the door that opens into their cell block. It leads to the testing labs. He has been there only once, but he would rather die than go back. Thoughts of torture, of pain beyond belief, of furious bolts of white-hot agony come to mind, and he cannot help shivering as the door creaks, as footsteps echo on the cold floor. </em></p><p><em>Will they come for him today? </em></p><p><em>No, they aren't here to take anyone it seems, for the guard has a limp form draped over his shoulder. As the guard passes his cell, he peers at the battered girl, pitying her, and yet grateful that fate has befallen her instead of him. </em></p><p><em>This poor girl has been experimented on many times already, and every time she is placed back in her cell, her screams slice through the air like a dying animal. Whatever they do to her, it is horrifyingly terrible. </em></p><p><em>Her cell is at the end of the hall. The guard opens it and throws her unconscious form inside like she is nothing more than a rag doll. He knows that to their captors, they aren't even that significant. </em></p><p><em>As the guard leaves, the prisoners slowly move to the front of their cells again, peering out through the bars at the crumpled girl at the end of the hall. Dozens of pairs of eyes shine in the dark, all eyeing their unfortunate comrade curiously. </em></p><p><em>He feels sorry for her. The stares never seem to bother her, though, even when she is awake. Though he is never really sure that she is awake, for she just lays there, staring at the ceiling, most of the time. </em></p><p><em>Not that there is much else to do. </em></p><p><em>The girl moans, and he lets out a deep breath he didn't even know he was holding. She is alive. Every time they bring her back, it is harder and harder to tell if she is. In some ways, though, he wishes that she would come back dead. So she wouldn't have to endure it anymore. </em></p><p><em>But as long as she is alive, as long as their captors have her, their favorite plaything, they ignore him, and so he finds himself glad that she suffers, as cruel as it makes him feel, for as long as she suffers, he does not. </em></p><p><em>Her eyes flutter open, and for just an instant her green eyes fixate on him. </em></p><p><em>And then the screams began. </em></p>
+</div>
+</div><div style="height:5px"></div><div style="clear:both;text-align:right;"> <select id="chap_select" title="Chapter Navigation" name="chapter" onchange="self.location = '/s/1009159/'+ this.options[this.selectedIndex].value + '/From-the-Shadows';"><option value="1" selected="">1. Prologue</option><option value="2">2. Darkness</option><option value="3">3. Rescue</option><option value="4">4. Awakening</option><option value="5">5. Arrival</option><option value="6">6. Confrontation</option><option value="7">7. Shattered</option><option value="8">8. Solitude</option><option value="9">9. Weakness</option><option value="10">10. Changes</option><option value="11">11. Discovery</option><option value="12">12. Confusion</option><option value="13">13. Persecutions</option><option value="14">14. Atonement</option><option value="15">15. Complications</option><option value="16">16. Unexpected</option><option value="17">17. Vistor</option><option value="18">18. Reflections</option><option value="19">19. Trust</option><option value="20">20. Amends</option><option value="21">21. Gift</option><option value="22">22. Revelations</option><option value="23">23. Truth</option><option value="24">24. Comfort</option><option value="25">25. Acceptance</option><option value="26">26. Disturbance</option><option value="27">27. Escape</option><option value="28">28. Choices</option><option value="29">29. Solutions</option><option value="30">30. Arrival</option><option value="31">31. Return</option><option value="32">32. Interlude</option><option value="33">33. Home</option><option value="34">34. Meetings</option><option value="35">35. Secrets</option><option value="36">36. Freedom</option><option value="37">37. Surprises</option><option value="38">38. Strategy</option><option value="39">39. Rendezvous</option><option value="40">40. Proposals</option><option value="41">41. Planning</option><option value="42">42. Celebrations</option><option value="43">43. Business</option><option value="44">44. Support</option><option value="45">45. Preparations</option><option value="46">46. Goodbyes</option><option value="47">47. Union</option><option value="48">48. Devotion</option><option value="49">49. Rebirth</option><option value="50">50. Requiescence</option><option value="51">51. Presents</option><option value="52">52. Familiar</option><option value="53">53. Opposition</option><option value="54">54. Threat</option><option value="55">55. Assault</option><option value="56">56. Reminder</option><option value="57">57. Venture</option><option value="58">58. Appropriation</option><option value="59">59. Exposed</option><option value="60">60. Parting</option><option value="61">61. Retreat</option><option value="62">62. Dreams</option><option value="63">63. Encounters</option><option value="64">64. Aftershock</option><option value="65">65. Queries</option><option value="66">66. Reunion</option><option value="67">67. Mornings</option><option value="68">68. Unknown</option><option value="69">69. Journies</option><option value="70">70. Homecoming</option><option value="71">71. Disclosure</option><option value="72">72. Answers</option><option value="73">73. Company</option><option value="74">74. Amazed</option><option value="75">75. Briefings</option><option value="76">76. Family</option><option value="77">77. Belonging</option><option value="78">78. Balance</option><option value="79">79. Questions</option><option value="80">80. Reconnecting</option><option value="81">81. Growth</option><option value="82">82. Revival</option><option value="83">83. Bonds</option><option value="84">84. Nerves</option><option value="85">85. Salvation</option><option value="86">86. Trouble</option><option value="87">87. Conflict</option><option value="88">88. Concessions</option><option value="89">89. Turnabout</option><option value="90">90. Offers</option><option value="91">91. Beginnings</option><option value="92">92. Bloodlines</option><option value="93">93. Heartbeats</option><option value="94">94. Frustrations</option><option value="95">95. Quickening</option><option value="96">96. Delivery</option><option value="97">97. Friends</option><option value="98">98. Transitions</option><option value="99">99. Release</option></select> <button class="btn" type="BUTTON" onclick="self.location='/s/1009159/2/From-the-Shadows'">Next &gt;</button></div><div style="height:5px"></div>
+<script>
+    function review_init() {
+         if(XUNAME) {
+             $('#review_name').hide();
+             $('#review_postbutton').html('Post Review as ' + XUNAME);
+             $('.login_items').hide();
+             $('#alert_subs').show();
+         }
+         else {
+             $('#review_name').show();
+             //$('#review_name').html("&lt;input type=text name='name' placeholder='Name:'&gt;");
+
+             $('.login_items').show();
+             $('#alert_subs').hide();
+         }
+    }
+
+    //call back
+    function login_success_default() {
+        //$('#name_login').html(render_login(XUNAME));
+
+        //focus on review
+        $('#review_review').focus();
+
+        //you have now logged in
+        xtoast("You have logged-in as "+XUNAME+'.');
+
+        //close all open dialogs
+        //$('#please_login').modal('hide');
+
+
+
+    }
+
+    function login_success() {
+         login_success_default();
+         review_init();
+    }
+
+    function self_login(target) {
+        xwindow('https://www.fanfiction.net/api/login_state_proxy.php?src=popup&amp;target='+target,450,450);
+    }
+
+    function post_q() {
+        if(!XUNAME) {
+            please_login();
+            return;
+        }
+
+        if($('#q_follow_author').prop('checked') == 0 &amp;&amp; $('#q_follow_story').prop('checked') == 0 &amp;&amp; $('#q_fav_author').prop('checked') == 0 &amp;&amp; $('#q_fav_story').prop('checked') ==0) {
+            xtoast('Please select at least one follow or favorite action');
+            return;
+        }
+
+        $('#q_working').toggle();
+
+        $.post('/api/ajax_subs.php', {
+            storyid: storyid,
+            userid: userid,
+
+            authoralert: $('#q_follow_author').prop('checked') ? 1 : 0,
+            storyalert: $('#q_follow_story').prop('checked') ? 1 : 0,
+            favstory: $('#q_fav_story').prop('checked') ? 1 : 0,
+            favauthor: $('#q_fav_author').prop('checked') ? 1 : 0
+        },
+        function(data) {
+            //console.log(data);
+            //alert(data);
+            if(data.error) {
+                $('#q_working').toggle();
+
+                xtoast("We are unable to process your request due to an network error. Please try again later.");
+            }
+            else {
+                xtoast("We have successfully processed the following:" + data.payload_data,3500);
+                $('#q_working').toggle();
+                $('#follow_area').modal('hide');
+             }
+        },
+        'json'
+        ).error(function() {
+            xtoast("We are unable to process your request due to an network error. Please try again later.");
+
+            $('#q_working').toggle();
+        });
+    }
+
+    function please_login() {
+         xtoast("Please login or signup to access this feature.");
+    }
+
+    function post_review() {
+        var review = $('#review_review').val();
+        var name = $('#review_name_value') ? $('#review_name_value').val() : '';
+
+        //make sure we don't submit default
+        if(review == '') {
+            xtoast("Please type up your review for this story.");
+            return;
+        }
+
+        $('#review_postbutton').html("Posting. Please wait...");
+        $('#review_postbutton').prop('disabled',true);
+
+        $.post('/api/ajax_review.php', {
+            storyid: storyid,
+            storytextid: storytextid,
+            chapter: chapter,
+
+            authoralert: $('#review_authoralert').prop('checked') ? 1 : 0,
+            storyalert: $('#review_storyalert').prop('checked') ? 1 : 0,
+            favstory: $('#review_favstory').prop('checked') ? 1 : 0,
+            favauthor: $('#review_favauthor').prop('checked') ? 1 : 0,
+
+            name: name,
+            review: review
+        },
+        function(data) {
+            //console.log(data);
+            //alert(data);
+            if(data.error) {
+                $('#review_postbutton').html('Post Review as'+XUNAME);
+                $('#review_postbutton').prop('disabled', false);
+
+                xtoast("We are unable to post your review due to the following reason:&lt;br&gt;&lt;br&gt;" + data.error_msg);
+            }
+            else {
+                xtoast("The author would like to thank you for your continued support. Your review has been posted.",3500);
+                review_success();
+            }
+        },
+        'json'
+        ).error(function() {
+            xtoast("We are unable to process your review due to an network error. Please try again later.");
+
+            $('#review_postbutton').html("Post Review as"+XUNAME);
+            $('#review_postbutton').prop('disabled', false);
+        });
+
+    }
+
+    function review_success() {
+         $('#review').hide();
+         $('#review_success').show();
+
+         //must clear textarea of auto-save would save old data
+         $('#review_review').val('');
+         
+if(!$.storage) {
+    $.storage = new $.store();
+    //console.log('new storage');
+}
+$.storage.del('review:1009159:1');
+//console.log('del review:1009159:1');
+        
+    }
+
+    function review_failure() {
+
+    }
+
+    $().ready(function() {
+        review_init();
+    });
+</script>
+<div id="review_success" style="display:none;width:500px;height:100px;clear:both;margin-right:auto;margin-left:auto;">
+    The author would like to thank you for your continued support. Your review has been posted.
+</div>
+<div id="review">
+<table border="0" padding="0" cellspacing="0" style="width:100%;"> <!-- min-width:500px;max-width:975px;clear:both;margin-right:auto;margin-left:auto;-->
+    <tbody><tr>
+        <td width="336" valign="top">
+            <!-- startz -->
+            <ins class="adsbygoogle" style="display:inline-block;width:336px;height:280px" data-ad-client="ca-pub-8698054525611092" data-ad-slot="8107878760" data-adsbygoogle-status="done"><ins id="aswift_1_expand" style="display:inline-table;border:none;height:280px;margin:0;padding:0;position:relative;visibility:visible;width:336px;background-color:transparent;"><ins id="aswift_1_anchor" style="display:block;border:none;height:280px;margin:0;padding:0;position:relative;visibility:visible;width:336px;background-color:transparent;"><iframe width="336" height="280" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_1" name="aswift_1" style="left:0;position:absolute;top:0;width:336px;height:280px;"></iframe></ins></ins></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            <!-- endz -->    </td>
+        <td width="10"></td>
+        <td valign="top">
+            <div style="width:100%;max-width:700px;">
+            <table style="width:100%;">
+            <tbody><tr>
+            <td colspan="2">
+
+            <div id="review_name" style=""> <!-- min-width:500px;max-width:975px;  style='padding:0.5em;width:98%;' -->
+                <input class="input-block-level" style="max-width:700px" type="text" name="name" id="review_name_value" maxlength="16" placeholder="Name:" />
+                <div style="height:4px"></div>
+            </div>
+
+
+
+            <textarea class="input-block-level" style="max-width:700px" rows="10" placeholder="Type your review for this chapter here..." name="review" id="review_review"></textarea>
+            </td>
+            </tr>
+            <tr>
+            <td style="vertical-align:middle;">
+                <div id="alert_subs" class="hide xcontrast_txt" style="display: none;">
+                  Favorite :
+                  Story <input style="margin:-2px 0 0 0" type="checkbox" name="favstory" id="review_favstory" />
+                  Author <input style="margin:-2px 0 0 0" type="checkbox" name="favauthor" id="review_favauthor" />
+                   
+                  Follow :
+                  Story <input style="margin:-2px 0 0 0" type="checkbox" name="storyalert" id="review_storyalert" />
+                  Author <input style="margin:-2px 0 0 0" type="checkbox" name="authoralert" id="review_authoralert" />
+                </div>
+            </td>
+            <td align="right">
+            <!-- Split button -->
+<div class="btn-group xreset-left">
+  <button type="button" class="btn icon-edit-1" onclick="post_review();" id="review_postbutton">Post Review</button>
+  <button type="button" class="btn dropdown-toggle login_items" data-toggle="dropdown">
+
+    <span class="sr-only ">As</span>
+     <span class="caret "></span>
+  </button>
+ <ul class="dropdown-menu" role="menu">
+                        <li><a href="#" onclick="self_login('self');" class="xdrop_login">FanFiction</a></li>
+                        <li><a href="#" onclick="self_login('sister');" class="xdrop_login">FictionPress</a></li>
+                        <li><a href="#" onclick="self_login('google');" lass="xdrop_login">Google</a></li>
+                        <li><a href="#" onclick="self_login('facebook');" class="xdrop_login">Facebook</a></li>
+                        <li><a href="#" onclick="self_login('twitter');" class="xdrop_login">Twitter</a></li>
+                        <li><a href="#" onclick="self_login('amazon');" class="xdrop_login">Amazon</a></li>
+                    </ul>
+</div>
+
+
+            </td>
+            </tr>
+            </tbody></table>
+            </div>
+        </td>
+    </tr>
+</tbody></table>
+</div>
+
+<!-- <div id='please_login' class='modal hide fade'></div> -->
+
+<script src="/static/scripts/jquery.jstore_01_09_2012.js"></script>
+<script>
+$().ready(function(){
+
+    if(!$.storage) {
+        $.storage = new $.store(); //init
+    }
+
+    var t_read = $.storage.get('review:1009159:1');
+
+    if(t_read &amp;&amp; t_read.length &gt; 0 ) {
+        //alert('recovered data' + t_read);
+
+        var temp = $('textarea#review_review').val(); //NO SPACES .replace(/^\s+|\s+$/g,'')
+
+        if(!temp || temp.length == 0 || temp == "Type your comments here.") {
+            //alert('set good');
+            $('textarea#review_review').val(t_read);
+            //console.log('got'+t_read);
+        }
+    }
+    else {
+        //alert('no data');
+    }
+
+    var rTimer = setInterval(saveReview, 2000); //every 2s
+
+    function saveReview() {
+        var temp = $('textarea#review_review').val();  //make sure we don't save spaces .replace(/^\s+|\s+$/g,'');
+
+        if(temp &amp;&amp; temp.length &gt; 0 &amp;&amp;  temp != "Type your comments here.") {
+            $.storage.set('review:1009159:1', temp);
+            //console.log('set'+temp);
+        }
+    }
+});
+</script>
+        <div style="height:15px"></div>
+<div align="center" class="lc-wrapper"><div class="lc">
+<form name="myselect" onsubmit="return false;"><table style="min-width;400px;margin-left:auto;margin-right:auto;" cellpadding="4">
+            <tbody><tr>
+                <td>
+                <script>
+  var storyid = 1009159;
+  var userid = 62399;
+  var storytextid = storytextid=2216622;
+  var chapter = 1;
+  var title = 'From+the+Shadows';
+  var logind = 'https://www.fanfiction.net';
+
+
+function select_drop(sel_value) {
+  var t;
+
+  if (sel_value == 'abuse') {
+      t = xwindow(logind+'/report.php?chapter='+chapter+'&amp;storyid='+storyid+'&amp;title='+title,560,510);
+  }
+  else if (sel_value == 'c2') {
+     t = xwindow(logind+'/c2_addstory.php?action=add&amp;storyid='+storyid,560,470);
+  }
+}
+</script>
+<div class="btn-group " id="story_actions">
+    <div class="btn-group dropup" align="left">
+    <button class="btn dropdown-toggle" data-toggle="dropdown">
+        <span>Actions</span>
+        <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+       <li><a onclick="select_drop('c2')">Add to Community</a></li>
+        <li><a onclick="select_drop('abuse')">Report Abuse</a></li>
+    </ul>
+    </div>
+</div>
+
+<div class="btn-group " id="share_providers">
+    <div class="btn-group dropup" align="left">
+    <button class="btn dropdown-toggle" data-toggle="dropdown">
+        <span class="icon-share"> Share</span>
+
+    </button>
+    <ul class="dropdown-menu">
+        <li><a href="//plus.google.com/share?url=https%3A%2F%2Fwww.fanfiction.net%2Fs%2F1009159%2F1%2F" target="_new">Google+</a></li>
+        <li><a href="//twitter.com/home?status=Reading+story%3A+https%3A%2F%2Fwww.fanfiction.net%2Fs%2F1009159%2F1%2F" target="_new">Twitter</a></li>
+        <li><a href="//www.tumblr.com/share/link?url=https%3A%2F%2Fwww.fanfiction.net%2Fs%2F1009159%2F1%2F" target="_new">Tumblr</a></li>
+        <li><a href="//www.facebook.com/sharer.php?u=https%3A%2F%2Fwww.fanfiction.net%2Fs%2F1009159%2F1%2F" target="_new">Facebook</a></li>
+    </ul>
+    </div>
+</div>
+
+<button class="btn icon-heart" type="button" onclick="$(&quot;#follow_area&quot;).modal();"> Follow/Favorite</button>
+<style>
+    label input[type=checkbox]{
+        position: relative;
+        vertical-align: middle;
+        bottom: -5px;
+    }
+</style>
+<div class="modal fade hide" id="follow_area">
+  <div class="modal-body">
+        <center>
+        <table style="padding:6px;color:black !important;">
+        <tbody><tr><td valign="top">
+        + Follow
+        <hr />
+          <label class="checkbox">
+            <input type="checkbox" id="q_follow_story" /> Story
+           </label>
+            <label class="checkbox">
+            <input type="checkbox" id="q_follow_author" /> Writer
+           </label>
+        </td>
+        <td width="20"></td>
+        <td valign="top">
+        + Favorite
+        <hr />
+             <label class="checkbox">
+            <input type="checkbox" id="q_fav_story" /> Story
+           </label>
+            <label class="checkbox">
+            <input type="checkbox" id="q_fav_author" /> Writer
+           </label>
+        </td>
+        </tr>
+        </tbody></table>
+        </center>
+  </div>
+  <div class="modal-footer">
+
+
+    <span class="btn pull-left" data-dismiss="modal">Close</span>
+<span id="q_working" class="hide">Working...  </span>
+    <span class="btn btn-primary" onclick="post_q();">Save</span>
+  </div>
+
+ </div>
+</td>
+</tr>
+</tbody></table></form>
+</div></div>
+        <div style="height:5px"></div></div></div></div><div id="p_footer" class="maxwidth" style="clear:all;padding:1em 0 1em 0;"><div style="text-align:center"><a href="/support/">Help</a> . <a href="/privacy/">Privacy</a> . <a href="/tos/">Terms of Service</a>  . <a href="#top">Top</a></div><div style="height:10px"></div><div style="text-align:center"><a href="http://blog.fictionpress.com"><span class="icon-wordpress" style="color:rgb(104, 100, 100);font-size:18px;height:20px;width:20px;"></span></a>  <a href="//www.twitter.com/fictionpress"><span class="icon-twitter-3" style="color:rgb(104, 100, 100);font-size:18px;height:20px;width:20px;"></span></a> <a href="//plus.google.com/+fanfiction"><span class="icon-google__x2B_" style="color:rgb(104, 100, 100);font-size:18px;height:20px;width:20px;"></span></a></div><div style="height:15px"></div></div>
+<script>
+$(function() {
+    $('img.lazy').lazyload({
+        //skip_invisible : false
+    });
+});
+</script>
+        </body></html>
