@@ -26,6 +26,9 @@ crawler_output_path = "/Users/carolyn/projects/ficspressiso/tools/output/"
 def tsstr(ts):
     return datetime.datetime.fromtimestamp(ts).strftime("%x %X")
 
+def simple_stop(metas, page):
+    return page > 700
+
 def update_stop(metas, page):
     if page is 1:
         print "PAGE 1"
@@ -37,7 +40,7 @@ def update_stop(metas, page):
 def main(argv):
     #phantomjs_options = ["--load-images=false", "--max-disk-cache-size=512"]
     load_crawler_status()
-    update_crawler = Crawler(crawler_output_path + 'updates', base_updates_url, update_stop)
+    update_crawler = Crawler(crawler_output_path + 'updates', base_updates_url, simple_stop)
     update_crawler.crawl()
     print update_crawler
     try:

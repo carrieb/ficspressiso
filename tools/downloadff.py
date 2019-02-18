@@ -16,7 +16,7 @@ def main(argv):
     driver_options = ChromeOptions();
     driver_options.add_argument("--headless");
     driver = webdriver.Chrome(
-        '/home/carrie/projects/ficspressiso/tools/chromedriver',
+        '/Users/carolyn/projects/ficspressiso/tools/chromedriver',
         chrome_options=driver_options
     )
 

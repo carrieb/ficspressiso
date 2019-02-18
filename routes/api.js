@@ -20,6 +20,8 @@ const Sources = require('../src/constants/sources');
 
 const config = require('../config');
 
+const onlyStatus200 = (req, res) => res.statusCode === 200;
+
 router.get('/library', function(req, res) {
   res.json(library.fics);
 });
@@ -50,34 +52,42 @@ router.post('/browse', jsonParser, (req, res) => {
   if (site === 'fanfiction.net') {
     ffnet.retrieveFics(page, fandom, characters, (data) => {
       DAO.saveFics(req.app.locals.db, data, (fics) => {
-        console.log(fics);
+        //console.log(fics);
       });
-      console.log(data);
+      //console.log(data);
       res.json(data);
     });
   } else {
     ao3.retrieveFics(req.body, (data) => {
-      console.log(data);
+      //console.log(data);
       res.json(data);
     })
   }
 
 });
 
-router.get('/characters', cache('1 day'), function(req, res) {
-  // const fandom = req.query.fandoms || ['Harry Potter'];
-  // ffnet.retrieveCharacters(fandom, (data) => {
-  //   res.json(data);
-  // });
+router.get('/characters', cache('1 day', onlyStatus200), function(req, res) {
   DAO.getCharacters(req.app.locals.db, (characters) => {
     res.json(characters);
   });
 });
 
-router.get('/fandoms', cache('1 day'), function(req, res) {
+router.get('/fandoms', cache('1 day', onlyStatus200), function(req, res) {
+  // TODO: pass site into query
   DAO.getFandoms(req.app.locals.db, (fandoms) => {
     res.json(fandoms);
   });
+});
+
+router.get('/ratings', cache('1 day', onlyStatus200), (req, res) => {
+  // DAO.getRatings(req.app.locals.db, req.query.site, (ratings) => {
+  //   res.json(ratings);
+  // }, (error) => {
+  //   res.error(`Unable to lookup fandoms for ${req.query.site}: ${error.message}`);
+  // });
+
+  // mock data
+  res.json([{ rating: 'K', count: 1 }, { rating: 'T', count: 1 }, { rating: 'M', count: 1 }, { rating: 'E', count: 1 }]);
 });
 
 const PythonShell = require('python-shell');
@@ -120,7 +130,7 @@ router.get('/download', (req, res) => {
   });
 })
 
-router.get('/top/data', cache('1 day'), (req, res) => {
+router.get('/top/data', cache('1 day', onlyStatus200), (req, res) => {
   //console.log(req.query);
   const characters = req.query.characters;
   const rating = req.query.rating;
@@ -142,7 +152,7 @@ router.get('/top/data', cache('1 day'), (req, res) => {
 });
 
 
-router.get('/chart/data', cache('1 day'), function(req, res) {
+router.get('/chart/data', cache('1 day', onlyStatus200), function(req, res) {
   try {
     DAO.aggregateNumFics(req.query, 'month', (labels, datasets) => {
       try {
@@ -156,7 +166,7 @@ router.get('/chart/data', cache('1 day'), function(req, res) {
   }
 });
 
-router.get('/fic/timeline', cache('1 day'), function(req, res) {
+router.get('/fic/timeline', cache('1 day', onlyStatus200), function(req, res) {
   try {
     Timeline.inferTimeline(Sources.FFNET, req.query.id, (timeline) => {
       // TODO: save timeline to fic in db

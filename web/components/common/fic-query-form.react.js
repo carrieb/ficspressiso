@@ -10,6 +10,8 @@ import QueryUtil from 'util/query-util';
 
 import _clone from 'lodash/clone';
 
+// TODO: add additional fields based on selected site. 
+
 class FicQueryForm extends React.Component {
     constructor(props) {
         super(props);
@@ -77,6 +79,7 @@ class FicQueryForm extends React.Component {
     };
 
     render() {
+        console.log('FicQueryForm', this.props.query);
         const form = (
             <form className="ui form">
                 <div className="field">

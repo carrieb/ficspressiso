@@ -6,7 +6,7 @@ let $;
 
 const baseUrl = 'https://www.fanfiction.net';
 
-const defaultQuery = '?&srt=1&lan=1&r=10&len=20'; // over 20k
+const defaultQuery = '?&srt=1&lan=1&r=10';
 
 const fandomToPath = {
   'Harry Potter': '/book/Harry-Potter/',
@@ -215,7 +215,7 @@ const parseReviewHtml = function(i, elem) {
   review.date = dateEl.text();
   review.sentiment = '//todo';
   review.author = author;
-  
+
   return review;
 };
 

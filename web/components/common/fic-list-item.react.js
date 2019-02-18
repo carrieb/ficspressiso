@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 
 import CharacterLabel from 'components/common/character-label.react';
-
 
 class FicListItem extends React.Component {
     render() {
@@ -58,8 +58,8 @@ class FicListItem extends React.Component {
                     </div>
                     <div className="footer">
                         <div className="right">
-                            Updated: {fic.update_date}<br/>
-                            Published: {fic.publish_date}
+                            Updated: { moment.unix(fic.update_date).format('l') }<br/>
+                            Published: { moment.unix(fic.publish_date).format('l') }
                         </div>
                         <div className="characters">
                             { characterLabels }

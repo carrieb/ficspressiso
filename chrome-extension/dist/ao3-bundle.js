@@ -10282,8 +10282,8 @@ module.exports = getHostComponentFromComposite;
 /***/ (function(module, exports, __webpack_require__) {
 
 var Symbol = __webpack_require__(86),
-    getRawTag = __webpack_require__(204),
-    objectToString = __webpack_require__(205);
+    getRawTag = __webpack_require__(203),
+    objectToString = __webpack_require__(204);
 
 /** `Object#toString` result references. */
 var nullTag = '[object Null]',
@@ -10315,7 +10315,7 @@ module.exports = baseGetTag;
 /* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var root = __webpack_require__(201);
+var root = __webpack_require__(200);
 
 /** Built-in value references. */
 var Symbol = root.Symbol;
@@ -10338,7 +10338,7 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactDom = __webpack_require__(104);
 
-var _starRaterReact = __webpack_require__(191);
+var _starRaterReact = __webpack_require__(190);
 
 var _starRaterReact2 = _interopRequireDefault(_starRaterReact);
 
@@ -22693,8 +22693,7 @@ module.exports = ReactDOMInvalidARIAHook;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 190 */,
-/* 191 */
+/* 190 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22710,11 +22709,11 @@ var _react = __webpack_require__(52);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = __webpack_require__(192);
+var _propTypes = __webpack_require__(191);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _range2 = __webpack_require__(194);
+var _range2 = __webpack_require__(193);
 
 var _range3 = _interopRequireDefault(_range2);
 
@@ -22794,7 +22793,7 @@ StarSelector.propTypes = {
 exports.default = StarSelector;
 
 /***/ }),
-/* 192 */
+/* 191 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(process) {/**
@@ -22823,13 +22822,13 @@ if (process.env.NODE_ENV !== 'production') {
 } else {
   // By explicitly using `prop-types` you are opting into new production behavior.
   // http://fb.me/prop-types-in-prod
-  module.exports = __webpack_require__(193)();
+  module.exports = __webpack_require__(192)();
 }
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 193 */
+/* 192 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22894,10 +22893,10 @@ module.exports = function() {
 
 
 /***/ }),
-/* 194 */
+/* 193 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var createRange = __webpack_require__(195);
+var createRange = __webpack_require__(194);
 
 /**
  * Creates an array of numbers (positive and/or negative) progressing from
@@ -22946,12 +22945,12 @@ module.exports = range;
 
 
 /***/ }),
-/* 195 */
+/* 194 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseRange = __webpack_require__(196),
-    isIterateeCall = __webpack_require__(197),
-    toFinite = __webpack_require__(208);
+var baseRange = __webpack_require__(195),
+    isIterateeCall = __webpack_require__(196),
+    toFinite = __webpack_require__(207);
 
 /**
  * Creates a `_.range` or `_.rangeRight` function.
@@ -22982,7 +22981,7 @@ module.exports = createRange;
 
 
 /***/ }),
-/* 196 */
+/* 195 */
 /***/ (function(module, exports) {
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
@@ -23016,12 +23015,12 @@ module.exports = baseRange;
 
 
 /***/ }),
-/* 197 */
+/* 196 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var eq = __webpack_require__(198),
-    isArrayLike = __webpack_require__(199),
-    isIndex = __webpack_require__(207),
+var eq = __webpack_require__(197),
+    isArrayLike = __webpack_require__(198),
+    isIndex = __webpack_require__(206),
     isObject = __webpack_require__(51);
 
 /**
@@ -23052,7 +23051,7 @@ module.exports = isIterateeCall;
 
 
 /***/ }),
-/* 198 */
+/* 197 */
 /***/ (function(module, exports) {
 
 /**
@@ -23095,11 +23094,11 @@ module.exports = eq;
 
 
 /***/ }),
-/* 199 */
+/* 198 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isFunction = __webpack_require__(200),
-    isLength = __webpack_require__(206);
+var isFunction = __webpack_require__(199),
+    isLength = __webpack_require__(205);
 
 /**
  * Checks if `value` is array-like. A value is considered array-like if it's
@@ -23134,7 +23133,7 @@ module.exports = isArrayLike;
 
 
 /***/ }),
-/* 200 */
+/* 199 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseGetTag = __webpack_require__(85),
@@ -23177,10 +23176,10 @@ module.exports = isFunction;
 
 
 /***/ }),
-/* 201 */
+/* 200 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var freeGlobal = __webpack_require__(202);
+var freeGlobal = __webpack_require__(201);
 
 /** Detect free variable `self`. */
 var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
@@ -23192,7 +23191,7 @@ module.exports = root;
 
 
 /***/ }),
-/* 202 */
+/* 201 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/** Detect free variable `global` from Node.js. */
@@ -23200,10 +23199,10 @@ var freeGlobal = typeof global == 'object' && global && global.Object === Object
 
 module.exports = freeGlobal;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(203)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(202)))
 
 /***/ }),
-/* 203 */
+/* 202 */
 /***/ (function(module, exports) {
 
 var g;
@@ -23230,7 +23229,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 204 */
+/* 203 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var Symbol = __webpack_require__(86);
@@ -23282,7 +23281,7 @@ module.exports = getRawTag;
 
 
 /***/ }),
-/* 205 */
+/* 204 */
 /***/ (function(module, exports) {
 
 /** Used for built-in method references. */
@@ -23310,7 +23309,7 @@ module.exports = objectToString;
 
 
 /***/ }),
-/* 206 */
+/* 205 */
 /***/ (function(module, exports) {
 
 /** Used as references for various `Number` constants. */
@@ -23351,7 +23350,7 @@ module.exports = isLength;
 
 
 /***/ }),
-/* 207 */
+/* 206 */
 /***/ (function(module, exports) {
 
 /** Used as references for various `Number` constants. */
@@ -23369,20 +23368,23 @@ var reIsUint = /^(?:0|[1-9]\d*)$/;
  * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
  */
 function isIndex(value, length) {
+  var type = typeof value;
   length = length == null ? MAX_SAFE_INTEGER : length;
+
   return !!length &&
-    (typeof value == 'number' || reIsUint.test(value)) &&
-    (value > -1 && value % 1 == 0 && value < length);
+    (type == 'number' ||
+      (type != 'symbol' && reIsUint.test(value))) &&
+        (value > -1 && value % 1 == 0 && value < length);
 }
 
 module.exports = isIndex;
 
 
 /***/ }),
-/* 208 */
+/* 207 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var toNumber = __webpack_require__(209);
+var toNumber = __webpack_require__(208);
 
 /** Used as references for various `Number` constants. */
 var INFINITY = 1 / 0,
@@ -23427,11 +23429,11 @@ module.exports = toFinite;
 
 
 /***/ }),
-/* 209 */
+/* 208 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isObject = __webpack_require__(51),
-    isSymbol = __webpack_require__(210);
+    isSymbol = __webpack_require__(209);
 
 /** Used as references for various `Number` constants. */
 var NAN = 0 / 0;
@@ -23499,11 +23501,11 @@ module.exports = toNumber;
 
 
 /***/ }),
-/* 210 */
+/* 209 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseGetTag = __webpack_require__(85),
-    isObjectLike = __webpack_require__(211);
+    isObjectLike = __webpack_require__(210);
 
 /** `Object#toString` result references. */
 var symbolTag = '[object Symbol]';
@@ -23534,7 +23536,7 @@ module.exports = isSymbol;
 
 
 /***/ }),
-/* 211 */
+/* 210 */
 /***/ (function(module, exports) {
 
 /**

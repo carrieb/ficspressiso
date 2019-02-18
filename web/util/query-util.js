@@ -27,7 +27,7 @@ const QueryUtil = {
   DEFAULT_TOP_QUERY: {
       characters: [],
       start: '2001-01-01',
-      end: '2017-12-31',
+      end: moment().format('YYYY-MM-DD'),
       minWords: 0,
       maxWords: 10000000, // ten million
       rating: [],

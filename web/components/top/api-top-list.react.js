@@ -7,6 +7,8 @@ import Paginator from 'components/common/paginator.react';
 import TopList from './top-list.react';
 import FicQueryForm from 'components/common/fic-query-form.react';
 
+import 'styles/top/root.css';
+
 import moment from 'moment';
 
 class ApiTopList extends React.Component {
@@ -90,7 +92,7 @@ class ApiTopList extends React.Component {
     );
 
     return (
-      <div className="api-top-list ui basic segment">
+      <div className="api-top-list ui container">
         <div className="ui grid">
           <div className="ten wide column">
             { loader }
